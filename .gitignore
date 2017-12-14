@@ -58,3 +58,6 @@ ios/coverage/*
 
 # Derived Data
 ios/DerivedData/
+
+src/**/*.js
+src/**/*.js.map
