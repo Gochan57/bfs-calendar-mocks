@@ -13,6 +13,7 @@ const router = express.Router();
 
 router.post('/task-service-bh/config/', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
+        res.contentType('application/json; charset=utf-8')
         res.json(response.config)
     }, 2000)
 })
