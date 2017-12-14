@@ -8,13 +8,14 @@ const config: Response<RoleGroupConfiguration> = {
             "EFS_MRM_MONITORING_GUARANTY_USER"
         ],
         "description": "Геомониторинг для логов",
-        "dataSource": "CRM_CORPORATE",
+        "dataSource": "PPRB_USP",
         "methods": {
             "forTaskDetails": "EFSCMPLGetActionDetails",
             "forTaskList": "EFSCMPLGetActionsByLogin",
             "forTaskUpdate": "EFSCMPLUpdateAction"
         },
         "canCreateTask": false,
+        "isNeedToGroupingTaskList": true,
         "enrichTaskListVsEmployee": false,
         "enrichTaskListVsClientInfo": false,
         "enrichTaskListVsPoints": false,
@@ -25,15 +26,15 @@ const config: Response<RoleGroupConfiguration> = {
         "showDateStrategy": "PLANNED_START",
         "filter": [
             {
-                "@type": "TabSelector",
+                "@type": "Select",
                 "order": 0,
                 "required": true,
                 "name": "status",
                 "caption": "Статус задач",
-                "position": "DEFAULT",
+                "position": "SEARCH_PANEL",
                 "defaultValue": "any",
-                "immediatelyApplicable": false,
-                "resettable": true,
+                "immediatelyApplicable": true,
+                "resettable": false,
                 "items": [
                     {
                         "value": "assigned",
@@ -135,6 +136,69 @@ const config: Response<RoleGroupConfiguration> = {
                 "taskListDisabled": null,
                 "taskListVisible": null,
                 "headerHidden": null,
+                "conditions": [
+                    {
+                        "@type": "AND",
+                        "when": null,
+                        "value": [
+                            {
+                                "@type": "ROLE",
+                                "when": "EQUALS",
+                                "value": "GUIDE"
+                            },
+                            {
+                                "@type": "TASK_TYPE",
+                                "when": "NOT_EQUALS",
+                                "value": "1-CALL"
+                            }
+                        ]
+                    }
+                ],
+                "rows": [
+                    {
+                        "title": {
+                            "order": 10,
+                            "gotoCardName": "corporate"
+                        }
+                    },
+                    {
+                        "planDates": {
+                            "order": 10,
+                            "caption": "Дата начала"
+                        },
+                        "status": {
+                            "order": 12,
+                            "caption": "Статус"
+                        },
+                        "priority": {
+                            "order": 13,
+                            "caption": "Приоритет"
+                        },
+                        "type": {
+                            "order": 14,
+                            "caption": "Тип задачи"
+                        }
+                    },
+                    {
+                        "address": {
+                            "order": 10,
+                            "caption": "Адрес"
+                        }
+                    },
+                    {
+                        "contacts": {
+                            "order": 10,
+                            "caption": "Контактное лицо"
+                        }
+                    },
+                    {
+                        "deposit": {
+                            "order": 10,
+                            "caption": "Виды залога",
+                            "gotoCardName": "deposit"
+                        }
+                    }
+                ],
                 "operations": [],
                 "allOperations": []
             }

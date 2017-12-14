@@ -314,8 +314,8 @@ export interface CardConfiguration extends IIgnoreUnknownFields {
     taskListDisabled?: boolean;
     taskListVisible?: boolean;
     headerHidden?: boolean;
-    // conditions?: DefaultCondition<T>[];
-    blocks?: Blocks;
+    conditions?: DefaultCondition<DefaultCondition<string>[]>[];
+    rows?: any;
     operations?: Operation[];
     allOperations?: Operation[];
 }
@@ -384,6 +384,7 @@ export interface RoleGroupConfiguration extends IIgnoreUnknownFields {
     dataSource?: DataSource;
     methods?: Methods;
     canCreateTask?: boolean;
+    isNeedToGroupingTaskList?: boolean;
     enrichTaskListVsEmployee?: boolean;
     enrichTaskListVsClientInfo?: boolean;
     enrichTaskListVsPoints?: boolean;
@@ -621,7 +622,7 @@ export type TaskType = 'MEETING' | 'CALL' | 'OTHER';
 
 export type CardMode = 'CREATE' | 'READ' | 'UPDATE';
 
-export type DataSource = 'CRM_CORPORATE' | 'CRM_RETAIL';
+export type DataSource = 'CRM_CORPORATE' | 'CRM_RETAIL' | 'PPRB_USP';
 
 /**
  * Стратегия заполнения полей title, subtitle
