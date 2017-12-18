@@ -16,7 +16,7 @@ export default function taskList(param: Model.SbrfTaskFilter): Model.SbrfTask[] 
     const models: Model.SbrfTask[] = [
         {
             title: 'ПромСтройИнвест, ООО',
-            description: 'Срочное принятие буджета на следущий год.',
+            description: 'Срочное принятие бюджета на следущий год.',
             taskType: {ref: Model.TaskType.CALL},
             priority: {ref: Model.TaskPriority.HIGH},
             startDate: today + '10:11:00',
