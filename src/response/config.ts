@@ -1,7 +1,7 @@
-import {RoleGroupConfiguration} from 'src/model/task';
+import * as Model from 'src/model/task';
 import {Response} from 'src/model/common';
 
-export default function config(): Response<RoleGroupConfiguration> {
+export default function config(): Response<Model.RoleGroupConfiguration> {
     return {
         "success": true,
         "body": {
@@ -16,7 +16,6 @@ export default function config(): Response<RoleGroupConfiguration> {
                 "forTaskUpdate": "EFSCMPLUpdateAction"
             },
             "canCreateTask": false,
-            "isNeedToGroupingTaskList": true,
             "enrichTaskListVsEmployee": false,
             "enrichTaskListVsClientInfo": false,
             "enrichTaskListVsPoints": false,
@@ -27,106 +26,52 @@ export default function config(): Response<RoleGroupConfiguration> {
             "showDateStrategy": "PLANNED_START",
             "filter": [
                 {
-                    "@type": "Select",
-                    "order": 0,
-                    "required": true,
-                    "name": "status",
-                    "caption": "Статус задач",
-                    "position": "SEARCH_PANEL",
-                    "defaultValue": "any",
-                    "immediatelyApplicable": true,
-                    "resettable": false,
-                    "items": [
+                    '@type': 'CheckboxGroup',
+                    'order': 0,
+                    'required': true,
+                    'name': 'type',
+                    'caption': 'Типы задач',
+                    'position': 'DEFAULT',
+                    'defaultValue': 'any',
+                    'immediatelyApplicable': false,
+                    'resettable': true,
+                    'items': [
                         {
-                            "value": "assigned",
-                            "text": "Назначенные"
+                            'value': 'Meeting',
+                            'text': 'Встречи'
                         },
                         {
-                            "value": "confirmation",
-                            "text": "На подтверждении"
+                            'value': 'Calling',
+                            'text': 'Звонки'
                         },
                         {
-                            "value": "closed",
-                            "text": "Завершенные"
-                        },
-                        {
-                            "value": "any",
-                            "text": "Все задачи"
-                        }
-                    ]
-                },
-                {
-                    "@type": "Select",
-                    "order": 2,
-                    "required": true,
-                    "name": "type",
-                    "caption": "Типы задач",
-                    "position": "DEFAULT",
-                    "defaultValue": "any",
-                    "immediatelyApplicable": false,
-                    "resettable": true,
-                    "items": [
-                        {
-                            "value": "any",
-                            "text": "Все типы задач"
-                        },
-                        {
-                            "value": "Calling",
-                            "text": "Звонки"
-                        },
-                        {
-                            "value": "Meeting",
-                            "text": "Встречи"
-                        },
-                        {
-                            "value": "Task",
-                            "text": "Задания"
+                            'value': 'Task',
+                            'text': 'Задания'
                         }
                     ],
-                    "type": "DEFAULT"
+                    'type': 'DEFAULT'
                 },
                 {
-                    "@type": "DateInput",
-                    "order": 4,
-                    "required": true,
-                    "name": "dateCreateFrom",
-                    "caption": "Дата начала или дедлайн, от",
-                    "position": "DEFAULT",
-                    "immediatelyApplicable": false,
-                    "resettable": true
+                    '@type': 'DateInput',
+                    'order': 1,
+                    'required': true,
+                    'name': 'datePlanTo',
+                    'caption': 'Завершить до',
+                    'position': 'DEFAULT',
+                    'immediatelyApplicable': false,
+                    'resettable': true
                 },
                 {
-                    "@type": "DateInput",
-                    "order": 6,
-                    "required": true,
-                    "name": "dateCreateTo",
-                    "caption": "Дата начала или дедлайн, до",
-                    "position": "DEFAULT",
-                    "immediatelyApplicable": false,
-                    "resettable": true
+                    '@type': 'Switch',
+                    'order': 2,
+                    'required': false,
+                    'name': 'priority',
+                    'caption': 'Только важные',
+                    'position': 'SEARCH_PANEL',
+                    'defaultValue': false,
+                    'immediatelyApplicable': false,
+                    'resettable': true
                 },
-                {
-                    "@type": "Checkbox",
-                    "order": 8,
-                    "required": false,
-                    "name": "important",
-                    "caption": "Только важные",
-                    "position": "DEFAULT",
-                    "defaultValue": false,
-                    "immediatelyApplicable": false,
-                    "resettable": true
-                },
-                {
-                    "@type": "Switch",
-                    "order": 9,
-                    "required": false,
-                    "name": "divisionTasks",
-                    "caption": "Показать все задачи подразделения",
-                    "position": "SEARCH_PANEL",
-                    "defaultValue": false,
-                    "immediatelyApplicable": false,
-                    "resettable": true
-                }
             ],
             "cards": [
                 {
@@ -158,8 +103,7 @@ export default function config(): Response<RoleGroupConfiguration> {
                     "rows": [
                         {
                             "title": {
-                                "order": 10,
-                                "gotoCardName": "corporate"
+                                "order": 10
                             }
                         },
                         {
@@ -190,13 +134,6 @@ export default function config(): Response<RoleGroupConfiguration> {
                             "contacts": {
                                 "order": 10,
                                 "caption": "Контактное лицо"
-                            }
-                        },
-                        {
-                            "deposit": {
-                                "order": 10,
-                                "caption": "Виды залога",
-                                "gotoCardName": "deposit"
                             }
                         }
                     ],

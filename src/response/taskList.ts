@@ -1,4 +1,4 @@
-import * as Model from '../model/task';
+import * as Model from 'src/model/task';
 import {Response} from 'src/model/common';
 
 export default function taskList (param: Model.SbrfTaskFilter): Response<Model.SbrfTask[]> {
