@@ -1,6 +1,7 @@
 import * as Model from '../model/task';
+import {Response} from 'src/model/common';
 
-export default function taskList(param: Model.SbrfTaskFilter): Model.SbrfTask[] {
+export default function taskList (param: Model.SbrfTaskFilter): Response<Model.SbrfTask[]> {
     const sizePage = param.pageSize || 100
     const page = param.pageNum || 0
 
@@ -115,7 +116,7 @@ export default function taskList(param: Model.SbrfTaskFilter): Model.SbrfTask[] 
         let index = i + page * sizePage
         const item = {...models[index % models.length]}
         if (param) {
-            const taskTypeMap: {[key:string]: Model.TaskType} = {
+            const taskTypeMap: {[key: string]: Model.TaskType} = {
                 Calling: Model.TaskType.CALL,
                 Meeting: Model.TaskType.MEETING,
                 Task: Model.TaskType.OTHER,
@@ -158,5 +159,8 @@ export default function taskList(param: Model.SbrfTaskFilter): Model.SbrfTask[] 
         })
 
     }
-    return tasks
+    return {
+        success: true,
+        body: tasks
+    }
 }
