@@ -16,7 +16,7 @@ export interface RoleGroupConfiguration {
     /**
      * Источник данных
      */
-    dataSource?: "CRM_CORPORATE" | "CRM_RETAIL" | "PPRB_USP";
+    dataSource?: 'CRM_CORPORATE' | 'CRM_RETAIL' | 'PPRB_USP';
     /**
      * Методы, используемые для сервисов CRM.
      */
@@ -63,7 +63,7 @@ export interface RoleGroupConfiguration {
         forEmployeesSubordinates?: string;
     };
     /**
-     * Настройка для отображения кнопки "Добавить задачу"
+     * Настройка для отображения кнопки 'Добавить задачу'
      */
     canCreateTask?: boolean;
     /**
@@ -90,27 +90,27 @@ export interface RoleGroupConfiguration {
     /**
      * Перечень возможных привязок ко времени
      */
-    timeRefList?: ("UNBOUND" | "DATE" | "DATETIME" | "DEADLINE" | "DAY")[];
+    timeRefList?: ('UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY')[];
     /**
      * Стратегия заполнения полей title, subtitle
      */
-    titleFillStrategy?: "CLIENT" | "TASK_TYPE" | "PERFORMER" | "PRODUCTS";
+    titleFillStrategy?: 'CLIENT' | 'TASK_TYPE' | 'PERFORMER' | 'PRODUCTS';
     /**
      * Стратегия выбора отображаемой даты в списке задач
      */
     showDateStrategy?:
-        | "PLANNED_START"
-        | "PLANNED_END"
-        | "FACT_START"
-        | "FACT_END"
-        | "CREATED_ON"
-        | "DUE_DATE"
-        | "ACTIVE_START_DATE"
-        | "ACTIVE_END_DATE";
+        | 'PLANNED_START'
+        | 'PLANNED_END'
+        | 'FACT_START'
+        | 'FACT_END'
+        | 'CREATED_ON'
+        | 'DUE_DATE'
+        | 'ACTIVE_START_DATE'
+        | 'ACTIVE_END_DATE';
     /**
      * Перечень параметров фильтрации
      */
-    filter?: (Checkbox | CheckboxGroup | DateInput | RadioGroup | Select | Switch | TabSelector)[];
+    filter?: (Checkbox | DateInput | OptionItem | RadioGroup | Select | Switch | TabSelector)[];
     /**
      * Список доступных для ролей карточек задач
      */
@@ -274,33 +274,33 @@ export interface RoleGroupConfiguration {
          * Значения для маппинга типа задачи
          */
         taskTypes?: {
-            [k: string]: "MEETING" | "CALL" | "OTHER";
+            [k: string]: 'MEETING' | 'CALL' | 'OTHER';
         };
         /**
          * Значения для маппинга статуса задачи
          */
         taskStatuses?: {
             [k: string]:
-                | "PLANNED"
-                | "PROGRESS"
-                | "APPROVAL"
-                | "DECLINED"
-                | "CLARIFY"
-                | "DONE"
-                | "ARCHIEVE"
-                | "DEF_TASK_STATUS";
+                | 'PLANNED'
+                | 'PROGRESS'
+                | 'APPROVAL'
+                | 'DECLINED'
+                | 'CLARIFY'
+                | 'DONE'
+                | 'ARCHIEVE'
+                | 'DEF_TASK_STATUS';
         };
         /**
          * Значения для маппинга приоритета задачи
          */
         taskPriorities?: {
-            [k: string]: "HIGH" | "MEDIUM" | "LOW" | "DEF_TASK_PRIORITY";
+            [k: string]: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
         };
     };
     /**
      * Список доступных типов задач в сервисах CRM Retail
      */
-    listType?: ("ACTIONINFO" | "VISIT" | "ACTIVITY" | "TASK" | "REQUEST" | "TASKPIP" | "NBOTASK")[];
+    listType?: ('ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK')[];
     /**
      * Признак необходимости группировки задач по дате
      */
@@ -319,7 +319,7 @@ export interface RoleGroupConfiguration {
     customAcceptorHandler?: string;
 }
 export interface Checkbox {
-    "@type"?: "Checkbox";
+    '@type'?: 'Checkbox';
     /**
      * Порядок следования параметра
      */
@@ -339,7 +339,7 @@ export interface Checkbox {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -368,7 +368,7 @@ export interface FilterParamCondition {
     value?: string;
 }
 export interface DateInput {
-    "@type"?: "DateInput";
+    '@type'?: 'DateInput';
     /**
      * Порядок следования параметра
      */
@@ -388,7 +388,7 @@ export interface DateInput {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -415,7 +415,7 @@ export interface OptionItem {
     text?: string;
 }
 export interface RadioGroup {
-    "@type"?: "RadioGroup";
+    '@type'?: 'RadioGroup';
     /**
      * Порядок следования параметра
      */
@@ -435,7 +435,7 @@ export interface RadioGroup {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -469,7 +469,7 @@ export interface RadioGroup {
     classifierName?: string;
 }
 export interface Select {
-    "@type"?: "Select";
+    '@type'?: 'Select';
     /**
      * Порядок следования параметра
      */
@@ -489,7 +489,7 @@ export interface Select {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -524,10 +524,10 @@ export interface Select {
     /**
      * Тип селекта
      */
-    type?: "DASHED" | "DEFAULT" | "INVERT";
+    type?: 'DASHED' | 'DEFAULT' | 'INVERT';
 }
 export interface Switch {
-    "@type"?: "Switch";
+    '@type'?: 'Switch';
     /**
      * Порядок следования параметра
      */
@@ -547,7 +547,7 @@ export interface Switch {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -566,7 +566,7 @@ export interface Switch {
     resettable: boolean;
 }
 export interface TabSelector {
-    "@type"?: "TabSelector";
+    '@type'?: 'TabSelector';
     /**
      * Порядок следования параметра
      */
@@ -586,7 +586,7 @@ export interface TabSelector {
     /**
      * Позиция фильтра на PL
      */
-    position?: "DEFAULT" | "SEARCH_PANEL";
+    position?: 'DEFAULT' | 'SEARCH_PANEL';
     /**
      * Значение по умолчанию (из filter.items)
      */
@@ -635,7 +635,7 @@ export interface CardConfiguration {
     /**
      * Режим отображения
      */
-    mode?: "CREATE" | "READ" | "UPDATE";
+    mode?: 'CREATE' | 'READ' | 'UPDATE';
     /**
      * Наименование кнопки
      */
@@ -655,7 +655,7 @@ export interface CardConfiguration {
     /**
      * Условия отображения
      */
-    conditions?: (Role | TaskStatus | TaskType | And | Or)[];
+    conditions?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
     /**
      * Перечень отображаемых блоков
      */
@@ -683,7 +683,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -704,7 +704,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -725,7 +725,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -746,7 +746,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -767,7 +767,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -792,7 +792,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -813,7 +813,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -834,7 +834,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -859,7 +859,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -880,7 +880,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -901,7 +901,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -922,7 +922,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -943,7 +943,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -968,7 +968,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -993,7 +993,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1014,7 +1014,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1035,7 +1035,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1056,7 +1056,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1077,7 +1077,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1102,7 +1102,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1127,7 +1127,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1152,7 +1152,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1173,7 +1173,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1198,7 +1198,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1219,7 +1219,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1240,7 +1240,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1261,7 +1261,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1286,7 +1286,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1307,7 +1307,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1328,7 +1328,7 @@ export interface CardConfiguration {
             /**
              * Режим работы блока
              */
-            mode?: "CREATE" | "READ" | "UPDATE";
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
             /**
              * Параметры в СУП
              */
@@ -1338,59 +1338,59 @@ export interface CardConfiguration {
     allOperations?: Operation[];
 }
 export interface Role {
-    "@type"?: "ROLE";
+    '@type'?: 'ROLE';
     /**
      * Операнд условия отображения
      */
-    when?: "EQUALS" | "NOT_EQUALS";
+    when?: 'EQUALS' | 'NOT_EQUALS';
     /**
      * Сравниваемое значение
      */
     value?: string;
 }
-export interface TaskStatus {
-    "@type"?: "TASK_STATUS";
+export interface TaskStatusCondition {
+    '@type'?: 'TASK_STATUS';
     /**
      * Операнд условия отображения
      */
-    when?: "EQUALS" | "NOT_EQUALS";
+    when?: 'EQUALS' | 'NOT_EQUALS';
     /**
      * Сравниваемое значение
      */
     value?: string;
 }
-export interface TaskType {
-    "@type"?: "TASK_TYPE";
+export interface TaskTypeCondition {
+    '@type'?: 'TASK_TYPE';
     /**
      * Операнд условия отображения
      */
-    when?: "EQUALS" | "NOT_EQUALS";
+    when?: 'EQUALS' | 'NOT_EQUALS';
     /**
      * Сравниваемое значение
      */
     value?: string;
 }
 export interface And {
-    "@type"?: "AND";
+    '@type'?: 'AND';
     /**
      * Операнд условия отображения
      */
-    when?: "EQUALS" | "NOT_EQUALS";
+    when?: 'EQUALS' | 'NOT_EQUALS';
     /**
      * Сравниваемое значение
      */
-    value?: (Role | TaskStatus | TaskType | And | Or)[];
+    value?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
 }
 export interface Or {
-    "@type"?: "OR";
+    '@type'?: 'OR';
     /**
      * Операнд условия отображения
      */
-    when?: "EQUALS" | "NOT_EQUALS";
+    when?: 'EQUALS' | 'NOT_EQUALS';
     /**
      * Сравниваемое значение
      */
-    value?: (Role | TaskStatus | TaskType | And | Or)[];
+    value?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
 }
 export interface Blocks {
     /**
@@ -1408,7 +1408,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1429,7 +1429,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1450,7 +1450,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1471,7 +1471,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1492,7 +1492,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1517,7 +1517,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1538,7 +1538,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1559,7 +1559,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1584,7 +1584,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1605,7 +1605,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1626,7 +1626,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1647,7 +1647,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1668,7 +1668,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1693,7 +1693,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1718,7 +1718,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1739,7 +1739,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1760,7 +1760,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1781,7 +1781,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1802,7 +1802,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1827,7 +1827,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1852,7 +1852,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1877,7 +1877,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1898,7 +1898,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1923,7 +1923,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1944,7 +1944,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1965,7 +1965,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -1986,7 +1986,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -2011,7 +2011,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -2032,7 +2032,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -2053,7 +2053,7 @@ export interface Blocks {
         /**
          * Режим работы блока
          */
-        mode?: "CREATE" | "READ" | "UPDATE";
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
         /**
          * Параметры в СУП
          */
@@ -2096,7 +2096,7 @@ export interface Operation {
     /**
      * Условия отображения
      */
-    conditions?: (Role | TaskStatus | TaskType | And | Or)[];
+    conditions?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
     /**
      * Название действия, для отображения в выпадающем списке из карточки задач
      */
@@ -2153,7 +2153,7 @@ export interface Operation {
              * Значение
              */
             value?: string;
-            ref?: "PLANNED" | "PROGRESS" | "APPROVAL" | "DECLINED" | "CLARIFY" | "DONE" | "ARCHIEVE" | "DEF_TASK_STATUS";
+            ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
         };
         /**
          * Тип задачи
@@ -2167,12 +2167,12 @@ export interface Operation {
              * Значение
              */
             value?: string;
-            ref?: "MEETING" | "CALL" | "OTHER";
+            ref?: 'MEETING' | 'CALL' | 'OTHER';
         };
         /**
          * Привязка ко времени
          */
-        timeRef?: "UNBOUND" | "DATE" | "DATETIME" | "DEADLINE" | "DAY";
+        timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
         /**
          * Приоритет
          */
@@ -2185,7 +2185,7 @@ export interface Operation {
              * Значение
              */
             value?: string;
-            ref?: "HIGH" | "MEDIUM" | "LOW" | "DEF_TASK_PRIORITY";
+            ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
         };
         /**
          * Подзадачи
@@ -2451,7 +2451,7 @@ export interface Operation {
             /**
              * Тип сотрудника
              */
-            type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
             /**
              * Сегмент профиля сотрудника
              */
@@ -2562,7 +2562,7 @@ export interface Operation {
         /**
          * Тип листа в сервисах CRM
          */
-        listType?: "ACTIONINFO" | "VISIT" | "ACTIVITY" | "TASK" | "REQUEST" | "TASKPIP" | "NBOTASK";
+        listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
         /**
          * Количество Персональных предложений по клиенту
          */
@@ -2614,7 +2614,7 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "PLANNED" | "PROGRESS" | "APPROVAL" | "DECLINED" | "CLARIFY" | "DONE" | "ARCHIEVE" | "DEF_TASK_STATUS";
+        ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
     };
     /**
      * Тип задачи
@@ -2628,12 +2628,12 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "MEETING" | "CALL" | "OTHER";
+        ref?: 'MEETING' | 'CALL' | 'OTHER';
     };
     /**
      * Привязка ко времени
      */
-    timeRef?: "UNBOUND" | "DATE" | "DATETIME" | "DEADLINE" | "DAY";
+    timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
     /**
      * Приоритет
      */
@@ -2646,7 +2646,7 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "HIGH" | "MEDIUM" | "LOW" | "DEF_TASK_PRIORITY";
+        ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
     };
     /**
      * Подзадачи
@@ -2912,7 +2912,7 @@ export interface SbrfTask {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -3023,7 +3023,7 @@ export interface SbrfTask {
     /**
      * Тип листа в сервисах CRM
      */
-    listType?: "ACTIONINFO" | "VISIT" | "ACTIVITY" | "TASK" | "REQUEST" | "TASKPIP" | "NBOTASK";
+    listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
     /**
      * Количество Персональных предложений по клиенту
      */
@@ -3102,7 +3102,7 @@ export interface SbrfTaskEmployee {
     /**
      * Тип сотрудника
      */
-    type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+    type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
     /**
      * Сегмент профиля сотрудника
      */
@@ -3401,7 +3401,7 @@ export interface SbrfTaskPerson {
     /**
      * Тип должности
      */
-    typeJobTitle?: "OFFICER" | "EMPLOYEE" | "DIRECTOR";
+    typeJobTitle?: 'OFFICER' | 'EMPLOYEE' | 'DIRECTOR';
     /**
      * Пол
      */
@@ -3452,7 +3452,7 @@ export interface SbrfTaskCorporateAddress {
     /**
      * Тип адреса
      */
-    addressType?: "REG" | "WORK" | "LIVE";
+    addressType?: 'REG' | 'WORK' | 'LIVE';
     /**
      * Адрес в произвольной форме
      */
@@ -3528,7 +3528,7 @@ export interface SbrfTaskPoint {
         /**
          * Тип адреса
          */
-        addressType?: "REG" | "WORK" | "LIVE";
+        addressType?: 'REG' | 'WORK' | 'LIVE';
         /**
          * Адрес в произвольной форме
          */
@@ -3644,7 +3644,7 @@ export interface SbrfTaskComment {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -3753,7 +3753,7 @@ export interface SbrfTaskHistory {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -3886,7 +3886,7 @@ export interface SbrfTaskJson {
          * Значение
          */
         value?: string;
-        ref?: "PLANNED" | "PROGRESS" | "APPROVAL" | "DECLINED" | "CLARIFY" | "DONE" | "ARCHIEVE" | "DEF_TASK_STATUS";
+        ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
     };
     /**
      * Тип задачи
@@ -3900,12 +3900,12 @@ export interface SbrfTaskJson {
          * Значение
          */
         value?: string;
-        ref?: "MEETING" | "CALL" | "OTHER";
+        ref?: 'MEETING' | 'CALL' | 'OTHER';
     };
     /**
      * Привязка ко времени
      */
-    timeRef?: "UNBOUND" | "DATE" | "DATETIME" | "DEADLINE" | "DAY";
+    timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
     /**
      * Приоритет
      */
@@ -3918,7 +3918,7 @@ export interface SbrfTaskJson {
          * Значение
          */
         value?: string;
-        ref?: "HIGH" | "MEDIUM" | "LOW" | "DEF_TASK_PRIORITY";
+        ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
     };
     /**
      * Подзадачи
@@ -4184,7 +4184,7 @@ export interface SbrfTaskJson {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -4295,7 +4295,7 @@ export interface SbrfTaskJson {
     /**
      * Тип листа в сервисах CRM
      */
-    listType?: "ACTIONINFO" | "VISIT" | "ACTIVITY" | "TASK" | "REQUEST" | "TASKPIP" | "NBOTASK";
+    listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
     /**
      * Количество Персональных предложений по клиенту
      */
@@ -4342,7 +4342,7 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "PLANNED" | "PROGRESS" | "APPROVAL" | "DECLINED" | "CLARIFY" | "DONE" | "ARCHIEVE" | "DEF_TASK_STATUS";
+        ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
     };
     /**
      * Тип задачи
@@ -4356,12 +4356,12 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "MEETING" | "CALL" | "OTHER";
+        ref?: 'MEETING' | 'CALL' | 'OTHER';
     };
     /**
      * Привязка ко времени
      */
-    timeRef?: "UNBOUND" | "DATE" | "DATETIME" | "DEADLINE" | "DAY";
+    timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
     /**
      * Приоритет
      */
@@ -4374,7 +4374,7 @@ export interface SbrfTask {
          * Значение
          */
         value?: string;
-        ref?: "HIGH" | "MEDIUM" | "LOW" | "DEF_TASK_PRIORITY";
+        ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
     };
     /**
      * Подзадачи
@@ -4640,7 +4640,7 @@ export interface SbrfTask {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -4751,7 +4751,7 @@ export interface SbrfTask {
     /**
      * Тип листа в сервисах CRM
      */
-    listType?: "ACTIONINFO" | "VISIT" | "ACTIVITY" | "TASK" | "REQUEST" | "TASKPIP" | "NBOTASK";
+    listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
     /**
      * Количество Персональных предложений по клиенту
      */
@@ -4830,7 +4830,7 @@ export interface SbrfTaskEmployee {
     /**
      * Тип сотрудника
      */
-    type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+    type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
     /**
      * Сегмент профиля сотрудника
      */
@@ -5129,7 +5129,7 @@ export interface SbrfTaskPerson {
     /**
      * Тип должности
      */
-    typeJobTitle?: "OFFICER" | "EMPLOYEE" | "DIRECTOR";
+    typeJobTitle?: 'OFFICER' | 'EMPLOYEE' | 'DIRECTOR';
     /**
      * Пол
      */
@@ -5180,7 +5180,7 @@ export interface SbrfTaskCorporateAddress {
     /**
      * Тип адреса
      */
-    addressType?: "REG" | "WORK" | "LIVE";
+    addressType?: 'REG' | 'WORK' | 'LIVE';
     /**
      * Адрес в произвольной форме
      */
@@ -5256,7 +5256,7 @@ export interface SbrfTaskPoint {
         /**
          * Тип адреса
          */
-        addressType?: "REG" | "WORK" | "LIVE";
+        addressType?: 'REG' | 'WORK' | 'LIVE';
         /**
          * Адрес в произвольной форме
          */
@@ -5372,7 +5372,7 @@ export interface SbrfTaskComment {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -5481,7 +5481,7 @@ export interface SbrfTaskHistory {
         /**
          * Тип сотрудника
          */
-        type?: "INITIATOR" | "PERFORMER" | "MANAGER" | "VKO" | "COMMENTAUTHOR" | "CORPORATETEAMMEMBER" | "BANKEMPLOYEE";
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -5769,6 +5769,58 @@ export interface CheckboxGroup {
      * Имя справочника, из которого получаем значения
      */
     classifierName?: string;
+}
+export type ListType = 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
+
+export type AddressType = 'REG' | 'WORK' | 'LIVE';
+
+/**
+ * Enumeration EmployeeType: Роль сотрудника в обслуживании клиента (инициатор, исполнитель, менеджер и т.д.)
+ */
+export type EmployeeType = 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+
+export type JobTitleType = 'OFFICER' | 'EMPLOYEE' | 'DIRECTOR';
+
+export type TaskPriority = 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
+
+export type TaskStatus = 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
+
+export type TaskType = 'MEETING' | 'CALL' | 'OTHER';
+
+export type CardMode = 'CREATE' | 'READ' | 'UPDATE';
+
+export type DataSource = 'CRM_CORPORATE' | 'CRM_RETAIL';
+
+/**
+ * Стратегия заполнения полей title, subtitle
+ */
+export type TitleFillStrategy = 'CLIENT' | 'TASK_TYPE';
+
+/**
+ * Стратегия выбора отображаемой даты в списке задач
+ */
+export type ShowDateStrategy = 'PLANNED_START' | 'PLANNED_END' | 'FACT_START' | 'FACT_END' | 'CREATED_ON' | 'DUE_DATE' | 'ACTIVE_START_DATE' | 'ACTIVE_END_DATE';
+
+export type CardConditionOperand = 'EQUALS' | 'NOT_EQUALS';
+
+export type FilterParamPosition = 'DEFAULT' | 'SEARCH_PANEL';
+
+export type SelectType = 'DASHED' | 'DEFAULT' | 'INVERT';
+export interface Classifier {
+    code?: string;
+    value?: string;
+}
+
+export interface TaskPriorityClassifier extends Classifier {
+    ref?: TaskPriority;
+}
+
+export interface TaskStatusClassifier extends Classifier {
+    ref?: TaskStatus;
+}
+
+export interface TaskTypeClassifier extends Classifier {
+    ref?: TaskType;
 }
 export const AddressType: {[key: string]: 'REG' | 'WORK' | 'LIVE'} = {
     REG: 'REG',
