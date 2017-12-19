@@ -110,7 +110,7 @@ export interface RoleGroupConfiguration {
     /**
      * Перечень параметров фильтрации
      */
-    filter?: (Checkbox | CheckboxGroup | DateInput | OptionItem | RadioGroup | Select | Switch | TabSelector)[];
+    filter?: (Checkbox | CheckboxGroup | DateInput | RadioGroup | Select | Switch | TabSelector)[];
     /**
      * Список доступных для ролей карточек задач
      */
