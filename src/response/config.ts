@@ -3,28 +3,28 @@ import {Response} from 'src/model/common';
 
 export default function config(): Response<Model.RoleGroupConfiguration> {
     return {
-        "success": true,
-        "body": {
-            "roles": [
-                "EFS_MRM_MONITORING_GUARANTY_USER"
+        'success': true,
+        'body': {
+            'roles': [
+                'GUIDE'
             ],
-            "description": "Геомониторинг для логов",
-            "dataSource": "PPRB_USP",
-            "methods": {
-                "forTaskDetails": "EFSCMPLGetActionDetails",
-                "forTaskList": "EFSCMPLGetActionsByLogin",
-                "forTaskUpdate": "EFSCMPLUpdateAction"
+            'description': 'Гайд Планировщика (для разработки/тестирования)',
+            'dataSource': 'CRM_CORPORATE',
+            'methods': {
+                'forTaskDetails': 'EFSCMPLGetActionDetails',
+                'forTaskList': 'EFSCMPLGetActionsByLogin',
+                'forTaskUpdate': 'EFSCMPLUpdateAction'
             },
-            "canCreateTask": false,
-            "enrichTaskListVsEmployee": false,
-            "enrichTaskListVsClientInfo": false,
-            "enrichTaskListVsPoints": false,
-            "enrichTaskDetailsVsEmployees": false,
-            "enrichTaskDetailsVsClientInfo": false,
-            "enrichTaskDetailsVsPoints": false,
-            "titleFillStrategy": "CLIENT",
-            "showDateStrategy": "PLANNED_START",
-            "filter": [
+            'canCreateTask': true,
+            'enrichTaskListVsEmployee': false,
+            'enrichTaskListVsClientInfo': false,
+            'enrichTaskListVsPoints': false,
+            'enrichTaskDetailsVsEmployees': false,
+            'enrichTaskDetailsVsClientInfo': false,
+            'enrichTaskDetailsVsPoints': false,
+            'titleFillStrategy': 'CLIENT',
+            'showDateStrategy': 'PLANNED_START',
+            'filter': [
                 {
                     '@type': 'CheckboxGroup',
                     'order': 0,
@@ -48,8 +48,7 @@ export default function config(): Response<Model.RoleGroupConfiguration> {
                             'value': 'Task',
                             'text': 'Задания'
                         }
-                    ],
-                    'type': 'DEFAULT'
+                    ]
                 },
                 {
                     '@type': 'DateInput',
@@ -73,95 +72,255 @@ export default function config(): Response<Model.RoleGroupConfiguration> {
                     'resettable': true
                 },
             ],
-            "cards": [
+            'cards': [
                 {
-                    "name": "read",
-                    "caption": null,
-                    "description": "Детальная карточка задачи",
-                    "mode": "READ",
-                    "taskListDisabled": null,
-                    "taskListVisible": null,
-                    "headerHidden": null,
-                    "conditions": [
+                    'name': 'read',
+                    'caption': null,
+                    'description': 'Детальная карточка задачи',
+                    'mode': 'READ',
+                    'taskListDisabled': null,
+                    'taskListVisible': null,
+                    'headerHidden': null,
+                    'conditions': [
                         {
-                            "@type": "AND",
-                            "when": null,
-                            "value": [
+                            '@type': 'AND',
+                            'when': null,
+                            'value': [
                                 {
-                                    "@type": "ROLE",
-                                    "when": "EQUALS",
-                                    "value": "GUIDE"
+                                    '@type': 'ROLE',
+                                    'when': 'EQUALS',
+                                    'value': 'GUIDE'
                                 },
                                 {
-                                    "@type": "TASK_TYPE",
-                                    "when": "NOT_EQUALS",
-                                    "value": "1-CALL"
+                                    '@type': 'TASK_TYPE',
+                                    'when': 'NOT_EQUALS',
+                                    'value': '1-CALL'
                                 }
                             ]
                         }
                     ],
-                    "rows": [
+                    'rows': [
                         {
-                            "title": {
-                                "order": 10
+                            'title': {
+                                'order': 10
                             }
                         },
                         {
-                            "planDates": {
-                                "order": 10,
-                                "caption": "Дата начала"
+                            'type': {
+                                'order': 14,
+                                'caption': 'Тип задачи'
                             },
-                            "status": {
-                                "order": 12,
-                                "caption": "Статус"
+                            'status': {
+                                'order': 12,
+                                'caption': 'Статус'
                             },
-                            "priority": {
-                                "order": 13,
-                                "caption": "Приоритет"
+                            'priority': {
+                                'order': 13,
+                                'caption': 'Приоритет'
                             },
-                            "type": {
-                                "order": 14,
-                                "caption": "Тип задачи"
+                        },
+                        {
+                            'planDates': {
+                                'order': 10,
+                                'caption': 'Дата начала'
+                            },
+                            'planDatesDuration': {
+                                'order': 10,
+                                'caption': 'Длительность'
                             }
                         },
                         {
-                            "address": {
-                                "order": 10,
-                                "caption": "Адрес"
+                            'address': {
+                                'order': 10,
+                                'caption': 'Место встречи'
                             }
                         },
                         {
-                            "contacts": {
-                                "order": 10,
-                                "caption": "Контактное лицо"
+                            'description': {
+                                'caption': 'Описание',
+                                'order': 10,
                             }
+                        },
+                        {
+                            'contacts': {
+                                'order': 10,
+                                'caption': 'Контактное лицо'
+                            }
+                        },
+                        {
+                            'persons': {
+                                'order': 7,
+                                'multiple': false
+                            }
+                        },
+                        {
+                            'products': {
+                                'order': 75
+                            }
+                        },
+                        {
+                            'contacts': {
+                                'caption': 'Представители клиента',
+                                'order': 50
+                            }
+                        },
+                        {
+                            'comments': {
+                                'caption': 'История и комментарии',
+                                'order': 70,
+                                'multiple': true
+                            }
+                        },
+                        {
+                            'factDates': {
+                                'order': 15
+                            }
+                        },
+                        {
+                            'leads': {
+                                'order': 80,
+                                'multiple': true
+                            }
+                        },
+                        {
+                            'corporates': {
+                                'order': 30,
+                                'multiple': false
+                            }
+                        },
+                        {
+                            'meetingLocation': {
+                                'order': 17
+                            }
+                        },
+                        {
+                            'description': {
+                                'caption': 'Суть задачи',
+                                'order': 40
+                            }
+                        },
+                        {
+                            'decision': {
+                                'caption': 'Текст запроса',
+                                'order': 60
+                            }
+                        },
+                        {
+                            'actionResult': {
+                                'caption': 'Результат запроса',
+                                'order': 20
+                            }
+                        },
+                        {
+                            'performer': {
+                                'caption': 'Исполнители',
+                                'order': 65,
+                                'multiple': true
+                            }
+                        },
+                        {
+                            'initiator': {
+                                'order': 90
+                            }
+                        },
+                        {
+                            'manager': {
+                                'order': 100,
+                                'multiple': false
+                            }
+                        },
+                        {
+                            'vko': {
+                                'order': 100
+                            }
+                        },
+                        {
+                            'split': {
+                                'order': 110
+                            }
+                        },
+                        {
+                            'opportunities': {
+                                'order': 120
+                            }
+                        },
+                        {
+                            'history': {
+                                'order': 130,
+                                'multiple': false
+                            }
+                        },
+                    ],
+                    'operations': [
+                        {
+                            hidden: true,
+                            'name': 'assign',
+                            'conditions': [
+                                {
+                                    '@type': 'ROLE',
+                                    'when': 'EQUALS',
+                                    'value': 'EFS_PMOP_COMPLIANCE_CORP'
+                                }
+                            ],
+                            'caption': 'Ввести результат',
+                            'gotoCardName': '_INPUT_RESULT',
+                        },
+                        {
+                            hidden: false,
+                            'name': 'edit',
+                            'caption': 'Изменить или удалить',
+                            'gotoCardName': 'update'
+                        },
+                        {
+                            hidden: false,
+                            'name': 'edit',
+                            'caption': 'Удалить',
+                            'gotoCardName': 'update'
                         }
                     ],
-                    "operations": [],
-                    "allOperations": []
+                    'allOperations': [
+                        {
+                            'name': 'assign',
+                            'conditions': [
+                                {
+                                    '@type': 'ROLE',
+                                    'when': 'EQUALS',
+                                    'value': 'EFS_PMOP_COMPLIANCE_CORP'
+                                }
+                            ],
+                            'caption': 'Назначить на исполнителя',
+                            'gotoCardName': 'assign'
+                        },
+                        {
+                            'name': 'edit',
+                            'caption': 'Редактировать',
+                            'gotoCardName': 'update'
+                        }
+                    ]
                 }
             ],
-            "defaultFilter": {
-                "status": "any",
-                "type": "any",
-                "divisionTasks": false,
-                "important": false
+            'defaultFilter': {
+                'status': 'any',
+                'type': 'any',
+                'divisionTasks': false,
+                'important': false
             },
-            "mappings": {
-                "taskTypes": {
-                    "3-ClientCall": "CALL",
-                    "1-Calling": "CALL",
-                    "2-Meeting": "MEETING"
+            'mappings': {
+                'taskTypes': {
+                    '3-ClientCall': 'CALL',
+                    '1-Calling': 'CALL',
+                    '2-Meeting': 'MEETING'
                 },
-                "taskStatuses": {
-                    "Cancelled": "DECLINED",
-                    "Planned": "PLANNED"
+                'taskStatuses': {
+                    'Cancelled': 'DECLINED',
+                    'Planned': 'PLANNED'
                 },
-                "taskPriorities": {
-                    "2-High": "MEDIUM",
-                    "1-ASAP": "HIGH"
+                'taskPriorities': {
+                    '2-High': 'MEDIUM',
+                    '1-ASAP': 'HIGH'
                 }
-            }
+            },
+            //'isNeedToGroupingTaskList': true
         }
     }
 }

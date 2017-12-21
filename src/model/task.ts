@@ -99,7 +99,7 @@ export interface RoleGroupConfiguration {
      * Стратегия выбора отображаемой даты в списке задач
      */
     showDateStrategy?:
-        | 'PLANNED_START'
+        'PLANNED_START'
         | 'PLANNED_END'
         | 'FACT_START'
         | 'FACT_END'
@@ -110,7 +110,7 @@ export interface RoleGroupConfiguration {
     /**
      * Перечень параметров фильтрации
      */
-    filter?: (Checkbox | DateInput | OptionItem | RadioGroup | Select | Switch | TabSelector)[];
+    filter?: (Checkbox | CheckboxGroup | DateInput | OptionItem | RadioGroup | Select | Switch | TabSelector)[];
     /**
      * Список доступных для ролей карточек задач
      */
@@ -281,7 +281,7 @@ export interface RoleGroupConfiguration {
          */
         taskStatuses?: {
             [k: string]:
-                | 'PLANNED'
+                'PLANNED'
                 | 'PROGRESS'
                 | 'APPROVAL'
                 | 'DECLINED'
@@ -1393,6 +1393,13 @@ export interface Or {
     value?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
 }
 export interface Blocks {
+    /* Кнопка из блока операций
+     *
+     */
+    operationHiddenTrue?: {
+        order?: number,
+        params?: BlockParameter[],
+    }
     /**
      * Заголовок
      */
@@ -1573,6 +1580,24 @@ export interface Blocks {
      * Плановые даты
      */
     planDates?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+    };
+    planDatesDuration?: {
         /**
          * Заглавие
          */
