@@ -3,7 +3,7 @@
  * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
  * and run json-schema-to-typescript to regenerate this file.
  */
-
+export type Filter = (Checkbox | CheckboxGroup | DateInput | RadioGroup | Select | Switch | TabSelector)
 export interface RoleGroupConfiguration {
     /**
      * Список ролей, для которых применима данная конфигурация
@@ -110,7 +110,7 @@ export interface RoleGroupConfiguration {
     /**
      * Перечень параметров фильтрации
      */
-    filter?: (Checkbox | CheckboxGroup | DateInput | OptionItem | RadioGroup | Select | Switch | TabSelector)[];
+    filter?: Filter[];
     /**
      * Список доступных для ролей карточек задач
      */
@@ -1397,8 +1397,22 @@ export interface Blocks {
      *
      */
     operationHiddenTrue?: {
-        order?: number,
-        params?: BlockParameter[],
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
     }
     /**
      * Заголовок

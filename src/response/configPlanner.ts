@@ -1,7 +1,10 @@
-import * as Model from 'src/model/task';
-import {Response} from 'src/model/common';
+/**
+ * Кофигурация, возвращаемая бэком планировщика.
+ */
 
-export default function config(): Response<Model.RoleGroupConfiguration> {
+import * as Model from 'src/model/index';
+
+export default function configPlanner(): Model.Response<Model.RoleGroupConfiguration> {
     return {
         'success': true,
         'body': {
