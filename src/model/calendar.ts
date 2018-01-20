@@ -2,17 +2,17 @@ export interface CalendarConfig {
     /**
      * Список ролей, для которых применима данная конфигурация
      */
-    "roles": string[],
+    roles: string[],
     /**
      * Описание конфигурации
      */
-    "description": string,
+    description: string,
     /**
      * Не отображать стакан задач
      */
-    "taskListDisabled": boolean,
+    taskListDisabled: boolean,
     /**
      * Отображать 7-дневную неделю
      */
-    "showWeekend":  boolean
+    showWeekend: boolean
 }

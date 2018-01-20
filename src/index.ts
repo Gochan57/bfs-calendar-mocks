@@ -6,10 +6,10 @@ import configCalendar from './response/configCalendar'
 import taskList from './response/taskList';
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-const port = 8082;
+const port = 8080;
 const router = express.Router();
 
 router.post('/task-service-bh/config/', (req: express.Request, res: express.Response) => {
@@ -18,7 +18,6 @@ router.post('/task-service-bh/config/', (req: express.Request, res: express.Resp
         res.json(configPlanner())
     }, 2000)
 })
-
 
 router.post('/task-service-bh/config-calendar/', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
