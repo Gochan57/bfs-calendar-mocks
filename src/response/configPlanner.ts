@@ -4,7 +4,7 @@
 
 import * as Model from 'src/model/index';
 
-export default function configPlanner(): Model.Response<Model.RoleGroupConfiguration> {
+export function configPlanner(): Model.Response<Model.RoleGroupConfiguration> {
     return {
         'success': true,
         'body': {

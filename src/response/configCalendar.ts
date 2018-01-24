@@ -4,7 +4,7 @@
 
 import * as Model from 'src/model/index';
 
-export default function configCalendar(): Model.Response<Model.CalendarConfig> {
+export function configCalendar(): Model.Response<Model.CalendarConfig> {
     return {
         success: true,
         body: {

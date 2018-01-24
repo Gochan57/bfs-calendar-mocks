@@ -1,7 +1,7 @@
 import * as Model from '../model/sbrfModel';
 import {Response} from '../model/common';
 
-export default function taskList(param: Model.SbrfTaskFilter): Response<Model.SbrfTask[]> {
+export function taskList(param: Model.SbrfTaskFilter): Response<Model.SbrfTask[]> {
     let flTask = !(param && param.datePlanTo)
     const sizePage = param.pageSize || 100
     const page = param.pageNum || 0
