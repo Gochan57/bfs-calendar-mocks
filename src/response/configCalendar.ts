@@ -39,127 +39,107 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                             ]
                         }
                     ],
-                    rows: [
+                    rows:[
                         {
-                            title: {
-                            }
+                            position: 'header',
+                            blocks: [{
+                                type: 'title'
+                            }]
                         },
                         {
-                            manager: {
-                                caption: 'Участники',
-                            }
+                            position: 'header',
+                            horizontalLine: true,
+                            blocks: [{
+                                type: 'type', // возможно, что важность задачи надо описывать через important
+                                'caption': 'Тип задачи',
+                            }, {
+                                type: 'priority',
+                                'caption': 'Высокая важность'
+                            },]
                         },
                         {
-                            type: {
-                                caption: 'Тип задачи'
-                            },
-                            status: {
-                                caption: 'Статус'
-                            },
-                            priority: {
-                                caption: 'Приоритет'
-                            },
+                            blocks: [{
+                                type: 'button',
+                                actions: [{
+                                    caption: 'Поехали!',
+                                    type: 'NavigateToApp',
+                                    param: 'имя бандла Поехали'
+                                }]
+                            }, {
+                                type: 'button',
+                                actions: [{
+                                    caption: 'Подробности',
+                                    type: 'NavigateToApp',
+                                    param: 'имя бандла Подробности'
+                                }]
+                            }]
                         },
                         {
-                            planDates: {
+                            flexWrap: 'wrap',
+                            justifyContent: 'flexStart',
+                            blocks: [{
+                                type: 'planDates',
                                 caption: 'Дата начала'
-                            },
-                            planDatesDuration: {
-                                caption: 'Длительность'
-                            }
+                            }, {
+                                type: 'status',
+                                caption: 'Статус',
+                            }]
                         },
                         {
-                            address: {
-                                caption: 'Место встречи'
-                            }
+                            blocks: [{
+                                type: 'description',
+                                'caption': 'Описание',
+                            }]
                         },
                         {
-                            description: {
-                                caption: 'Описание',
-                            }
+                            blocks: [{
+                                type: 'address',
+                                caption: 'Адрес'
+                            },]
+                        },{
+                            blocks: [{
+                                type: 'contacts',
+                                caption: 'Контактное лицо',
+                                itemCaption: 'Контактное лицо',
+                            }]
                         },
                         {
-                            contacts: {
-                                caption: 'Контактное лицо'
-                            }
+                            blocks: [{
+                                type: 'pledge',
+                                caption: 'Объекты залога',
+                                actions: [{
+                                    caption: 'Показать все объекты',
+                                    type: 'NavigateToApp',
+                                    param: 'имя бандла геомониторинга'
+                                }],
+                            }]
+                        },
+                        // TODO Для геомониторига не нужен
+                        {
+                            blocks: [{
+                                type: 'manager',
+                                caption: 'Участники',
+                                itemCaption: 'Участник',
+
+                            }]
                         },
                         {
-                            persons: {
-                            }
-                        },
-                        {
-                            products: {
-                            }
-                        },
-                        {
-                            contacts: {
-                                caption: 'Представители клиента',
-                            }
-                        },
-                        {
-                            comments: {
-                                caption: 'История и комментарии',
-                            }
-                        },
-                        {
-                            factDates: {
-                            }
-                        },
-                        {
-                            leads: {
-                            }
-                        },
-                        {
-                            corporates: {
-                            }
-                        },
-                        {
-                            meetingLocation: {
-                            }
-                        },
-                        {
-                            description: {
-                                caption: 'Суть задачи',
-                            }
-                        },
-                        {
-                            decision: {
-                                caption: 'Текст запроса',
-                            }
-                        },
-                        {
-                            actionResult: {
-                                caption: 'Результат запроса',
-                            }
-                        },
-                        {
-                            performer: {
-                                caption: 'Исполнители',
-                            }
-                        },
-                        {
-                            initiator: {
-                            }
-                        },
-                        {
-                            manager: {
-                            }
-                        },
-                        {
-                            vko: {
-                            }
-                        },
-                        {
-                            split: {
-                            }
-                        },
-                        {
-                            opportunities: {
-                            }
-                        },
-                        {
-                            history: {
-                            }
+                            justifyContent: 'spaceAround',
+                            blocks: [{
+                                type: 'button',
+                                actions: [{
+                                    caption: 'Изменить',
+                                    type: 'Action',
+                                    param: 'Change'
+                                }]
+                            }, {
+                                type: 'redButton',
+                                actions: [{
+                                    caption: 'Удалить',
+                                    type: 'Action',
+                                    param: 'Delete',
+                                }]
+                            }]
                         },
                     ],
                     operations: [

@@ -3,8 +3,9 @@
  */
 
 import * as Model from 'src/model/index';
+import * as SbrfModel from 'src/model/sbrfModel';
 
-export function configPlanner(): Model.Response<Model.RoleGroupConfiguration> {
+export function configPlanner(): Model.Response<SbrfModel.RoleGroupConfiguration> {
     return {
         'success': true,
         'body': {
