@@ -72,6 +72,7 @@ export function taskList(param: Model.SbrfTaskFilter): Response<Model.SbrfTask[]
                             'fullName': 'Иван Константинович Айвазовский',
                             'mobilePhone': '+7 (988) 123-12-12',
                             'primaryEmail': 'mail@mail.ru',
+                            'primaryPhone': '12345-987654',
                             'jobTitle': 'Залогодатель',
                         }
                     ]
