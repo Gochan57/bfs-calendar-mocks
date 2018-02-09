@@ -666,8 +666,16 @@ export interface ActionBlock {
     param?: string,
 }
 
+// new
+/**
+ * Типы блоков в детальной карточке задачи
+ */
 export type BlockType =
-    'button' |
+    /**
+     * Внешний блок, который загружается из бандла
+     */
+    'external' |
+        'button' |
         'redButton' |
         'operationHiddenTrue' |
         /**

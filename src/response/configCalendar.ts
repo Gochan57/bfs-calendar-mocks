@@ -39,7 +39,7 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                             ]
                         }
                     ],
-                    rows:[
+                    rows: [
                         {
                             position: 'header',
                             blocks: [{
@@ -48,7 +48,6 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                         },
                         {
                             position: 'header',
-                            horizontalLine: true,
                             blocks: [{
                                 type: 'type', // возможно, что важность задачи надо описывать через important
                                 'caption': 'Тип задачи',
@@ -75,11 +74,20 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                             }]
                         },
                         {
+                            blocks: [{
+                                type: 'external',
+                                caption: 'Блок в колонке',
+                            },]
+                        },
+                        {
                             flexWrap: 'wrap',
                             justifyContent: 'flexStart',
                             blocks: [{
                                 type: 'planDates',
                                 caption: 'Дата начала'
+                            }, {
+                                type: 'external',
+                                caption: 'Блок в строке'
                             }, {
                                 type: 'status',
                                 caption: 'Статус',
@@ -96,7 +104,27 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                                 type: 'address',
                                 caption: 'Адрес'
                             },]
-                        },{
+                        }, {
+                            blocks: [{
+                                type: 'address',
+                                caption: 'Адрес 2'
+                            },]
+                        }, {
+                            blocks: [{
+                                type: 'address',
+                                caption: 'Адрес 3'
+                            },]
+                        }, {
+                            blocks: [{
+                                type: 'address',
+                                caption: 'Адрес 4'
+                            },]
+                        }, {
+                            blocks: [{
+                                type: 'address',
+                                caption: 'Адрес 5'
+                            },]
+                        }, {
                             blocks: [{
                                 type: 'contacts',
                                 caption: 'Контактное лицо',
@@ -125,6 +153,7 @@ export function configCalendar(): Model.Response<Model.CalendarConfig> {
                         },
                         {
                             justifyContent: 'spaceAround',
+                            position: 'footer',
                             blocks: [{
                                 type: 'button',
                                 actions: [{
