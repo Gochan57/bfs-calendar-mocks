@@ -1829,9 +1829,10 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     }
                 ],
             },
+            // Отклонение ИСУ
             {
                 name: 'read',
-                description: 'Детальная карточка задачи TASK_FIELD taskType == ISU',
+                description: 'Детальная карточка Отклонение ИСУ (TASK_FIELD taskType == ISU)',
                 mode: 'READ',
                 condition: {
                     type: 'TASK_FIELD',
@@ -1921,11 +1922,11 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                                         // }
                                         diff: {
                                             //'PLANNED'| 'PROGRESS' | 'APPROVAL'| 'DECLINED'| 'CLARIFY'| 'DONE'| 'ARCHIEVE' | 'DEF_TASK_STATUS'
-                                            title: 'Вы приняли в работу',
+                                            //title: 'Вы приняли в работу',
                                             status: {
                                                 ref: 'PROGRESS',
                                                 code: 'PROGRESS',
-                                                value: 'PROGRESS',
+                                                value: 'В работе',
                                             }
                                         },
                                     },
@@ -1938,7 +1939,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                             },
                             {
                                 type: 'button',
-                                caption: 'Завершить',
+                                caption: 'Закрыть',
                                 condition: {
                                     type: 'TASK_FIELD',
                                     param: 'status',
@@ -1946,11 +1947,22 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                                     value: 'PROGRESS'
                                 },
                                 actions: {
-                                    navigateToApp: {
-                                        // перейти в приложение планировщика на разные карточки
-                                        bundle: 'component-list',
-                                        param: {hello: 'Hello component-list'},
+                                    action: {
+                                        type: 'Change',
+                                        // navigateToApp:{
+                                        //     bundle: 'task-service',
+                                        // }
+                                        diff: {
+                                            //'PLANNED'| 'PROGRESS' | 'APPROVAL'| 'DECLINED'| 'CLARIFY'| 'DONE'| 'ARCHIEVE' | 'DEF_TASK_STATUS'
+                                            // title: 'Вы закрыли задачу',
+                                            status: {
+                                                ref: 'DONE',
+                                                code: 'DONE',
+                                                value: 'Закрытая',
+                                            }
+                                        },
                                     },
+
                                 }
                             },
                             {
@@ -1958,29 +1970,31 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                                 caption: 'Подробности',
                                 actions: {
                                     navigateToApp: {
-                                        // перейти в приложение планировщика на разные карточки
-                                        bundle: 'taskBandle',
-                                        param: 'bundleName',
+                                        // перейти в приложение
+                                        bundle: 'demoapp',  // надо задать
+                                        param: {formName: 'nameForm'},
                                     },
                                 }
                             },
                         ],
                     },
-                    {
-                        blocks: [
-                            {
-                                type: 'dueDateDuration',
-                                caption: 'Осталось'
-                            },
-                        ],
-
-                    },
+                    // Период выявления отклонения и осталось будут отображаться во внешнем блоке
+                    // {
+                    //     blocks: [
+                    //         {
+                    //             type: 'dueDateDuration',
+                    //             caption: 'Осталось'
+                    //         },
+                    //     ],
+                    //
+                    // },
                     {
                         blocks: [{
                             type: 'description',
                             caption: 'Описание'
                         }],
-                    }, {
+                    },
+                    {
                         blocks: [{
                             type: 'external',
                             caption: 'Менеджер и Период выявления отклонения',
