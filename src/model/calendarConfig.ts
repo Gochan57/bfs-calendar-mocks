@@ -127,7 +127,7 @@ export interface BlocksRow {
      * Стратегия выравнивание блоков в строке
      * @maxLength 255
      */
-    justifyContent?: string
+    justifyContent?: 'flex-start' | 'space-around' |  'space-between'
     /**
      * Область отображения блока (в заголовке, в футере, или в центральной области, если значение не задано)
      * @maxLength 255
@@ -165,6 +165,11 @@ export interface Block {
      *  условия вывода блока
      */
     condition?: Condition
+    /**
+     *  индивидуальное выравнивание блока, введен для прибивания кнопки вправо всегда, даже если она остается одна в блоке
+     *  а для всего блока задано выравнивание spaceBetween
+     */
+    justifyContent?: 'flex-start' | 'flex-end'
 }
 /**
  * Типы блоков в детальной карточке задачи

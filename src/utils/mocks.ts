@@ -1723,7 +1723,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -1760,7 +1760,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [
                             {
                                 type: 'button',
@@ -1968,6 +1968,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                             {
                                 type: 'button',
                                 caption: 'Подробности',
+                                justifyContent: 'flex-end',
                                 actions: {
                                     navigateToApp: {
                                         // перейти в приложение
@@ -2105,7 +2106,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -2191,7 +2192,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                     {
-                        justifyContent: 'spaceAround',
+                        justifyContent: 'space-around',
                         position: 'footer',
 
                         blocks: [{
@@ -2352,7 +2353,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -2427,7 +2428,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                     {
-                        justifyContent: 'spaceAround',
+                        justifyContent: 'space-around',
                         position: 'footer',
                         blocks: [{
                             type: 'button',
