@@ -2496,7 +2496,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
             },
         ],
         taskListDisabled: false,
-        showWeekend: false,
+        showWeekend: true,
         gridTime: {
             start: '9:00',
             end: '18:00'
