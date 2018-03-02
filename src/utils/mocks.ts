@@ -20,9 +20,10 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-2GHE2Q',
             'title': 'Торговый дом оконная, ООО',
             'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'startDate': tomorrow + '15:24:00',
-            'endDate': tomorrow + '17:24:00',
+            'startDate': tomorrow + '00:00:00',
+            'endDate': tomorrow + '23:59:59',
             'dueDate': tomorrow + '12:24:00',
+            'timeRef': 'DAY',
             'plannedStart': tomorrow + '15:24:00',
             'plannedEnd': tomorrow + '15:24:00',
             'subtitle': '2 объекта',
@@ -159,8 +160,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-2GHE2Q',
             'title': 'ОАО УралПромСтройМарш',
             'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'startDate': tomorrow + '15:24:00',
-            'endDate': tomorrow + '17:24:00',
+            'startDate': tomorrow + '00:00:00',
+            'endDate': tomorrow + '23:59:59',
+            'timeRef': 'DAY',
             'dueDate': tomorrow + '12:24:00',
             'subtitle': '2 объекта',
             'status': {
@@ -421,8 +423,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-JD93ED',
             'title': 'ОАО ТяжПромСтрой',
-            'startDate': tomorrow + '13:24:00',
-            'endDate': tomorrow + '15:24:00',
+            'startDate': tomorrow + '00:00:00',
+            'endDate': tomorrow + '23:59:59',
+            'timeRef': 'DAY',
             'dueDate': yestarday + '12:24:00',
             'description': 'ул. Строителей, 44',
             'subtitle': '7 объектов',
@@ -1043,8 +1046,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-1WG56W',
             'parentTaskId': '4',
-            'startDate': yestarday + '15:13:00',
-            'endDate': today + '17:24:00',
+            'startDate': yestarday + '00:00:00',
+            'endDate': yestarday + '23:59:59',
+            'timeRef': 'DAY',
             'title': 'ОАО УралПромСтройМаш',
             'description': 'ул. Орбитальная, 109',
             'subtitle': '1 объект',
@@ -1723,7 +1727,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -1760,7 +1764,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [
                             {
                                 type: 'button',
@@ -1829,9 +1833,10 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     }
                 ],
             },
+            // Отклонение ИСУ
             {
                 name: 'read',
-                description: 'Детальная карточка задачи TASK_FIELD taskType == ISU',
+                description: 'Детальная карточка Отклонение ИСУ (TASK_FIELD taskType == ISU)',
                 mode: 'READ',
                 condition: {
                     type: 'TASK_FIELD',
@@ -1921,11 +1926,11 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                                         // }
                                         diff: {
                                             //'PLANNED'| 'PROGRESS' | 'APPROVAL'| 'DECLINED'| 'CLARIFY'| 'DONE'| 'ARCHIEVE' | 'DEF_TASK_STATUS'
-                                            title: 'Вы приняли в работу',
+                                            //title: 'Вы приняли в работу',
                                             status: {
                                                 ref: 'PROGRESS',
                                                 code: 'PROGRESS',
-                                                value: 'PROGRESS',
+                                                value: 'В работе',
                                             }
                                         },
                                     },
@@ -1938,7 +1943,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                             },
                             {
                                 type: 'button',
-                                caption: 'Завершить',
+                                caption: 'Закрыть',
                                 condition: {
                                     type: 'TASK_FIELD',
                                     param: 'status',
@@ -1946,41 +1951,55 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                                     value: 'PROGRESS'
                                 },
                                 actions: {
-                                    navigateToApp: {
-                                        // перейти в приложение планировщика на разные карточки
-                                        bundle: 'component-list',
-                                        param: {hello: 'Hello component-list'},
+                                    action: {
+                                        type: 'Change',
+                                        // navigateToApp:{
+                                        //     bundle: 'task-service',
+                                        // }
+                                        diff: {
+                                            //'PLANNED'| 'PROGRESS' | 'APPROVAL'| 'DECLINED'| 'CLARIFY'| 'DONE'| 'ARCHIEVE' | 'DEF_TASK_STATUS'
+                                            // title: 'Вы закрыли задачу',
+                                            status: {
+                                                ref: 'DONE',
+                                                code: 'DONE',
+                                                value: 'Закрытая',
+                                            }
+                                        },
                                     },
+
                                 }
                             },
                             {
                                 type: 'button',
                                 caption: 'Подробности',
+                                justifyContent: 'flex-end',
                                 actions: {
                                     navigateToApp: {
-                                        // перейти в приложение планировщика на разные карточки
-                                        bundle: 'taskBandle',
-                                        param: 'bundleName',
+                                        // перейти в приложение
+                                        bundle: 'demoapp',  // надо задать
+                                        param: {formName: 'nameForm'},
                                     },
                                 }
                             },
                         ],
                     },
-                    {
-                        blocks: [
-                            {
-                                type: 'dueDateDuration',
-                                caption: 'Осталось'
-                            },
-                        ],
-
-                    },
+                    // Период выявления отклонения и осталось будут отображаться во внешнем блоке
+                    // {
+                    //     blocks: [
+                    //         {
+                    //             type: 'dueDateDuration',
+                    //             caption: 'Осталось'
+                    //         },
+                    //     ],
+                    //
+                    // },
                     {
                         blocks: [{
                             type: 'description',
                             caption: 'Описание'
                         }],
-                    }, {
+                    },
+                    {
                         blocks: [{
                             type: 'external',
                             caption: 'Менеджер и Период выявления отклонения',
@@ -2091,7 +2110,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -2177,7 +2196,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                     {
-                        justifyContent: 'spaceAround',
+                        justifyContent: 'space-around',
                         position: 'footer',
 
                         blocks: [{
@@ -2338,7 +2357,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     },
                     {
                         flexWrap: 'wrap',
-                        justifyContent: 'flexStart',
+                        justifyContent: 'flex-start',
                         blocks: [{
                             type: 'planDates',
                             caption: 'Дата начала'
@@ -2413,7 +2432,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                     {
-                        justifyContent: 'spaceAround',
+                        justifyContent: 'space-around',
                         position: 'footer',
                         blocks: [{
                             type: 'button',
@@ -2481,7 +2500,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
             },
         ],
         taskListDisabled: false,
-        showWeekend: false,
+        showWeekend: true,
         gridTime: {
             start: '9:00',
             end: '18:00'

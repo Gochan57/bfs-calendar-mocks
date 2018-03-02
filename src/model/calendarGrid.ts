@@ -15,6 +15,11 @@ export interface CalendarEventClick {
     }
 }
 
+export interface CalendarActionClick {
+    actionName: string, // Например, MoreCellAction
+    clickDate: Date, // Дата(без времени)
+}
+
 // conference:1
 // telephoneConference:2
 // videoConference:3
@@ -25,8 +30,8 @@ export const enum CalendarIconType {
 }
 
 export const enum CalendarEventType {
-    Distributed = 0,
-    WholeDay = 1,
+    Distributed = 1,
+    WholeDay = 2,
 }
 
 export const enum CalendarColorType {
