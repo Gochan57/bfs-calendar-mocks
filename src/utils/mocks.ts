@@ -1,5 +1,6 @@
-import Model from '../model'
+import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
+
 
 export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTask[] {
     let flTask = !(param && param.datePlanTo && param.datePlanFrom)
@@ -20,10 +21,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-2GHE2Q',
             'title': 'Торговый дом оконная, ООО',
             'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'startDate': tomorrow + '15:24:00',
-            'endDate': tomorrow + '17:24:00',
+            'plannedStart': tomorrow + '00:00:00',
             'dueDate': tomorrow + '12:24:00',
-            'plannedStart': tomorrow + '15:24:00',
+            'timeRef': 'DAY',
             'plannedEnd': tomorrow + '15:24:00',
             'subtitle': '2 объекта',
             'status': {
@@ -159,8 +159,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-2GHE2Q',
             'title': 'ОАО УралПромСтройМарш',
             'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'startDate': tomorrow + '15:24:00',
-            'endDate': tomorrow + '17:24:00',
+            'plannedStart': tomorrow + '00:00:00',
+            'endDate': tomorrow + '23:59:59',
+            'timeRef': 'DAY',
             'dueDate': tomorrow + '12:24:00',
             'subtitle': '2 объекта',
             'status': {
@@ -204,7 +205,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                 },
 
             ],
-            'plannedStart': '2017-12-15T07:00:00.000+0000',
             'plannedEnd': '2017-12-16T14:00:00.000+0000',
             'meetingLocation': 'ул. Просвещения, 80',
             'corporates': [
@@ -298,7 +298,7 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-5DW6IU',
             'title': 'Группа Компаний ПИК',
             'description': 'ул. Мосфильмовская, 18',
-            'startDate': today + '15:24:00',
+            'plannedStart': today + '15:24:00',
             'endDate': today + '16:24:00',
             'dueDate': today + '12:24:00',
             'subtitle': '4 объекта',
@@ -337,7 +337,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-20T11:00:00.000+0000',
             'plannedEnd': '2017-12-22T11:00:00.000+0000',
             'factStart': '2017-11-21T11:00:00.000+0000',
             'factEnd': '2017-11-29T12:22:34.000+0000',
@@ -421,8 +420,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-JD93ED',
             'title': 'ОАО ТяжПромСтрой',
-            'startDate': tomorrow + '13:24:00',
-            'endDate': tomorrow + '15:24:00',
+            'plannedStart': tomorrow + '00:00:00',
+            'endDate': tomorrow + '23:59:59',
+            'timeRef': 'DAY',
             'dueDate': yestarday + '12:24:00',
             'description': 'ул. Строителей, 44',
             'subtitle': '7 объектов',
@@ -461,7 +461,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-20T09:45:00.000+0000',
             'plannedEnd': '2017-12-22T15:30:00.000+0000',
             'factStart': '2017-12-30T06:22:54.000+0000',
             'factEnd': '2017-12-01T13:25:23.000+0000',
@@ -543,8 +542,8 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
             'id': '1-GHT4R',
             'title': 'ЗАО Полярис',
             'description': 'ул. Искусства, 57',
-            'startDate': tomorrow + '03:10:00',
-            'endDate': tomorrow + '03:24:00',
+            'plannedStart': tomorrow + '03:10:00',
+            'plannedEnd': tomorrow + '03:24:00',
             'dueDate': tomorrow + '12:24:00',
             'subtitle': '1 объект',
             'status': {
@@ -582,8 +581,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-05T06:00:00.000+0000',
-            'plannedEnd': '2017-12-05T07:00:00.000+0000',
             'factStart': '2017-12-05T06:22:54.000+0000',
             'factEnd': '2017-12-05T06:42:22.000+0000',
             'meetingLocation': 'ул. Искусства, 57',
@@ -690,8 +687,8 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-7FGH4Z',
             'title': 'Группа Компаний ПИК',
-            'startDate': tomorrow + '01:24:00',
-            'endDate': tomorrow + '03:24:00',
+            'plannedStart': tomorrow + '01:24:00',
+            'plannedEnd': tomorrow + '03:24:00',
             'dueDate': tomorrow + '12:24:00',
             'description': 'ул. Космонавтов, 27',
             'subtitle': '3 объекта',
@@ -730,8 +727,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-05T07:00:00.000+0000',
-            'plannedEnd': '2017-12-07T15:00:00.000+0000',
             'factStart': '2017-12-05T08:00:00.000+0000',
             'factEnd': '2017-12-06T12:22:34.000+0000',
             'meetingLocation': 'ул. Космонавтов, 27',
@@ -805,8 +800,8 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-NMD3D1',
             'parentTaskId': '5',
-            'startDate': today + '02:13:00',
-            'endDate': today + '01:13:00',
+            'plannedStart': today + '02:13:00',
+            'plannedEnd': today + '01:13:00',
             'dueDate': tomorrow + '12:24:00',
             'title': 'Авиоконструкторское бюро',
             'description': 'ул. Пушкинская, 78',
@@ -846,8 +841,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-15T07:00:00.000+0000',
-            'plannedEnd': '2017-12-21T14:00:00.000+0000',
             'factStart': '2017-12-11T08:00:00.000+0000',
             'factEnd': '2017-12-14T11:23:51.000+0000',
             'meetingLocation': 'ул. Пушкинская, 78',
@@ -924,8 +917,8 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-RTG6HS',
             'title': 'ОАО Лукойл',
-            'startDate': yestarday + '13:12:00',
-            'endDate': yestarday + '15:20:00',
+            'plannedStart': yestarday + '13:12:00',
+            'plannedEnd': yestarday + '15:20:00',
             'dueDate': tomorrow + '12:24:00',
             'description': 'ул. Мира, 132',
             'subtitle': '2 объекта',
@@ -964,8 +957,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-14T07:00:00.000+0000',
-            'plannedEnd': '2017-12-15T14:00:00.000+0000',
             'meetingLocation': 'ул. Мира, 132',
             'corporates': [
                 {
@@ -1043,8 +1034,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-1WG56W',
             'parentTaskId': '4',
-            'startDate': yestarday + '15:13:00',
-            'endDate': today + '17:24:00',
+            'plannedStart': yestarday + '00:00:00',
+            'plannedEnd': yestarday + '23:59:59',
+            'timeRef': 'DAY',
             'title': 'ОАО УралПромСтройМаш',
             'description': 'ул. Орбитальная, 109',
             'subtitle': '1 объект',
@@ -1083,8 +1075,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-15T08:11:33.000+0000',
-            'plannedEnd': '2017-12-15T08:11:33.000+0000',
             'factStart': '2017-12-15T13:00:31.000+0000',
             'factEnd': '2017-12-14T10:15:06.000+0000',
             'meetingLocation': 'ул. Орбитальная, 109',
@@ -1167,8 +1157,8 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         {
             'id': '1-3PA5RU',
             'title': 'Группа Компаний ПИК',
-            'startDate': today + '10:11:00',
-            'endDate': today + '11:12:00',
+            'plannedStart': today + '10:11:00',
+            'plannedEnd': today + '11:12:00',
             'description': 'ул. Возрождения, 2',
             'subtitle': '3 объекта',
             'status': {
@@ -1206,8 +1196,6 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     'type': 'MANAGER'
                 }
             ],
-            'plannedStart': '2017-12-14T07:00:00.000+0000',
-            'plannedEnd': '2017-12-15T14:00:00.000+0000',
             'meetingLocation': 'ул. Возрождения, 2',
             'corporates': [
                 {
@@ -1317,7 +1305,7 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                     }
                     //alert(JSON.stringify(taskType) + JSON.stringify(param))
                 }
-                if (datePlanTo && item.endDate && datePlanTo.getTime() <= (new Date(item.endDate)).getTime()) {
+                if (datePlanTo && item.plannedEnd && datePlanTo.getTime() <= (new Date(item.plannedEnd)).getTime()) {
                     continue
                 }
 
@@ -1327,9 +1315,9 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                 id: '' + (index + 1),
                 title: item.title || '',
                 description: item.description,
-                startDate: undefined,
-                endDate: item.endDate,
-                dueDate: item.dueDate || item.endDate,
+                plannedStart: undefined,
+                plannedEnd: item.plannedEnd,
+                dueDate: item.dueDate || item.plannedEnd,
                 priority: item.priority,
                 taskType: item.taskType,
                 meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
@@ -1337,11 +1325,11 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
         } else {
             tasks.push({
                 ...item,
-                id: '' + (index + 1),
+                id: '' + (10000 + index + 1),
                 title: item.title || '',
                 description: item.description,
-                startDate: item.startDate,
-                endDate: item.endDate,
+                plannedStart: item.plannedStart,
+                plannedEnd: item.plannedEnd,
                 priority: item.priority,
                 taskType: item.taskType,
                 meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
