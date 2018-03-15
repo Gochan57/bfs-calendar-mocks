@@ -675,10 +675,6 @@ export interface CardConfiguration {
      */
     rows?: Blocks[];
     /**
-     * Доступные действия из этой карточки
-     */
-    operations?: Operation[];
-    /**
      * Перечень отображаемых блоков в заголовке
      */
     header?: {
@@ -1349,7 +1345,6 @@ export interface CardConfiguration {
             params?: BlockParameter[];
         };
     };
-    allOperations?: Operation[];
 }
 export interface Role {
     '@type'?: 'ROLE';

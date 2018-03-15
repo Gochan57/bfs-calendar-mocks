@@ -1,6 +1,18 @@
 import * as Task from './task'
 import {Event} from './event'
 
+export interface CalendarEventItem {
+    color: number, // хотелось бы задать ему тип CalendarColorType, но не выходит, ибо CalendarColorType экспортирована как константа
+    startDate: string,
+    endDate: string,
+    title: string,
+    selected: boolean,
+    eventId: string,
+    description: string,
+    type: number, // замечание, аналогичное CalendarColorType
+    icons: number[] // замечание, аналогичное CalendarColorType
+}
+
 /**
  * Объект, генерируемый календарной сеткой в ответ на тап по задаче
  */
@@ -80,6 +92,11 @@ export const enum CalendarGridWholeDayType {
 export const enum DragAndDropAvailabilityType {
     Disabled = 0,
     Enabled = 1,
+}
+
+export const enum DropAreaType {
+    GridAreaType = 1, //drop в гриде
+    WholeDayAreaType = 2, // в области на весь день
 }
 
 // частичный тип, может содержать любое количество свойств <T>

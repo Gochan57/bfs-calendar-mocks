@@ -1,7 +1,6 @@
 import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
 
-
 export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTask[] {
     let flTask = !(param && param.datePlanTo && param.datePlanFrom)
     const sizePage = param.pageSize || 100
@@ -1323,9 +1322,13 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                 meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
             })
         } else {
+            let id = item.id
+            if (tasks.find(item => item.id === id)) {
+                id = '' + (10000 + index + 1)
+            }
             tasks.push({
                 ...item,
-                id: '' + (10000 + index + 1),
+                id: id,
                 title: item.title || '',
                 description: item.description,
                 plannedStart: item.plannedStart,
@@ -1333,6 +1336,7 @@ export function generateTaskList(param: Model.TaskListParams): SbrfModel.SbrfTas
                 priority: item.priority,
                 taskType: item.taskType,
                 meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
+                timeRef: 'DAY', // только для геомониторинга
             })
         }
     }
@@ -1351,7 +1355,7 @@ export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
             'forTaskList': 'EFSCMPLGetActionsByLogin',
             'forTaskUpdate': 'EFSCMPLUpdateAction'
         },
-        'canCreateTask': true,
+        'canCreateTask': false, // для геомониторига не возм созд задачу  // true,
         'enrichTaskListVsEmployee': false,
         'enrichTaskListVsClientInfo': false,
         'enrichTaskListVsPoints': false,
@@ -1594,52 +1598,6 @@ export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
                         }
                     },
                 ],
-                'operations': [
-                    {
-                        hidden: true,
-                        'name': 'assign',
-                        'conditions': [
-                            {
-                                '@type': 'ROLE',
-                                'when': 'EQUALS',
-                                'value': 'EFS_PMOP_COMPLIANCE_CORP'
-                            }
-                        ],
-                        'caption': 'Ввести результат',
-                        'gotoCardName': '_INPUT_RESULT',
-                    },
-                    {
-                        hidden: false,
-                        'name': 'edit',
-                        'caption': 'Изменить или удалить',
-                        'gotoCardName': 'update'
-                    },
-                    {
-                        hidden: false,
-                        'name': 'edit',
-                        'caption': 'Удалить',
-                        'gotoCardName': 'update'
-                    }
-                ],
-                'allOperations': [
-                    {
-                        'name': 'assign',
-                        'conditions': [
-                            {
-                                '@type': 'ROLE',
-                                'when': 'EQUALS',
-                                'value': 'EFS_PMOP_COMPLIANCE_CORP'
-                            }
-                        ],
-                        'caption': 'Назначить на исполнителя',
-                        'gotoCardName': 'assign'
-                    },
-                    {
-                        'name': 'edit',
-                        'caption': 'Редактировать',
-                        'gotoCardName': 'update'
-                    }
-                ]
             }
         ],
         'defaultFilter': {
@@ -1666,7 +1624,11 @@ export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
     }
 }
 
-export function generateCalendarConfig(): Model.CalendarConfig {
+/**
+ * Генерация конфига для РКМ
+ * @return {CalendarConfig} - конфиг
+ */
+export function generateRKMCalendarConfig(): Model.CalendarConfig {
     return {
         roles: [
             'GUIDE'
@@ -1772,50 +1734,6 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         ]
                     },
                 ],
-                operations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Ввести результат',
-                        gotoCardName: '_INPUT_RESULT',
-                        hidden: true
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Изменить или удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
-                allOperations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Назначить на исполнителя',
-                        gotoCardName: 'assign',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Редактировать',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
             },
             // Отклонение ИСУ
             {
@@ -1829,50 +1747,6 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                     value: 'ISU',
 
                 },
-                operations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Ввести результат',
-                        gotoCardName: '_INPUT_RESULT',
-                        hidden: true
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Изменить или удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
-                allOperations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Назначить на исполнителя',
-                        gotoCardName: 'assign',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Редактировать',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
                 rows: [
                     {
                         position: 'header',
@@ -2210,50 +2084,6 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                 ],
-                operations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Ввести результат',
-                        gotoCardName: '_INPUT_RESULT',
-                        hidden: true
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Изменить или удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
-                allOperations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Назначить на исполнителя',
-                        gotoCardName: 'assign',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Редактировать',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ]
             },
             {
                 name: 'read',
@@ -2283,56 +2113,6 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                             'caption': 'Высокая важность'
                         },]
                     },
-                    // {
-                    //     blocks: [{
-                    //         type: 'button',
-                    //         caption: 'Поехали! r(TASK_FIELD taskType != ISU',
-                    //         condition: {
-                    //             operator: 'AND',
-                    //             operands: [
-                    //                 {
-                    //                     type: 'ROLE',
-                    //                     when: '==',
-                    //                     value: 'GUIDE'
-                    //                 },
-                    //                 {
-                    //                     operator: 'OR',
-                    //                     operands: [
-                    //                         {
-                    //                             type: 'TASK_FIELD',
-                    //                             param: 'status',
-                    //                             when: '==',
-                    //                             value: 'Scheduled2'
-                    //                         },
-                    //                         {
-                    //                             type: 'TASK_FIELD',
-                    //                             param: 'taskType',
-                    //                             when: '==',
-                    //                             value: 'Call – Outbound2'
-                    //                         }
-                    //                     ]
-                    //                 }
-                    //             ]
-                    //         },
-                    //         // actions: {
-                    //         //     navigateToApp: {
-                    //         //         // перейти в geo приложение
-                    //         //         bundle:'taskBandle',
-                    //         //         param: 'bundleName',
-                    //         //     },
-                    //         // }
-                    //     }, {
-                    //         type: 'button',
-                    //         caption: 'Подробности',
-                    //         actions: {
-                    //             navigateToApp: {
-                    //                 // перейти в geo приложение
-                    //                 bundle:'taskBandle',
-                    //                 param: 'bundleName',
-                    //             },}
-                    //         }]
-                    //     ]
-                    // },
                     {
                         blocks: [{
                             type: 'external',
@@ -2437,50 +2217,6 @@ export function generateCalendarConfig(): Model.CalendarConfig {
                         }]
                     },
                 ],
-                operations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Ввести результат',
-                        gotoCardName: '_INPUT_RESULT',
-                        hidden: true
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Изменить или удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Удалить',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ],
-                allOperations: [
-                    {
-                        name: 'assign',
-                        condition: {
-                            type: 'ROLE',
-                            when: '==',
-                            value: 'EFS_PMOP_COMPLIANCE_CORP'
-                        },
-                        caption: 'Назначить на исполнителя',
-                        gotoCardName: 'assign',
-                        hidden: false
-                    },
-                    {
-                        name: 'edit',
-                        caption: 'Редактировать',
-                        gotoCardName: 'update',
-                        hidden: false
-                    }
-                ]
             },
         ],
         taskListDisabled: false,
@@ -2488,7 +2224,124 @@ export function generateCalendarConfig(): Model.CalendarConfig {
         gridTime: {
             start: '9:00',
             end: '18:00'
-        }
+        },
+        dragAndDropEnabled: false
 
     }
+}
+
+/**
+ * Генерация конфига для геомониторинга
+ * @returns {CalendarConfig} - конфиг
+ */
+export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
+    return {
+        roles: [
+            'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+        ],
+        description: 'Конфиг календаря Геомониторинга',
+        cards: [
+            {
+                name: 'read',
+                description: 'Детальная карточка задачи',
+                mode: 'READ',
+                rows: [
+                    {
+                        position: 'header',
+                        blocks: [{
+                            type: 'title'
+                        }]
+                    },
+                    {
+                        position: 'header',
+                        blocks: [{
+                            type: 'type',
+                        }, {
+                            type: 'priority',
+                            caption: 'Высокая важность'
+                        },]
+                    },
+                    {
+                        justifyContent: 'flex-end',
+                        blocks: [
+                            {
+                                type: 'button',
+                                caption: 'Подробности',
+                                justifyContent: 'flex-end',
+                                actions: {
+                                    navigateToApp: {
+                                        // перейти в приложение Планировщика
+                                        type: 'READ_TASK',
+                                        bundle: 'ufs-taskservice'
+                                    },
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                        blocks: [{
+                            type: 'planDates',
+                            caption: 'Дата начала'
+                        }, {
+                            type: 'status',
+                            caption: 'Статус',
+                        }]
+                    },
+                    {
+                        blocks: [{
+                            type: 'address',
+                            caption: 'Адрес'
+                        },]
+                    },
+                    {
+                        blocks: [{
+                            type: 'contacts',
+                            caption: 'Контактное лицо',
+                            itemCaption: 'Контактное лицо',
+                        }]
+                    },
+                    {
+                        blocks: [{
+                            type: 'pledge',
+                            caption: 'Объекты залога',
+                        }]
+                    },
+                    {
+                        blocks: [
+                            {
+                                type: 'button',
+                                caption: 'Все объекты',
+                                actions: {
+                                    navigateToApp: {
+                                        // перейти в приложение Геомониторинга
+                                        bundle: 'listObjects',
+                                        type: 'SHOW_ALL_OBJECTS',
+                                    },
+                                }
+                            }
+                        ]
+                    },
+                ],
+            },
+        ],
+        taskListDisabled: true,
+        showWeekend: true,
+        gridTime: {
+            start: '9:00',
+            end: '18:00'
+        },
+        dragAndDropEnabled: false
+
+    }
+}
+
+export function generateCalendarConfig(): Model.CalendarConfig {
+    let config = generateRKMCalendarConfig()
+    const role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+    if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
+        config = generateGeomonitoringCalendarConfig()
+    }
+    return config
 }

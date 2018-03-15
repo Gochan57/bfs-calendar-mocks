@@ -53,7 +53,40 @@ export interface Position {
     height: number,
 }
 
+/**
+ * место вывода cooбщения об ошибке
+ */
+export const enum ErrorMessagePanel {
+    allPanels = 0,
+    taskList = 1,
+    calendar = 2,
+}
+
+/**
+ * ошибка для вывода на экран
+ */
+export interface ErrorMessage {
+    panel: ErrorMessagePanel,
+    type: 'error' | 'warning',
+    title: string,  // обязательный заголовок
+    text?: string,  // необязательный текст
+    button?: {
+        text: string, // текст кнопки
+        onExecute: (errorMessage: ErrorMessage) => void,
+    }
+}
+
+/**
+ * обслуживет драг и дроп
+ */
+export interface DragAndDrop {
+    enabled: boolean  // глобальный рубильник включить/выключить днд (будет читаться из конфига)
+    id: string        // ид перетаскиваемого события
+}
+
 export interface AppState {
+    errorMessages: ErrorMessage[],
+    dragAndDrop: DragAndDrop,
     appInitialProps: Model.CalendarMessage
     calendarMode: Model.CalendarMode, // текущий режим календаря
     defaultEventColor: Model.CalendarColorType,
@@ -67,7 +100,6 @@ export interface AppState {
     eventsShowLoader: boolean,
     eventsFetching: boolean,
     eventsFetchSuccess: boolean,
-    eventsFetchError: Error,
     selectedEventId: string, // выбранная задача в календаре
     selectedEventPosition: Position, // габаритный прямоугольник выбранноф задачи для вывода поповера
 
@@ -75,7 +107,6 @@ export interface AppState {
     tasksShowLoader: boolean,
     tasksFetching: boolean,
     tasksFetchSuccess: boolean,
-    tasksFetchError: Error,
     selectedTaskId: string, // выбранная задача в стакане задач
 
     searchTask: string, // строка поиска задачи
