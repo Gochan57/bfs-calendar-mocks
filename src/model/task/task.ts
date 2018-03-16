@@ -65,7 +65,6 @@ export interface SbrfTask {
      * Приоритет
      */
     priority?: ClassifierRef<TaskPriority>
-
     /**
      * Подзадачи
      */

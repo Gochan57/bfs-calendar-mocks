@@ -34,7 +34,10 @@ export interface RoleCheck extends BaseCheck{
      */
     value: string
 }
-
+/**
+ * Режим отображения календаря
+ * @maxLength 255
+ */
 export type CalendarMode = 'MainCalendarMode' | 'OtherPersonCalendarMode'
 /**
  * Проверка условия на параметры программы

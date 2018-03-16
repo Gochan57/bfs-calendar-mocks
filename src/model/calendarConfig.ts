@@ -40,6 +40,10 @@ export interface CalendarConfig {
          */
         end: string,
     }
+    /**
+     * разрешить перенос задач из стакана в календарь и обратно
+     */
+    dragAndDropEnabled: boolean
 }
 /**
  * Конфигурация карточки задачи
@@ -66,23 +70,6 @@ export interface CardConfiguration {
      */
     mode?: CardMode;
     /**
-     * Наименование кнопки
-     * @maxLength 255
-     */
-    saveButtonLabel?: string;
-    /**
-     * Показывать только выбранную задачу в стакане
-     */
-    taskListDisabled?: boolean;
-    /**
-     * Показывать или скрывать стакан задач.
-     */
-    taskListVisible?: boolean;
-    /**
-     * Если true, заголовок не показывается
-     */
-    headerHidden?: boolean;
-    /**
      * Условия отображения
      */
     condition?: Condition;
@@ -90,17 +77,10 @@ export interface CardConfiguration {
      * Перечень отображаемых блоков
      */
     rows: BlocksRow[];
-    /**
-     * Доступные действия из этой карточки
-     */
-    operations: Operation[]
-    /**
-     * Все действия
-     */
-    allOperations?: Operation[]
 }
 /**
  * Типы карточек задачи
+ * @maxLength 255
  */
 export type CardMode = 'CREATE' | 'READ' | 'UPDATE'
 export const CardMode: { [key: string]: CardMode } = {
@@ -108,7 +88,10 @@ export const CardMode: { [key: string]: CardMode } = {
     READ: 'READ',
     UPDATE: 'UPDATE',
 }
-
+/**
+ * Позиция строки с блоками в детальной карточке задачи
+ * @maxLength 255
+ */
 export type BlocksRowPosition = 'header' | 'footer'
 /**
  * Строка с блоками в детальной карточке задачи
@@ -127,7 +110,7 @@ export interface BlocksRow {
      * Стратегия выравнивание блоков в строке
      * @maxLength 255
      */
-    justifyContent?: 'flex-start' | 'space-around' |  'space-between'
+    justifyContent?: 'flex-start' | 'flex-end' | 'space-around' | 'space-between'
     /**
      * Область отображения блока (в заголовке, в футере, или в центральной области, если значение не задано)
      * @maxLength 255
@@ -168,11 +151,13 @@ export interface Block {
     /**
      *  индивидуальное выравнивание блока, введен для прибивания кнопки вправо всегда, даже если она остается одна в блоке
      *  а для всего блока задано выравнивание spaceBetween
+     * @maxLength 255
      */
     justifyContent?: 'flex-start' | 'flex-end'
 }
 /**
  * Типы блоков в детальной карточке задачи
+ * @maxLength 255
  */
 export type BlockType =
     /**
@@ -183,23 +168,18 @@ export type BlockType =
      * Внешний блок, который загружается из бандла
      */
     'external' |
-        /**
-         * кнопка
-          */
+    /**
+     * кнопка
+     */
     'button' |
-        /**
-         *  красная кнопка
-         */
+    /**
+     *  красная кнопка
+     */
     'redButton' |
-        /***
-         * устарело - убрать
-         */
-    'operationHiddenTrue' |
     /**
      * Заголовок
      */
     'title' |
-
     /**
      * Приоритет
      */
@@ -232,6 +212,9 @@ export type BlockType =
      * Плановые даты
      */
     'planDates' |
+    /**
+     * Плановая продолжительность
+     */
     'planDatesDuration' |
     /**
      * Фактические даты
@@ -241,9 +224,9 @@ export type BlockType =
      * Дата создания
      */
     'createDate' |
-        /**
-         *
-         * */
+    /**
+     * Продолжительность
+     */
     'dueDateDuration' |
     /**
      * ID задачи
@@ -329,29 +312,63 @@ export type BlockType =
      * есть в коде, но нет в интерфейсе планировщика
      */
     'deposit' |
+    /**
+     * Карта
+     */
     'map'
 /**
- * Типы действия в блоке деталей по задаче
- */
-/**
- *  Внутренние экшкены
+ * Изменяемые поля в задаче (используется в действии редактирования задачи)
  */
 export type DiffTask = Partial<Task.SbrfTask>
 
+/**
+ * Типы действия в блоке деталей по задаче:
+ * Внутренние экшен по удалению задачи
+ */
 export interface InnerActionDelete {
+    /**
+     * Тип внутреннего экшена
+     * @maxLength 255
+     */
     type: 'Delete'
 }
+/**
+ * Типы действия в блоке деталей по задаче:
+ * Внутренние экшен по изменению задачи
+ */
 export interface InnerActionChange {
+    /**
+     * Тип внутреннего экшена
+     * @maxLength 255
+     */
     type: 'Change',
+    /**
+     * Поля
+     * @maxLength 255
+     */
     diff?: DiffTask,
 }
+/**
+ * Внутренние экшены
+ */
 export type InnerAction = InnerActionDelete | InnerActionChange
 
 /**
  *  навигация на внешние бандлы
  */
 export interface NavigateToApp {
+    /**
+     * Наименование бандла приложения, на которое произойдет переход
+     * @maxLength 255
+     */
     bundle: string,
+    /**
+     * Поле type в передаваемом сообщении
+     */
+    type?: string,
+    /**
+     * Статичные параметры, которые будут переданы в сообщении внешнему приложению при переход
+     */
     param?: any,
 }
 
@@ -367,54 +384,4 @@ export interface ActionBlock {
      *  навигация на внешний бандл
      */
     navigateToApp?: NavigateToApp
-
-    // /**
-    //  * Тип действия
-    //  * @maxLength 255
-    //  */
-    // type?: ActionBlockType,
-    // /**
-    //  * Параметр действия
-    //  * @maxLength 255
-    //  */
-    // param?: string,
-}
-
-/**
- * Операция
- */
-export interface Operation {
-    /**
-     * Наименование/идентификатор действия
-     * @maxLength 255
-     */
-    name: string;
-    /**
-     * Необходимо подтверждение пользователя, если поле заполнено
-     * @maxLength 255
-     */
-    confirmation?: string;
-    /**
-     * Условия отображения
-     */
-    condition?: Condition;
-    /**
-     * Название действия, для отображения в выпадающем списке из карточки задач
-     * @maxLength 255
-     */
-    caption: string;
-    /**
-     * Внешний Workflow
-     * @maxLength 255
-     */
-    externalWorkflowName?: string;
-    /**
-     * Карточка, в которую можно перейти
-     * @maxLength 255
-     */
-    gotoCardName: string;
-    /**
-     * Не показывать операцию в выпадающем списке на PL.
-     */
-    hidden: boolean;
 }
