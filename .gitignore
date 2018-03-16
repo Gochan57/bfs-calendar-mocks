@@ -61,3 +61,4 @@ ios/DerivedData/
 
 src/**/*.js
 src/**/*.js.map
+package-lock.json
