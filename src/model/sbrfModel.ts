@@ -158,7 +158,7 @@ export interface RoleGroupConfiguration {
         /**
          * Тип задачи
          */
-            type?: string;
+        type?: string;
         /**
          * Приоритет
          */

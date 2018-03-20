@@ -13,7 +13,7 @@ export interface BaseCheck {
      * Оператор проверки
      * @maxLength 255
      */
-    when: '==' | '!=' | '>=' | '<=',
+    when: '==' | '!=' | '>=' | '<=' | '>' | '<',
     /**
      * Правая часть в проверке условия
      */
@@ -67,9 +67,10 @@ export interface TaskFieldCheck extends BaseCheck{
     type: 'TASK_FIELD',
     /**
      * Поле в задаче, значение которого проверяется
+     * TS не умеет парсить сложный путь, поможем ему сами
      * @maxLength 255
      */
-    param: keyof Task.SbrfTask,
+    param: keyof Task.SbrfTask | 'pledges.totalCount' | 'pledges.objects.length',
 }
 /**
  * Проверка условия

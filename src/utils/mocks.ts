@@ -2,44 +2,110 @@ import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
 import moment from 'moment'
 
-export function generateTaskList(param: Model.TaskListFilter): SbrfModel.SbrfTask[] {
-    const sizePage = param.pageSize || 100
-    const page = param.pageNum || 0
+/**
+ * Хранилище списка задач
+ */
+namespace Task {
 
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+    function createPriority(priority?: SbrfModel.TaskPriority): Model.ClassifierRef<SbrfModel.TaskPriority> {
+        if (!priority) {
+            return undefined
+        }
+        if (priority === SbrfModel.TaskPriority.HIGH) {
+            return {
+                'code': '1-ASAP',
+                'value': 'Высокий',
+                'ref': priority
+            }
+        }
+        if (priority === SbrfModel.TaskPriority.MEDIUM) {
+            return {
+                'code': '2-HIGH',
+                'value': 'Высокий',
+                'ref': priority
+            }
+        }
+        if (priority === SbrfModel.TaskPriority.HIGH) {
+            return {
+                'code': '3-Medium',
+                'value': 'Низкий',
+                'ref': priority
+            }
+        }
+        return {
+            'code': '4-Low',
+            'value': '4-Low',
+            'ref': SbrfModel.TaskPriority.DEF_TASK_PRIORITY
+        }
     }
-    const yestarday = (new Date(new Date().getTime() - 24 * 60 * 60 * 1000)).toLocaleString('en-US', options) + ' ' // 'November 3, 2017 '
-    const today = (new Date()).toLocaleString('en-US', options) + ' ' // 'November 3, 2017 '
-    const tomorrow = (new Date(new Date().getTime() + 24 * 60 * 60 * 1000)).toLocaleString('en-US', options) + ' ' // 'November 8, 2017 '
 
-    const models: SbrfModel.SbrfTask[] = [
-        {
-            'id': '1-2GHE2Q',
-            'title': 'Торговый дом оконная, ООО',
-            'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'plannedStart': tomorrow + '00:00:00',
-            'dueDate': tomorrow + '12:24:00',
-            'timeRef': 'DAY',
-            'plannedEnd': tomorrow + '15:24:00',
-            'subtitle': '2 объекта',
+    function createTaskType(taskType: SbrfModel.TaskType | 'ISU'): Model.ClassifierRef<SbrfModel.TaskType> {
+        if (!taskType) {
+            return undefined
+        }
+        if (taskType === SbrfModel.TaskType.MEETING) {
+            return {
+                'code': '2-Meeting',
+                'value': 'Встреча',
+                'ref': taskType
+            }
+        }
+        if (taskType === SbrfModel.TaskType.CALL) {
+            return {
+                'code': '1-Calling',
+                'value': 'Звонок',
+                'ref': taskType
+            }
+        }
+        if (taskType === 'ISU') {
+            return {
+                'code': 'ISU',
+                'value': 'Отклонение ИСУ',
+                'ref': SbrfModel.TaskType.OTHER
+            }
+        }
+        if (taskType === SbrfModel.TaskType.OTHER) {
+            return {
+                'code': 'OTHER',
+                'value': 'Неизвестный тип',
+                'ref': taskType
+            }
+        }
+    }
+
+    interface ITask {
+        id: string,
+        title?: string,
+        subtitle?: string,
+        description?: string,
+        start?: string,
+        end?: string,
+        dueDate?: string,
+        priority?: SbrfModel.TaskPriority,
+        taskType?: SbrfModel.TaskType,
+        meetingLocation?: string,
+        wholeDay?: boolean,
+        pledges?: SbrfModel.Pledges
+    }
+
+    function createTask(params: ITask): SbrfModel.SbrfTask {
+        const {id, title, subtitle, description, start, end, dueDate, priority, taskType, meetingLocation, wholeDay, pledges} = params
+        return {
+            'id': id,
+            'title': title !== undefined ? title : 'Торговый дом оконная, ООО',
+            'description': description !== undefined ? description : 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
+            'plannedStart': start,
+            'plannedEnd': end,
+            'dueDate': dueDate,
+            'timeRef': wholeDay ? 'DAY' : 'DATETIME',
+            'subtitle': subtitle !== undefined ? subtitle : '2 объекта',
             'status': {
                 'code': 'NEW',
                 'value': 'Новая',
                 'ref': 'PLANNED'
             },
-            'taskType': {
-                'code': 'Talk',
-                'value': 'Встреча',
-                'ref': 'MEETING'
-            },
-            'priority': {
-                'code': '2-ASAP',
-                'value': 'Высокий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
+            'taskType': createTaskType(taskType),
+            'priority': createPriority(priority),
             'employees': [
                 {
                     'login': 'IIShishkin',
@@ -66,7 +132,7 @@ export function generateTaskList(param: Model.TaskListFilter): SbrfModel.SbrfTas
                 },
 
             ],
-            'meetingLocation': 'ул. Просвещения, 80',
+            'meetingLocation': meetingLocation !== undefined ? meetingLocation : 'ул. Просвещения, 80',
             'corporates': [
                 {
                     'crmId': '1-CG64DU',
@@ -138,7 +204,7 @@ export function generateTaskList(param: Model.TaskListFilter): SbrfModel.SbrfTas
             ],
             'phoneNumber': 'hidden',
             'listType': 'ACTIVITY',
-            'pledges': {
+            'pledges': pledges !== undefined ? pledges : {
                 'totalCount': 79,
                 'objects': [
                     {
@@ -152,1196 +218,351 @@ export function generateTaskList(param: Model.TaskListFilter): SbrfModel.SbrfTas
                         'count': 5,
                     }
                 ]
-            }
-        },
-        {
-            'id': '1-2GHE2Q',
-            'title': 'ОАО УралПромСтройМарш',
-            'description': 'В ГОСБ число ТП с отклонение «Количество созданных сделок МКК по зарплатным проектам» за две недели наибольшее в ТБ с учетом доли бизнеса.',
-            'plannedStart': tomorrow + '00:00:00',
-            'plannedEnd': tomorrow + '23:59:59',
-            'timeRef': 'DAY',
-            'dueDate': tomorrow + '12:24:00',
-            'subtitle': '2 объекта',
-            'status': {
-                'code': 'NEW',
-                'value': 'Новая',
-                'ref': 'PLANNED'
-            },
-            'taskType': {
-                'code': 'ISU',
-                'value': 'Отклонение ИСУ',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '2-ASAP',
-                'value': 'Высокий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'IIShishkin',
-                    'name': 'Иван Иванович Шишкин',
-                    'type': 'INITIATOR',
-                    'jobTitle': 'Большая шишка',
-                    'workPhone': '1234-5678-00',
-                    'mobilePhone': '916-1234-5678',
-                    'email': '1234@mail.ru',
-
-                },
-                {
-                    'login': 'IKAyvasovsky',
-                    'name': 'Иван Константинович Айвазовский',
-                    'type': 'PERFORMER',
-                    'jobTitle': 'Свободный художник',
-                    'workPhone': '1234-5678-01',
-                    'mobilePhone': '916-1234-12345',
-                    'email': '6785@mail.ru',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-
-            ],
-            'meetingLocation': 'ул. Просвещения, 80',
-            'corporates': [
-                {
-                    'crmId': '1-CG64DU',
-                    'name': 'ОАО УралПромСтройМарш',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Иван Константинович Айвазовский',
-                            'mobilePhone': '+7 (988) 123-12-12',
-                            'primaryEmail': 'mail@mail.ru',
-                            'primaryPhone': '12345-987654',
-                            'jobTitle': 'Залогодатель',
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Потребительский кредит'
-                },
-                {
-                    'name': 'Жилищные кредиты'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value002',
-                    'epkId': 'EpkId_value002',
-                    'lastName': 'Фет',
-                    'firstName': 'Афанасий',
-                    'middleName': 'Афанасьевич',
-                    'documentSerNum': '21 21 654321',
-                    'segment': {
-                        'code': 'Super VIP',
-                        'value': 'Super VIP'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 8'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY',
-            'pledges': {
-                'totalCount': 79,
-                'objects': [
-                    {
-                        'objType': 'Недвижимость',
-                        'name': 'Автомобили, спецтехника, самоходные механизмы',
-                        'count': 74
-                    },
-                    {
-                        'objType': 'Движимое имущество',
-                        'name': 'Воздушные суда',
-                        'count': 5,
-                    }
-                ]
-            }
-        },
-        {
-            'id': '1-5DW6IU',
-            'title': 'Группа Компаний ПИК',
-            'description': 'ул. Мосфильмовская, 18',
-            'plannedStart': today + '15:24:00',
-            'plannedEnd': today + '16:24:00',
-            'dueDate': today + '12:24:00',
-            'subtitle': '4 объекта',
-            'status': {
-                'code': 'PROGRESS',
-                'value': 'В работе',
-                'ref': 'PROGRESS'
-            },
-            'taskType': {
-                'code': 'ISU',
-                'value': 'Отклонение ИСУ',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '1-ASAP',
-                'value': 'Высокий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'IAgoncharov',
-                    'name': 'Иван Александрович Гончаров',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'NSLeskov',
-                    'name': 'Николай Семенович Лесков',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-11-21T11:00:00.000+0000',
-            'factEnd': '2017-11-29T12:22:34.000+0000',
-            'meetingLocation': 'ул. Мосфильмовская, 18',
-            'corporates': [
-                {
-                    'crmId': '2-HJR4F2',
-                    'name': 'Группа Компаний ПИК',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Иван Александрович Гончаров',
-                            'mobilePhone': '+7 (956) 999-00-00',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'ДСЖ'
-                },
-                {
-                    'name': 'НПР'
-                },
-                {
-                    'name': 'Переводы'
-                },
-                {
-                    'name': 'Потребительский кредит'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value001',
-                    'epkId': 'EpkId_value001',
-                    'lastName': 'Цветаева',
-                    'firstName': 'Марина',
-                    'middleName': 'Ивановна',
-                    'documentSerNum': '12 12 123456',
-                    'segment': {
-                        'code': 'Super VIP',
-                        'value': 'Super VIP'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 4'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-JD93ED',
-            'title': 'ОАО ТяжПромСтрой',
-            'plannedStart': tomorrow + '00:00:00',
-            'plannedEnd': tomorrow + '23:59:59',
-            'timeRef': 'DAY',
-            'dueDate': yestarday + '12:24:00',
-            'description': 'ул. Строителей, 44',
-            'subtitle': '7 объектов',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Call – Outbound',
-                'value': 'Call – Outbound',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '1-ASAP',
-                'value': 'Высокий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'NVGogol',
-                    'name': 'Николай Васильевич Гоголь',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'AAAhmatova',
-                    'name': 'Анна Андреевна Ахматова',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-01',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-12-30T06:22:54.000+0000',
-            'factEnd': '2017-12-01T13:25:23.000+0000',
-            'meetingLocation': 'ул. Строителей, 44',
-            'corporates': [
-                {
-                    'crmId': '3-JKR34F',
-                    'name': 'ОАО ТяжПромСтрой',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Анна Андреевна Ахматова',
-                            'mobilePhone': '+7 (912) 765-23-32',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Страхование'
-                },
-                {
-                    'name': 'Потребительский кредит'
-                },
-                {
-                    'name': 'ПИФы'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value001',
-                    'epkId': 'EpkId_value001',
-                    'lastName': 'Лермонтов',
-                    'firstName': 'Михаил',
-                    'middleName': 'Юрьевич',
-                    'documentSerNum': '12 12 123456',
-                    'segment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 2'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': '89261231123',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-GHT4R',
-            'title': 'ЗАО Полярис',
-            'description': 'ул. Искусства, 57',
-            'plannedStart': tomorrow + '03:10:00',
-            'plannedEnd': tomorrow + '03:24:00',
-            'dueDate': tomorrow + '12:24:00',
-            'subtitle': '1 объект',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Meeting',
-                'value': 'Meeting',
-                'ref': 'MEETING'
-            },
-            'priority': {
-                'code': '2-High',
-                'value': 'Средний',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'ANTolstoy',
-                    'name': 'Алексей Николаевич Толстой',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'ISTurgenev',
-                    'name': 'Иван Сергеевич Тургенев',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-12-05T06:22:54.000+0000',
-            'factEnd': '2017-12-05T06:42:22.000+0000',
-            'meetingLocation': 'ул. Искусства, 57',
-            'corporates': [
-                {
-                    'crmId': '4-TY55FD',
-                    'name': 'ЗАО Полярис',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Иван Сергеевич Тургенев',
-                            'mobilePhone': '+7 (906) 234-99-99',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Сберегательный сертификат'
-                },
-                {
-                    'name': 'Жилищные кредиты'
-                },
-                {
-                    'name': 'Дебетовая карта'
-                },
-                {
-                    'name': 'Переводы'
-                },
-                {
-                    'name': 'Пакетные предложения'
-                },
-                {
-                    'name': 'Потребительский кредит'
-                },
-                {
-                    'name': 'Страхование'
-                },
-                {
-                    'name': 'Кредитная карта'
-                },
-                {
-                    'name': 'Векселя'
-                },
-                {
-                    'name': 'Вклады'
-                },
-                {
-                    'name': 'Комплексные продукты'
-                },
-                {
-                    'name': 'Брокерское обслуживание'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value001',
-                    'epkId': 'EpkId_value001',
-                    'lastName': 'Толстой',
-                    'firstName': 'Лев',
-                    'middleName': 'Николаевич',
-                    'documentSerNum': '12 12 123456',
-                    'segment': {
-                        'code': 'МВС',
-                        'value': 'МВС'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 3'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-7FGH4Z',
-            'title': 'Группа Компаний ПИК',
-            'plannedStart': tomorrow + '01:24:00',
-            'plannedEnd': tomorrow + '03:24:00',
-            'dueDate': tomorrow + '12:24:00',
-            'description': 'ул. Космонавтов, 27',
-            'subtitle': '3 объекта',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Call – Outbound',
-                'value': 'Call – Outbound',
-                'ref': 'CALL'
-            },
-            'priority': {
-                'code': '3-Medium',
-                'value': 'Низкий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'MVLomonosov',
-                    'name': 'Михаил Васильевич Ломоносов',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'VYABrusov',
-                    'name': 'Валерий Яковлевич Брюсов',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-12-05T08:00:00.000+0000',
-            'factEnd': '2017-12-06T12:22:34.000+0000',
-            'meetingLocation': 'ул. Космонавтов, 27',
-            'corporates': [
-                {
-                    'crmId': '5-LA23DF',
-                    'name': 'Группа Компаний ПИК',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Валерий Яковлевич Брюсов',
-                            'mobilePhone': '+7 (903) 456-10-10',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Сберегательный сертификат'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value002',
-                    'epkId': 'EpkId_value002',
-                    'lastName': 'Чехов',
-                    'firstName': 'Антон',
-                    'middleName': 'Павлович',
-                    'documentSerNum': '21 21 654321',
-                    'segment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 5'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': '89261231132',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-NMD3D1',
-            'parentTaskId': '5',
-            'plannedStart': today + '02:13:00',
-            'plannedEnd': today + '01:13:00',
-            'dueDate': tomorrow + '12:24:00',
-            'title': 'Авиоконструкторское бюро',
-            'description': 'ул. Пушкинская, 78',
-            'subtitle': '4 объекта',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Appointment',
-                'value': 'Appointment',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '1-ASAP',
-                'value': 'Высокий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'VISurikov',
-                    'name': 'Василий Иванович Суриков',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'VGPerov',
-                    'name': 'Василий Григорьевич Перов',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-12-11T08:00:00.000+0000',
-            'factEnd': '2017-12-14T11:23:51.000+0000',
-            'meetingLocation': 'ул. Пушкинская, 78',
-            'corporates': [
-                {
-                    'crmId': '6-ER5F5',
-                    'name': 'Авиоконструкторское бюро',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Василий Григорьевич Перов',
-                            'mobilePhone': '+7 (918) 654-54-54',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'ДСЖ'
-                },
-                {
-                    'name': 'ПИФы'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value002',
-                    'epkId': 'EpkId_value002',
-                    'lastName': 'Тютчев',
-                    'firstName': 'Федор',
-                    'middleName': 'Иванович',
-                    'documentSerNum': '21 21 654321',
-                    'segment': {
-                        'code': 'VIP',
-                        'value': 'VIP'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 9'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-RTG6HS',
-            'title': 'ОАО Лукойл',
-            'plannedStart': yestarday + '13:12:00',
-            'plannedEnd': yestarday + '15:20:00',
-            'dueDate': tomorrow + '12:24:00',
-            'description': 'ул. Мира, 132',
-            'subtitle': '2 объекта',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Meeting',
-                'value': 'Meeting',
-                'ref': 'MEETING'
-            },
-            'priority': {
-                'code': '3-Medium',
-                'value': 'Низкий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'ASGrin',
-                    'name': 'Александр Степанович Грин',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'AKTolstoy',
-                    'name': 'Алексей Константинович Толстой',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'meetingLocation': 'ул. Мира, 132',
-            'corporates': [
-                {
-                    'crmId': '7-VC5HF4',
-                    'name': 'ОАО Лукойл',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Алексей Константинович Толстой',
-                            'mobilePhone': '+7 (934) 764-34-34',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Автокредит'
-                },
-                {
-                    'name': 'Векселя'
-                },
-                {
-                    'name': 'Вклады'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value002',
-                    'epkId': 'EpkId_value002',
-                    'lastName': 'Пушкин',
-                    'firstName': 'Александр',
-                    'middleName': 'Сергеевич',
-                    'documentSerNum': '21 21 654321',
-                    'segment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 6'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': '89261233322',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-1WG56W',
-            'parentTaskId': '4',
-            'plannedStart': yestarday + '00:00:00',
-            'plannedEnd': yestarday + '23:59:59',
-            'timeRef': 'DAY',
-            'title': 'ОАО УралПромСтройМаш',
-            'description': 'ул. Орбитальная, 109',
-            'subtitle': '1 объект',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Meeting',
-                'value': 'Meeting',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '3-Medium',
-                'value': 'Низкий',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'AIPetrov',
-                    'name': 'Александр Иванович Петров',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'SMIvanov',
-                    'name': 'Семен Максимович Иванов',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-01',
-                    'type': 'MANAGER'
-                }
-            ],
-            'factStart': '2017-12-15T13:00:31.000+0000',
-            'factEnd': '2017-12-14T10:15:06.000+0000',
-            'meetingLocation': 'ул. Орбитальная, 109',
-            'corporates': [
-                {
-                    'crmId': '8-GF5FDS',
-                    'name': 'ОАО УралПромСтройМаш',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Александр Иванович Петров',
-                            'mobilePhone': '+7 (984) 456-45-45',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Автокредит'
-                },
-                {
-                    'name': 'Кредитная карта'
-                },
-                {
-                    'name': 'Страхование'
-                },
-                {
-                    'name': 'Сберегательный сертификат'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value',
-                    'epkId': 'EpkId_value',
-                    'lastName': 'Горький',
-                    'firstName': 'Максим',
-                    'middleName': 'Алексеевич',
-                    'documentSerNum': '12 12 123456',
-                    'segment': {
-                        'code': 'VIP',
-                        'value': 'VIP'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Надо сделать срочно'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY'
-        },
-        {
-            'id': '1-3PA5RU',
-            'title': 'Группа Компаний ПИК',
-            'plannedStart': today + '10:11:00',
-            'plannedEnd': today + '11:12:00',
-            'description': 'ул. Возрождения, 2',
-            'subtitle': '3 объекта',
-            'status': {
-                'code': 'Scheduled',
-                'value': 'Scheduled',
-                'ref': 'DEF_TASK_STATUS'
-            },
-            'taskType': {
-                'code': 'Appointment',
-                'value': 'Appointment',
-                'ref': 'OTHER'
-            },
-            'priority': {
-                'code': '4-Low',
-                'value': '4-Low',
-                'ref': 'DEF_TASK_PRIORITY'
-            },
-            'employees': [
-                {
-                    'login': 'SYAMarshak',
-                    'name': 'Самуил Яковлевич Маршак',
-                    'type': 'INITIATOR'
-                },
-                {
-                    'login': 'NAKluev',
-                    'name': 'Николай Алексеевич Клюев',
-                    'type': 'PERFORMER',
-                    'businessSegment': {
-                        'code': 'Mass',
-                        'value': 'Mass'
-                    }
-                },
-                {
-                    'id': 'mid-02',
-                    'type': 'MANAGER'
-                }
-            ],
-            'meetingLocation': 'ул. Возрождения, 2',
-            'corporates': [
-                {
-                    'crmId': '9-TYR3D',
-                    'name': 'Группа Компаний ПИК',
-                    'inn': '1234567890',
-                    'contacts': [
-                        {
-                            'fullName': 'Николай Алексеевич Клюев',
-                            'mobilePhone': '+7 (988) 223-22-22',
-                            'primaryEmail': 'mail@mail.ru'
-                        }
-                    ]
-                }
-            ],
-            'actionResult': {
-                'code': 'Other',
-                'value': 'Other'
-            },
-            'products': [
-                {
-                    'name': 'Опросы'
-                },
-                {
-                    'name': 'Переводы'
-                },
-                {
-                    'name': 'Страхование'
-                }
-            ],
-            'persons': [
-                {
-                    'birthDate': '1989-06-13',
-                    'stubId': 'StubId_value002',
-                    'epkId': 'EpkId_value002',
-                    'lastName': 'Шолохов',
-                    'firstName': 'Михаил',
-                    'middleName': 'Александрович',
-                    'documentSerNum': '21 21 654321',
-                    'segment': {
-                        'code': 'МВС',
-                        'value': 'МВС'
-                    }
-                }
-            ],
-            'modId': 1,
-            'comments': [
-                {
-                    'text': 'Текст комментария 7'
-                }
-            ],
-            'estimated': {
-                'login': 'Vania',
-                'type': 'MANAGER'
-            },
-            'childActivityFlag': 'C',
-            'pointId': '2',
-            'addressId': 'SPB',
-            'gps': 'G',
-            'inTimeFlag': 'I',
-            'autoactivityFlag': true,
-            'opportunities': [
-                {
-                    'id': '1',
-                    'description': 'возможность 1',
-                    'salesStage': 'шаг 1',
-                    'salesChannel': 'канал 1',
-                    'fot': 2,
-                    'employeeQuantity': 1
-                }
-            ],
-            'phoneNumber': 'hidden',
-            'listType': 'ACTIVITY'
-        }
-    ]
-
-    const tasks: SbrfModel.SbrfTask[] = []
-
-    for (let i = 0; i < sizePage; i++) {
-        let index = i + page * sizePage
-        const item = {...models[index % models.length]}
-        if (param) {
-            if (param.planned === false) {
-                const taskTypeMap: { [key: string]: SbrfModel.TaskType } = {
-                    Calling: SbrfModel.TaskType.CALL,
-                    Meeting: SbrfModel.TaskType.MEETING,
-                    Task: SbrfModel.TaskType.OTHER,
-                }
-                let datePlanTo = param.datePlanTo ? new Date(param.datePlanTo) : null
-                let taskType = Array.isArray(param.type) ? param.type.map(item => taskTypeMap[item]).filter(item => item) : null
-                let priority = param.priority ? [SbrfModel.TaskPriority.HIGH] : null  // можно будет добавить ASAP
-
-                if (Array.isArray(priority)) {
-                    if (!(item.priority && item.priority.ref)) { // не установлены атрибуты
-                        continue
-                    }
-                    if ((item.priority && item.priority.ref && priority.indexOf(item.priority.ref) === -1)) {
-                        continue
-                    }
-                }
-                if (Array.isArray(taskType)) { // есть фильтр
-                    if (!(item.taskType && item.taskType.ref)) { // не установлены атрибуты
-                        continue
-                    }
-                    if ((item.taskType && item.taskType.ref && taskType.indexOf(item.taskType.ref) === -1)) {
-                        continue
-                    }
-                    //alert(JSON.stringify(taskType) + JSON.stringify(param))
-                }
-                if (datePlanTo && item.plannedEnd && datePlanTo.getTime() <= (new Date(item.plannedEnd)).getTime()) {
-                    continue
-                }
-
-                tasks.push({
-                    ...item,
-                    id: '' + (index + 1),
-                    title: item.title || '',
-                    description: item.description,
-                    plannedStart: undefined,
-                    plannedEnd: item.plannedEnd,
-                    dueDate: item.dueDate || item.plannedEnd,
-                    priority: item.priority,
-                    taskType: item.taskType,
-                    meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
-                })
-            } else {
-                if (item.plannedStart && item.plannedEnd
-                    && moment(item.plannedStart).isAfter(moment(param.datePlanFrom))
-                    && moment(item.plannedEnd).isBefore(moment(param.datePlanTo))) {
-                    let id = item.id
-                    if (tasks.find(item => item.id === id)) {
-                        id = '' + (10000 + index + 1)
-                    }
-                    tasks.push({
-                        ...item,
-                        id: id,
-                        title: item.title || '',
-                        description: item.description,
-                        plannedStart: item.plannedStart,
-                        plannedEnd: item.plannedEnd,
-                        priority: item.priority,
-                        taskType: item.taskType,
-                        meetingLocation: item.meetingLocation || 'Переговорная 215 оранж',
-                        timeRef: 'DAY', // только для геомониторинга
-                    })
-                }
             }
         }
     }
-    return tasks
+
+    /**
+     * Получить дату в виде строки ISO
+     * @param {number} days - Число дней от сегодняшнего: -1 - вчера, 0 - сегодня, 1 - завтра и тд
+     * @param {string} time - Время в формате HH:MM
+     * @returns {string} - Дата в формате ISO
+     */
+    function date(days: number, time?: string): string {
+        let day = moment().add(days, 'days').format('YYYY-MM-DD') // день в формате 2013-02-25
+        return moment(`${day} ${time}`).toISOString()
+    }
+
+    /**
+     * Задача для демонстрации перехода на планировщик
+     */
+    const plannerGeoTask: SbrfModel.SbrfTask = {
+        'id': '1-2GHE2Q',
+        'title': 'ОАО УралПромСтройМарш',
+        'description': 'ул. Просвещения, 80',
+        'subtitle': '2 объекта',
+        'status': {
+            'code': 'Assigned',
+            'value': 'Назначенная'
+        },
+        'taskType': {
+            'code': 'Call – Outbound',
+            'value': 'Исходящий звонок',
+            'ref': 'OTHER'
+        },
+        'priority': {
+            'code': '4-Low',
+            'value': '4-Low',
+            'ref': 'DEF_TASK_PRIORITY'
+        },
+        'employees': [
+            {
+                'login': 'IIShishkin',
+                'name': 'Иван Иванович Шишкин',
+                'type': 'INITIATOR'
+            },
+            {
+                'login': 'IKAyvasovsky',
+                'name': 'Иван Константинович Айвазовский',
+                'type': 'PERFORMER',
+                'businessSegment': {
+                    'code': 'Mass',
+                    'value': 'Mass'
+                }
+            },
+            {
+                'id': 'mid-02',
+                'type': 'MANAGER'
+            }
+        ],
+        'plannedStart': date(0, '12:00'),
+        'plannedEnd': date(0, '13:00'),
+        'meetingLocation': 'ул. Просвещения, 80',
+        'corporates': [
+            {
+                'crmId': '1-CG64DU',
+                'name': 'ОАО УралПромСтройМарш',
+                'inn': '1234567890',
+                'contacts': [
+                    {
+                        'fullName': 'Айвазовский Иван Константинович',
+                        'mobilePhone': '+7 (988) 123-12-12',
+                        'primaryEmail': 'mail@mail.ru',
+                        'jobTitle': 'Залогодатель'
+                    }
+                ],
+                'addresses': [
+                    {
+                        'address': 'ул. Ростовская, 23'
+                    }
+                ]
+            }
+        ],
+        'actionResult': {
+            'code': 'Other',
+            'value': 'Other'
+        },
+        'products': [
+            {
+                'name': 'Потребительский кредит'
+            },
+            {
+                'name': 'Жилищные кредиты'
+            }
+        ],
+        'persons': [
+            {
+                'birthDate': '1989-06-13',
+                'stubId': 'StubId_value002',
+                'epkId': 'EpkId_value002',
+                'lastName': 'Фет',
+                'firstName': 'Афанасий',
+                'middleName': 'Афанасьевич',
+                'documentSerNum': '21 21 654321',
+                'segment': {
+                    'code': 'Super VIP',
+                    'value': 'Super VIP'
+                }
+            }
+        ],
+        'modId': 1,
+        'comments': [
+            {
+                'text': 'Текст комментария 8'
+            }
+        ],
+        'estimated': {
+            'login': 'Vania',
+            'type': 'MANAGER'
+        },
+        'childActivityFlag': 'C',
+        'pointId': '2',
+        'addressId': 'SPB',
+        'gps': 'G',
+        'inTimeFlag': 'I',
+        'autoactivityFlag': true,
+        'opportunities': [
+            {
+                'id': '1',
+                'description': 'возможность 1',
+                'salesStage': 'шаг 1',
+                'salesChannel': 'канал 1',
+                'fot': 2,
+                'employeeQuantity': 1
+            }
+        ],
+        'phoneNumber': 'hidden',
+        'listType': 'ACTIVITY',
+        'pledges': {
+            'totalCount': 79,
+            'objects': [
+                {
+                    'objType': 'Недвижимость',
+                    'name': 'Автомобили, спецтехника, самоходные механизмы',
+                    'count': 74
+                },
+                {
+                    'objType': 'Движимое имущество',
+                    'name': 'Воздушные суда',
+                    'count': 5
+                }
+            ]
+        }
+    }
+
+    export const tasks: SbrfModel.SbrfTask[] = [
+        plannerGeoTask,
+        createTask({id: '1', start: date(+0, '15:30'), end: date(+0, '16:30'), taskType: 'MEETING', priority: 'HIGH'}),
+        createTask({
+            id: '2',
+            start: date(+0, '15:40'),
+            end: date(+0, '16:20'),
+            taskType: 'CALL',
+            title: 'ОАО УралПромСтройМарш'
+        }),
+        createTask({
+            id: '3',
+            start: date(+0, '16:00'),
+            end: date(+0, '16:20'),
+            taskType: 'CALL',
+            title: 'Группа Компаний ПИК',
+            description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
+        }),
+        createTask({id: '4', start: date(+0, '00:00'), end: date(+1, '00:00'), wholeDay: true}),
+        createTask({id: '5', start: date(-1, '12:15'), end: date(-1, '14:00'), taskType: 'CALL', priority: 'HIGH'}),
+        createTask({
+            id: '6',
+            start: date(-1, '15:15'),
+            end: date(-1, '16:00'),
+            taskType: 'MEETING',
+            title: 'ОАО ТяжПромСтрой'
+        }),
+        createTask({
+            id: '7',
+            start: date(+1, '13:00'),
+            end: date(+1, '14:15'),
+            title: 'Залоги Полярис',
+            pledges: {totalCount: 0, objects: []}
+        }),
+        createTask({
+            id: '8',
+            start: date(+1, '00:00'),
+            end: date(+2, '00:00'),
+            wholeDay: true,
+            title: 'ООО СХП Вдохновение'
+        }),
+        createTask({id: '9', start: date(-20, '18:00'), end: date(-20, '19:30')}),
+        createTask({id: '10', title: 'ЗАО Полярис', meetingLocation: 'ул. Мира, 132'}),
+        createTask({id: '11', title: 'Авиоконструкторское бюро', meetingLocation: 'ул. Орбитальная, 109'}),
+        createTask({id: '12', title: 'ОАО Лукойл', meetingLocation: 'ул. Возрождения, 2'}),
+        createTask({id: '13', title: 'Сделка с ООО "ЯСНО"', meetingLocation: 'ул. Просвещения, 80'}),
+        createTask({id: '14', title: 'Встреча с клиентом из группы ПИК', taskType: 'MEETING'}),
+        createTask({
+            id: '15',
+            title: 'Отнести документы в отдел кадров',
+            subtitle: 'Документы на отпуск',
+            meetingLocation: 'ДФ-1 10 этаж'
+        }),
+        createTask({id: '16'}),
+        createTask({id: '17'}),
+        createTask({id: '18'}),
+        createTask({id: '19'}),
+        createTask({id: '20'}),
+        createTask({id: '21'}),
+        createTask({id: '22'}),
+        createTask({id: '23'}),
+        createTask({id: '24'}),
+        createTask({id: '25'}),
+        createTask({id: '26'}),
+        createTask({id: '27'}),
+        createTask({id: '28'}),
+        createTask({id: '29'}),
+        createTask({id: '30'}),
+        createTask({id: '31'}),
+        createTask({id: '32'}),
+        createTask({id: '33'}),
+        createTask({id: '34'}),
+        createTask({id: '35'}),
+        createTask({id: '36'}),
+        createTask({id: '37'}),
+        createTask({id: '38'}),
+        createTask({id: '39'}),
+        createTask({id: '40'}),
+        createTask({id: '41'}),
+        createTask({id: '42'}),
+        createTask({id: '43'}),
+        createTask({id: '44'}),
+        createTask({id: '45'}),
+        createTask({id: '46'}),
+        createTask({id: '47'}),
+        createTask({id: '48'}),
+        createTask({id: '49'}),
+        createTask({id: '50'}),
+        createTask({id: '51'}),
+        createTask({id: '52'}),
+        createTask({id: '53'}),
+        createTask({id: '54'}),
+        createTask({id: '55'}),
+        createTask({id: '56'}),
+        createTask({id: '57'}),
+        createTask({id: '58'}),
+        createTask({id: '59'}),
+        createTask({id: '60'}),
+        createTask({id: '61'}),
+        createTask({id: '62'}),
+        createTask({id: '63'}),
+        createTask({id: '64'}),
+        createTask({id: '65'}),
+        createTask({id: '66'}),
+        createTask({id: '67'}),
+        createTask({id: '68'}),
+        createTask({id: '69'}),
+        createTask({id: '70'}),
+        createTask({id: '71'}),
+        createTask({id: '72'}),
+        createTask({id: '73'}),
+        createTask({id: '74'}),
+        createTask({id: '75'}),
+        createTask({id: '76'}),
+        createTask({id: '77'}),
+        createTask({id: '78'}),
+        createTask({id: '79'}),
+        createTask({id: '80'}),
+        createTask({id: '81'}),
+        createTask({id: '82'}),
+        createTask({id: '83'}),
+        createTask({id: '84'}),
+        createTask({id: '85'}),
+        createTask({id: '86'}),
+        createTask({id: '87'}),
+        createTask({id: '88'}),
+        createTask({id: '89'}),
+        createTask({id: '90'}),
+        createTask({id: '91'}),
+        createTask({id: '92'}),
+        createTask({id: '93'}),
+        createTask({id: '94'}),
+        createTask({id: '95'}),
+        createTask({id: '96'}),
+        createTask({id: '97'}),
+        createTask({id: '98'}),
+        createTask({id: '99'}),
+        createTask({id: '100'}),
+    ]
+}
+
+export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTask[] {
+    const {pageSize, pageNum, datePlanFrom, datePlanTo, type, taskTypes, planned} = filter
+
+    const res = Task.tasks
+        .filter(task => {
+            // Фильтруем по датам
+            if ((datePlanFrom || datePlanTo) && (!task.plannedStart || !task.plannedEnd)) {
+                return false
+            }
+            if (datePlanFrom && task.plannedStart && moment(task.plannedStart).isBefore(moment(datePlanFrom))) {
+                return false
+            }
+            if (datePlanTo && task.plannedStart && moment(task.plannedStart).isAfter(moment(datePlanTo))) {
+                return false
+            }
+            return true
+        })
+        .filter(task => {
+            // Фильтруем незапланированные
+            // FIXME узнать, чему равны значения plannedStart и plannedEnd у незапланированных задач
+            return planned === false && !task.plannedStart && !task.plannedEnd || planned !== false
+        })
+        .filter(task => {
+            // Фильтруем "Завершить до"
+            // FIXME узнать, какой параметр в SbrfTaskFilter отвечает за "Завершить до"
+            return true
+        })
+        .filter(task => {
+            // Фильтруем "Приоритет"
+            // FIXME как задавать приоритет с помощью Switch ?
+            return true
+        })
+        .filter(task => {
+            // Фильтруем по типу задачи
+            // FIXME что передается в type и taskTypes у SbrfTaskFilter: ref или code ?
+            if (type) {
+                return task.taskType && task.taskType.ref === type
+            }
+            if (taskTypes) {
+                return task.taskType && taskTypes.indexOf(task.taskType.ref) > -1
+            }
+            return true
+        })
+        .filter((task, i) => {
+            // Выбираем нужную страницу
+            if (pageNum === undefined || pageNum === null || pageSize === undefined || pageSize === null) {
+                return true
+            }
+            return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
+        })
+
+    return res
 }
 
 export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
@@ -1692,15 +913,6 @@ export function generateRKMCalendarConfig(): Model.CalendarConfig {
                             caption: 'Адрес'
                         },]
                     },
-                    // {
-                    //     blocks: [
-                    //         {
-                    //             type: 'manager',
-                    //             caption: 'Участники',
-                    //             //itemCaption: 'Участник'
-                    //         }
-                    //     ]
-                    // },
                     {
                         blocks: [
                             {
@@ -2320,7 +1532,14 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
                                         bundle: 'listObjects',
                                         type: 'SHOW_ALL_OBJECTS',
                                     },
-                                }
+                                },
+                                condition: {
+                                    type: 'TASK_FIELD',
+                                    param: 'pledges.objects.length', // 'pledges.totalCount',
+                                    when: '>',
+                                    value: 0,
+
+                                },
                             }
                         ]
                     },

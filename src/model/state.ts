@@ -11,7 +11,8 @@ export interface GlobalState {
 }
 
 export const enum ErrorType {
-    Network
+    Network,
+    Cache
 }
 
 export interface Error {
@@ -34,16 +35,17 @@ export interface TaskFilters extends Filter.FiltersValues {
 }
 
 // фильтр для сетки календаря, задается пользователем и хранится в стайте
-export interface EventFilter {
-    datePlanFrom: Date | null,
-    datePlanTo: Date | null,
+export interface EventFilter extends Config.SbrfTaskFilter {
+    // сюда выносим обязательные параметры из SbrfTaskFilter
+    datePlanFrom: string,
+    datePlanTo: string,
 }
 
 /**
  * Параметры, для получения списка задач
  */
 export interface TaskListFilter extends Config.SbrfTaskFilter {
-    // сюда выносим обязательные параметры
+    // сюда выносим обязательные параметры из SbrfTaskFilter
     pageNum: number,
     pageSize: number,
 }
@@ -122,10 +124,16 @@ export interface AppState {
     configFetchSuccess: boolean,
     configFetchError: Error,
 
+    configInited: boolean, // приложение удачно считало конфиг (из кэша или по сети)
+
+    globalLoader: boolean,
+
     taskToDelete: Event, // задача, которая удалится после 5 секунд ожидания, если не нажать Восстановить
     deleteTaskFetching: boolean, // запрос на удаление задачи в процессе
     deleteTaskSuccess: boolean, // задача удалилась успешно
     deleteTaskError: Error, // ошибка при удалении задачи
 
     allPopoverClosed: boolean, // задать в true, чтобы закрыть все поповеры при выходе из приложения
+
+    isOnline: boolean, // подключено ли устройство к сети
 }
