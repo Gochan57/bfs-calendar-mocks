@@ -388,7 +388,7 @@ namespace Task {
             title: 'Группа Компаний ПИК',
             description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
         }),
-        createTask({id: '4', start: date(+0, '00:00'), end: date(+1, '00:00'), wholeDay: true}),
+        createTask({id: '4', start: date(+0, '00:00'), end: date(0, '23:59'), wholeDay: true}),
         createTask({id: '5', start: date(-1, '12:15'), end: date(-1, '14:00'), taskType: 'CALL', priority: 'HIGH'}),
         createTask({
             id: '6',
@@ -407,7 +407,7 @@ namespace Task {
         createTask({
             id: '8',
             start: date(+1, '00:00'),
-            end: date(+2, '00:00'),
+            end: date(+1, '23:59'),
             wholeDay: true,
             title: 'ООО СХП Вдохновение'
         }),
@@ -561,6 +561,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             }
             return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
         })
+        // .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
 
     return res
 }
@@ -1439,8 +1440,7 @@ export function generateRKMCalendarConfig(): Model.CalendarConfig {
             start: '9:00',
             end: '18:00'
         },
-        dragAndDropEnabled: false
-
+        dragAndDropEnabled: true
     }
 }
 
@@ -1560,9 +1560,13 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
 
 export function generateCalendarConfig(): Model.CalendarConfig {
     let config = generateRKMCalendarConfig()
-    const role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+    let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+    // let role = 'RKM_USER'
     if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
         config = generateGeomonitoringCalendarConfig()
+    }
+    if (role === 'RKM_USER') {
+        config = generateRKMCalendarConfig()
     }
     return config
 }
