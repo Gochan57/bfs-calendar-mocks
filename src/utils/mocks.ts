@@ -578,6 +578,7 @@ export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
             'forTaskUpdate': 'EFSCMPLUpdateAction'
         },
         'canCreateTask': false, // для геомониторига не возм созд задачу  // true,
+        'noSeparateTaskService': true, // признак отсутствия отдельного сервиса для получения детальной информации по задаче
         'enrichTaskListVsEmployee': false,
         'enrichTaskListVsClientInfo': false,
         'enrichTaskListVsPoints': false,
