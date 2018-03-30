@@ -388,7 +388,7 @@ namespace Task {
             title: 'Группа Компаний ПИК',
             description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
         }),
-        createTask({id: '4', start: date(+0, '00:00'), end: date(0, '00:00'), wholeDay: true}),
+        createTask({id: '4', start: date(+0, '00:00'), end: date(0, '13:59'), wholeDay: true}),
         createTask({id: '5', start: date(-1, '12:15'), end: date(-1, '14:00'), taskType: 'CALL', priority: 'HIGH'}),
         createTask({
             id: '6',
@@ -407,7 +407,7 @@ namespace Task {
         createTask({
             id: '8',
             start: date(+1, '00:00'),
-            end: date(+1, '00:00'),
+            end: date(+1, '13:59'),
             wholeDay: true,
             title: 'ООО СХП Вдохновение'
         }),
