@@ -575,7 +575,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
         })
         // .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
 
-    return res
+    return []
 }
 
 export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
