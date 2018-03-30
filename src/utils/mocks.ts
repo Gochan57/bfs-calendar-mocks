@@ -7,6 +7,21 @@ import moment from 'moment'
  */
 namespace Task {
 
+    function createStatus(status?: SbrfModel.TaskStatus): Model.ClassifierRef<SbrfModel.TaskStatus> {
+        if (status === SbrfModel.TaskStatus.DONE) {
+            return {
+                'code': 'DONE',
+                'value': 'Завершенная',
+                'ref': 'DONE'
+            }
+        }
+        return {
+            'code': 'NEW',
+            'value': 'Новая',
+            'ref': 'PLANNED'
+        }
+    }
+
     function createPriority(priority?: SbrfModel.TaskPriority): Model.ClassifierRef<SbrfModel.TaskPriority> {
         if (!priority) {
             return undefined
@@ -81,6 +96,7 @@ namespace Task {
         start?: string,
         end?: string,
         dueDate?: string,
+        status?: SbrfModel.TaskStatus,
         priority?: SbrfModel.TaskPriority,
         taskType?: SbrfModel.TaskType,
         meetingLocation?: string,
@@ -89,7 +105,7 @@ namespace Task {
     }
 
     function createTask(params: ITask): SbrfModel.SbrfTask {
-        const {id, title, subtitle, description, start, end, dueDate, priority, taskType, meetingLocation, wholeDay, pledges} = params
+        const {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
         return {
             'id': id,
             'title': title !== undefined ? title : 'Торговый дом оконная, ООО',
@@ -99,11 +115,7 @@ namespace Task {
             'dueDate': dueDate,
             'timeRef': wholeDay ? 'DAY' : 'DATETIME',
             'subtitle': subtitle !== undefined ? subtitle : '2 объекта',
-            'status': {
-                'code': 'NEW',
-                'value': 'Новая',
-                'ref': 'PLANNED'
-            },
+            'status': createStatus(status),
             'taskType': createTaskType(taskType),
             'priority': createPriority(priority),
             'employees': [
@@ -389,7 +401,7 @@ namespace Task {
             description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
         }),
         createTask({id: '4', start: date(+0, '00:00'), end: date(0, '13:59'), wholeDay: true}),
-        createTask({id: '5', start: date(-1, '07:15'), end: date(-1, '09:00'), taskType: 'CALL', priority: 'HIGH'}),
+        createTask({id: '5', start: date(-1, '07:15'), end: date(-1, '09:00'), status: 'DONE', taskType: 'CALL', priority: 'HIGH'}),
         createTask({
             id: '6',
             start: date(-1, '15:15'),
@@ -1534,13 +1546,14 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
                                         type: 'SHOW_ALL_OBJECTS',
                                     },
                                 },
-                                condition: {
-                                    type: 'TASK_FIELD',
-                                    param: 'pledges.objects.length', // 'pledges.totalCount',
-                                    when: '>',
-                                    value: 0,
-
-                                },
+                                // так можно добавить условие с проверкой вложенных полей для кнопки
+                                // condition: {
+                                //     type: 'TASK_FIELD',
+                                //     param: 'pledges.objects.length', // 'pledges.totalCount',
+                                //     when: '>',
+                                //     value: 0,
+                                //
+                                // },
                             }
                         ]
                     },
