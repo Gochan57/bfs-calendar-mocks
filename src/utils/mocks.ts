@@ -1573,8 +1573,8 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
 
 export function generateCalendarConfig(): Model.CalendarConfig {
     let config = generateRKMCalendarConfig()
-    // let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-    let role = 'RKM_USER'
+    let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+    // let role = 'RKM_USER'
     if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
         config = generateGeomonitoringCalendarConfig()
     }
