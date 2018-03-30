@@ -389,7 +389,7 @@ namespace Task {
             description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
         }),
         createTask({id: '4', start: date(+0, '00:00'), end: date(0, '13:59'), wholeDay: true}),
-        createTask({id: '5', start: date(-1, '7:15'), end: date(-1, '9:00'), taskType: 'CALL', priority: 'HIGH'}),
+        createTask({id: '5', start: date(-1, '07:15'), end: date(-1, '09:00'), taskType: 'CALL', priority: 'HIGH'}),
         createTask({
             id: '6',
             start: date(-1, '15:15'),
@@ -411,7 +411,7 @@ namespace Task {
             wholeDay: true,
             title: 'ООО СХП Вдохновение'
         }),
-        createTask({id: '9', start: date(-20, '18:00'), end: date(-20, '19:30')}),
+        createTask({id: '9', start: date(-20, '13:00'), end: date(-20, '14:30')}),
         createTask({id: '10', title: 'ЗАО Полярис', meetingLocation: 'ул. Мира, 132'}),
         createTask({id: '11', title: 'Авиоконструкторское бюро', meetingLocation: 'ул. Орбитальная, 109'}),
         createTask({id: '12', title: 'ОАО Лукойл', meetingLocation: 'ул. Возрождения, 2'}),
