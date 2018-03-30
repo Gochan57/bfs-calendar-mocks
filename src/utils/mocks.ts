@@ -372,24 +372,24 @@ namespace Task {
 
     export const tasks: SbrfModel.SbrfTask[] = [
         plannerGeoTask,
-        createTask({id: '1', start: date(+0, '15:30'), end: date(+0, '16:30'), taskType: 'MEETING', priority: 'HIGH'}),
+        createTask({id: '1', start: date(+0, '10:30'), end: date(+0, '11:30'), taskType: 'MEETING', priority: 'HIGH'}),
         createTask({
             id: '2',
-            start: date(+0, '15:40'),
-            end: date(+0, '16:20'),
+            start: date(+0, '10:40'),
+            end: date(+0, '11:20'),
             taskType: 'CALL',
             title: 'ОАО УралПромСтройМарш'
         }),
         createTask({
             id: '3',
-            start: date(+0, '16:00'),
-            end: date(+0, '16:20'),
+            start: date(+0, '11:00'),
+            end: date(+0, '11:20'),
             taskType: 'CALL',
             title: 'Группа Компаний ПИК',
             description: 'Крупнейшая российская девелоперская компания, реализующая проекты в Москве, Московской области и регионах России. Группа работает на рынке с 1994 года и специализируется на проектах в сегменте доступного жилья'
         }),
         createTask({id: '4', start: date(+0, '00:00'), end: date(0, '13:59'), wholeDay: true}),
-        createTask({id: '5', start: date(-1, '12:15'), end: date(-1, '14:00'), taskType: 'CALL', priority: 'HIGH'}),
+        createTask({id: '5', start: date(-1, '7:15'), end: date(-1, '9:00'), taskType: 'CALL', priority: 'HIGH'}),
         createTask({
             id: '6',
             start: date(-1, '15:15'),
@@ -561,7 +561,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             }
             return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
         })
-        // .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
+        .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
 
     return res
 }
