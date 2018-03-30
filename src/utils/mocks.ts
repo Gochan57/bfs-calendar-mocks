@@ -561,9 +561,9 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             }
             return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
         })
-        .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
+        // .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
 
-    return []
+    return res
 }
 
 export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
@@ -1560,8 +1560,8 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
 
 export function generateCalendarConfig(): Model.CalendarConfig {
     let config = generateRKMCalendarConfig()
-    let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-    // let role = 'RKM_USER'
+    // let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+    let role = 'RKM_USER'
     if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
         config = generateGeomonitoringCalendarConfig()
     }
