@@ -30,6 +30,15 @@ router.post('/task-service-bh/config-calendar', (req: express.Request, res: expr
     }, 2000)
 })
 
+router.post(`/task-service-bh/tasks/update`, (req: express.Request, res: express.Response) => {
+    setTimeout(() => {
+        res.contentType('application/json; charset=utf-8')
+        res.json({
+            success: true
+        })
+    }, 2000)
+})
+
 router.post('/task-service-bh/tasks', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
