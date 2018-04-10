@@ -108,7 +108,7 @@ namespace Task {
     }
 
     function createTask(params: ITask): SbrfModel.SbrfTask {
-        const {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
+        let {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
         if( role === 'RKM_USER'){
             wholeDay = false
         }
