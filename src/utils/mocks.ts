@@ -109,6 +109,9 @@ namespace Task {
 
     function createTask(params: ITask): SbrfModel.SbrfTask {
         const {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
+        if( role === 'RKM_USER'){
+            wholeDay = false
+        }
         return {
             'id': id,
             'title': title !== undefined ? title : 'Торговый дом оконная, ООО',
