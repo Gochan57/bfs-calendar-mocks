@@ -2,6 +2,9 @@ import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
 import moment from 'moment'
 
+//let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+let role = 'RKM_USER'
+
 /**
  * Хранилище списка задач
  */
@@ -578,7 +581,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
     return res
 }
 
-export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
+export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfiguration {
     return {
         'roles': [
             'GUIDE'
@@ -591,6 +594,288 @@ export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
             'forTaskUpdate': 'EFSCMPLUpdateAction'
         },
         'canCreateTask': false, // для геомониторига не возм созд задачу  // true,
+        'noSeparateTaskService': true, // признак отсутствия отдельного сервиса для получения детальной информации по задаче
+        'enrichTaskListVsEmployee': false,
+        'enrichTaskListVsClientInfo': false,
+        'enrichTaskListVsPoints': false,
+        'enrichTaskDetailsVsEmployees': false,
+        'enrichTaskDetailsVsClientInfo': false,
+        'enrichTaskDetailsVsPoints': false,
+        'titleFillStrategy': 'CLIENT',
+        'showDateStrategy': 'DUE_DATE', //'PLANNED_START',
+        'filter': [
+            {
+                '@type': 'CheckboxGroup',
+                'order': 0,
+                'required': true,
+                'name': 'type',
+                'caption': 'Типы задач',
+                'position': 'DEFAULT',
+                'defaultValue': 'any',
+                'immediatelyApplicable': false,
+                'resettable': true,
+                'items': [
+                    {
+                        'value': 'Meeting',
+                        'text': 'Встречи'
+                    },
+                    {
+                        'value': 'Calling',
+                        'text': 'Звонки'
+                    },
+                    {
+                        'value': 'Task',
+                        'text': 'Задания'
+                    }
+                ],
+                'type': 'DEFAULT'
+            },
+            {
+                '@type': 'DateInput',
+                'order': 1,
+                'required': true,
+                'name': 'datePlanTo',
+                'caption': 'Завершить до',
+                'position': 'DEFAULT',
+                'immediatelyApplicable': false,
+                'resettable': true
+            },
+            {
+                '@type': 'Switch',
+                'order': 2,
+                'required': false,
+                'name': 'priority',
+                'caption': 'Только важные',
+                'position': 'SEARCH_PANEL',
+                'defaultValue': false,
+                'immediatelyApplicable': false,
+                'resettable': true
+            },
+        ],
+        'cards': [
+            {
+                'name': 'read',
+                'caption': null,
+                'description': 'Детальная карточка задачи',
+                'mode': 'READ',
+                'taskListDisabled': null,
+                'taskListVisible': null,
+                'headerHidden': null,
+                'conditions': [
+                    {
+                        '@type': 'AND',
+                        'when': null,
+                        'value': [
+                            {
+                                '@type': 'ROLE',
+                                'when': 'EQUALS',
+                                'value': 'GUIDE'
+                            },
+                            {
+                                '@type': 'TASK_TYPE',
+                                'when': 'NOT_EQUALS',
+                                'value': '1-CALL'
+                            }
+                        ]
+                    }
+                ],
+                'rows': [
+                    {
+                        'title': {
+                            'order': 10
+                        }
+                    },
+                    {
+                        'manager': {
+                            'order': 1,
+                            'caption': 'Участники',
+                        }
+                    },
+                    {
+                        'type': {
+                            'order': 14,
+                            'caption': 'Тип задачи'
+                        },
+                        'status': {
+                            'order': 12,
+                            'caption': 'Статус'
+                        },
+                        'priority': {
+                            'order': 13,
+                            'caption': 'Приоритет'
+                        },
+                    },
+                    {
+                        'planDates': {
+                            'order': 10,
+                            'caption': 'Дата начала'
+                        },
+                        'planDatesDuration': {
+                            'order': 10,
+                            'caption': 'Длительность'
+                        }
+                    },
+                    {
+                        'address': {
+                            'order': 10,
+                            'caption': 'Место встречи'
+                        }
+                    },
+                    {
+                        'description': {
+                            'caption': 'Описание',
+                            'order': 10,
+                        }
+                    },
+                    {
+                        'contacts': {
+                            'order': 10,
+                            'caption': 'Контактное лицо'
+                        }
+                    },
+                    {
+                        'persons': {
+                            'order': 7,
+                            'multiple': false
+                        }
+                    },
+                    {
+                        'products': {
+                            'order': 75
+                        }
+                    },
+                    {
+                        'contacts': {
+                            'caption': 'Представители клиента',
+                            'order': 50
+                        }
+                    },
+                    {
+                        'comments': {
+                            'caption': 'История и комментарии',
+                            'order': 70,
+                            'multiple': true
+                        }
+                    },
+                    {
+                        'factDates': {
+                            'order': 15
+                        }
+                    },
+                    {
+                        'leads': {
+                            'order': 80,
+                            'multiple': true
+                        }
+                    },
+                    {
+                        'corporates': {
+                            'order': 30,
+                            'multiple': false
+                        }
+                    },
+                    {
+                        'meetingLocation': {
+                            'order': 17
+                        }
+                    },
+                    {
+                        'description': {
+                            'caption': 'Суть задачи',
+                            'order': 40
+                        }
+                    },
+                    {
+                        'decision': {
+                            'caption': 'Текст запроса',
+                            'order': 60
+                        }
+                    },
+                    {
+                        'actionResult': {
+                            'caption': 'Результат запроса',
+                            'order': 20
+                        }
+                    },
+                    {
+                        'performer': {
+                            'caption': 'Исполнители',
+                            'order': 65,
+                            'multiple': true
+                        }
+                    },
+                    {
+                        'initiator': {
+                            'order': 90
+                        }
+                    },
+                    {
+                        'manager': {
+                            'order': 100,
+                            'multiple': false
+                        }
+                    },
+                    {
+                        'vko': {
+                            'order': 100
+                        }
+                    },
+                    {
+                        'split': {
+                            'order': 110
+                        }
+                    },
+                    {
+                        'opportunities': {
+                            'order': 120
+                        }
+                    },
+                    {
+                        'history': {
+                            'order': 130,
+                            'multiple': false
+                        }
+                    },
+                ],
+            }
+        ],
+        'defaultFilter': {
+            'status': 'any',
+            'type': 'any',
+            'divisionTasks': false,
+            'important': false
+        },
+        'mappings': {
+            'taskTypes': {
+                '3-ClientCall': 'CALL',
+                '1-Calling': 'CALL',
+                '2-Meeting': 'MEETING'
+            },
+            'taskStatuses': {
+                'Cancelled': 'DECLINED',
+                'Planned': 'PLANNED'
+            },
+            'taskPriorities': {
+                '2-High': 'MEDIUM',
+                '1-ASAP': 'HIGH'
+            }
+        }
+    }
+}
+
+export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
+    return {
+        'roles': [
+            'GUIDE'
+        ],
+        'description': 'Гайд Планировщика (для разработки/тестирования)',
+        'dataSource': 'CRM_CORPORATE',
+        'methods': {
+            'forTaskDetails': 'EFSCMPLGetActionDetails',
+            'forTaskList': 'EFSCMPLGetActionsByLogin',
+            'forTaskUpdate': 'EFSCMPLUpdateAction'
+        },
+        'canCreateTask': true, // для геомониторига не возм созд задачу  // true,
         'noSeparateTaskService': true, // признак отсутствия отдельного сервиса для получения детальной информации по задаче
         'enrichTaskListVsEmployee': false,
         'enrichTaskListVsClientInfo': false,
@@ -1573,13 +1858,19 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
 
 export function generateCalendarConfig(): Model.CalendarConfig {
     let config = generateRKMCalendarConfig()
-    //let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-    let role = 'RKM_USER'
     if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
         config = generateGeomonitoringCalendarConfig()
     }
     if (role === 'RKM_USER') {
         config = generateRKMCalendarConfig()
+    }
+    return config
+}
+
+export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
+    let config = generateRKMPlannerConfig()
+    if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
+        config = generateGeomonitoringPlannerConfig()
     }
     return config
 }
