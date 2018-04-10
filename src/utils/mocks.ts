@@ -108,10 +108,8 @@ namespace Task {
     }
 
     function createTask(params: ITask): SbrfModel.SbrfTask {
-        let {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
-        if( role === 'RKM_USER'){
-            wholeDay = false
-        }
+        const {id, title, subtitle, description, start, end, dueDate, status, priority, taskType, meetingLocation, wholeDay, pledges} = params
+
         return {
             'id': id,
             'title': title !== undefined ? title : 'Торговый дом оконная, ООО',
@@ -579,7 +577,8 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             }
             return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
         })
-        .map(task => ({...task, timeRef: <'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY'>'DAY'}))
+        .map(task => ({...task,
+            timeRef: role === 'RKM_USER' ? task.timeRef : 'DAY'}))
 
     return res
 }
