@@ -2,8 +2,8 @@ import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
 import moment from 'moment'
 
-//let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-let role = 'RKM_USER'
+let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+//let role = 'RKM_USER'
 
 /**
  * Хранилище списка задач
@@ -254,7 +254,7 @@ namespace Task {
      */
     const plannerGeoTask: SbrfModel.SbrfTask = {
         'id': '1-2GHE2Q',
-        'title': 'ОАО УралПромСтройМарш',
+        'title': 'ОАО ПланировщикУралПромСтройМарш',
         'description': 'ул. Просвещения, 80',
         'subtitle': '2 объекта',
         'status': {
