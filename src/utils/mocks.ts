@@ -3,7 +3,7 @@ import * as SbrfModel from '../model/sbrfModel'
 import moment from 'moment'
 
 let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-//role = 'RKM_USER'
+role = 'RKM_USER'
 
 /**
  * Хранилище списка задач
