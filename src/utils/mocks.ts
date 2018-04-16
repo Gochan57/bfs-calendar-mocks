@@ -1714,15 +1714,16 @@ export function generateRKMCalendarConfig(): Model.CalendarConfig {
                         position: 'footer',
                         blocks: [{
                             type: 'button',
-                            caption: 'Изменить',
+                            caption: 'Изменить!',
                             actions: {
                                 navigateToApp: {
-                                    bundle: 'task-service',
+                                    bundle: 'ufs-taskservice',
+                                    type:   'UPDATE_TASK',
                                 }
                             }
                         }, {
                             type: 'redButton',
-                            caption: 'Удалить',
+                            caption: 'Удалить!',
                             actions: {
                                 action: {
                                     type: 'Delete',
