@@ -2,8 +2,8 @@ import * as Model from '../model'
 import * as SbrfModel from '../model/sbrfModel'
 import moment from 'moment'
 
-let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
-role = 'RKM_USER'
+// let role = 'EFS_MRM_MONITORING_GEOPLEDGE_USER'
+let role = 'RKM_USER'
 
 /**
  * Хранилище списка задач
@@ -577,8 +577,11 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             }
             return i >= pageNum * pageSize && i < (pageNum + 1) * pageSize
         })
-        .map(task => ({...task,
-            timeRef: role === 'RKM_USER' ? task.timeRef : 'DAY'}))
+        .map(task => ({
+                ...task,
+                timeRef: role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER' ? 'DAY' : task.timeRef
+            })
+        )
 
     return res
 }
