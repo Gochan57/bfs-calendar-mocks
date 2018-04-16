@@ -7,7 +7,8 @@
     "rm_install": "rm -rf ./node_modules && npm install",
     "build": "npm run tsc",
     "start": "npm run build && ./node_modules/babel-cli/bin/babel-node.js --presets node6 ./src/index.js",
-    "tsc": "tsc --pretty"
+    "tsc": "tsc --pretty",
+    "mocks": "cd scripts && chmod +x restart-bfs-calendar-mocks-remotely.sh && ./restart-bfs-calendar-mocks-remotely.sh"
   },
   "dependencies": {
     "@types/body-parser": "^1.16.8",
