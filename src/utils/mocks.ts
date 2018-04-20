@@ -1829,7 +1829,7 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
                         blocks: [
                             {
                                 type: 'button',
-                                caption: 'Все объекты',
+                                caption: 'Список объектов',
                                 actions: {
                                     navigateToApp: {
                                         // перейти в приложение Геомониторинга
