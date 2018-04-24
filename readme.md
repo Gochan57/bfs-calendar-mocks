@@ -4,14 +4,14 @@
 
 ### Сервисы
 
-**/task-service-bh/config** - конфиг планировщика
+**/task-service-bh/v4.0/config** - конфиг планировщика
 
-**/task-service-bh/config-calendar** - конфиг календаря
+**/bfs-calendar-bh/v4.0/config** - конфиг календаря
 
-**/task-service-bh/tasks** - список задач (сервис можно вызывать неограниченное
+**/task-service-bh/v4.0/tasks** - список задач (сервис можно вызывать неограниченное
 число раз, будет возвращаться новый список задач)
 
-**/task-service-bh/tasks/delete/:taskid** - удаление задачи
+**/task-service-bh/v4.0/tasks/delete/:taskid** - удаление задачи
 
 ### Запуск приложения
 

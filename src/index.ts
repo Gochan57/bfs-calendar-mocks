@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 const port = 8080;
 const router = express.Router();
 
-router.post('/task-service-bh/config', (req: express.Request, res: express.Response) => {
+router.post('/task-service-bh/v4.0/config', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
         res.json({
@@ -20,7 +20,7 @@ router.post('/task-service-bh/config', (req: express.Request, res: express.Respo
     }, 2000)
 })
 
-router.post('/task-service-bh/config-calendar', (req: express.Request, res: express.Response) => {
+router.post('/bfs-calendar-bh/v4.0/config', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
         res.json({
@@ -30,7 +30,7 @@ router.post('/task-service-bh/config-calendar', (req: express.Request, res: expr
     }, 2000)
 })
 
-router.post(`/task-service-bh/tasks/update`, (req: express.Request, res: express.Response) => {
+router.post(`/task-service-bh/v4.0/tasks/update`, (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
         res.json({
@@ -39,7 +39,7 @@ router.post(`/task-service-bh/tasks/update`, (req: express.Request, res: express
     }, 2000)
 })
 
-router.post('/task-service-bh/tasks', (req: express.Request, res: express.Response) => {
+router.post('/task-service-bh/v4.0/tasks', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
         res.json({
@@ -49,7 +49,7 @@ router.post('/task-service-bh/tasks', (req: express.Request, res: express.Respon
     }, 2000)
 })
 
-router.post('/task-service-bh/tasks/delete/:taskid', (req: express.Request, res: express.Response) => {
+router.post('/task-service-bh/v4.0/tasks/delete/:taskid', (req: express.Request, res: express.Response) => {
     setTimeout(() => {
         res.contentType('application/json; charset=utf-8')
         res.json({
