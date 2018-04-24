@@ -1833,7 +1833,7 @@ export function generateGeomonitoringCalendarConfig(): Model.CalendarConfig {
                                 actions: {
                                     navigateToApp: {
                                         // перейти в приложение Геомониторинга
-                                        bundle: 'listObjects',
+                                        bundle: 'FieldAudit',
                                         type: 'SHOW_ALL_OBJECTS',
                                     },
                                 },
