@@ -254,7 +254,7 @@ namespace Task {
      */
     const plannerGeoTask: SbrfModel.SbrfTask = {
         'id': '1-2GHE2Q',
-        'title': 'ОАО ПланировщикУралПромСтройМарш',
+        'title': 'Перекредитование на льготных условиях',
         'description': 'ул. Просвещения, 80',
         'subtitle': '2 объекта',
         'status': {
