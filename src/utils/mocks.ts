@@ -583,7 +583,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
             })
         )
 
-    return res
+    return []
 }
 
 export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfiguration {
