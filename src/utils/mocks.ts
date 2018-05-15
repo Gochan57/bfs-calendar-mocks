@@ -428,10 +428,10 @@ namespace Task {
             title: 'ООО СХП Вдохновение'
         }),
         createTask({id: '9', start: date(-20, '13:00'), end: date(-20, '14:30')}),
-        createTask({id: '10', title: 'ЗАО Полярис', meetingLocation: 'ул. Мира, 132'}),
-        createTask({id: '11', title: 'Авиоконструкторское бюро', meetingLocation: 'ул. Орбитальная, 109'}),
+        createTask({id: '10', title: 'ЗАО Полярис', subtitle: 'Встреча с заказчиков', meetingLocation: 'ул. Мира, 132'}),
+        createTask({id: '11', title: 'Авиоконструкторское бюро', subtitle: 'Договор об аренде', meetingLocation: 'ул. Орбитальная, 109'}),
         createTask({id: '12', title: 'ОАО Лукойл', meetingLocation: 'ул. Возрождения, 2'}),
-        createTask({id: '13', title: 'Сделка с ООО "ЯСНО"', meetingLocation: 'ул. Просвещения, 80'}),
+        createTask({id: '13', title: 'Сделка с ООО "ЯСНО"', subtitle: 'Реализация активов', meetingLocation: 'ул. Просвещения, 80'}),
         createTask({id: '14', title: 'Встреча с клиентом из группы ПИК', taskType: 'MEETING'}),
         createTask({
             id: '15',
