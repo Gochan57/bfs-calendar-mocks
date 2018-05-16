@@ -23,30 +23,37 @@ export interface TaskTypeClassifier extends Classifier {
 export interface SbrfTask {
     /**
      * Идентификатор
+     * @maxLength 255
      */
     id: string;
     /**
      * Идентификатор родительской задачи
+     * @maxLength 255
      */
     parentTaskId: string;
     /**
      * Заголовок
+     * @maxLength 255
      */
     title: string;
     /**
      * Подзаголовок
+     * @maxLength 255
      */
     subtitle: string;
     /**
      * Описание
+     * @maxLength 255
      */
     description: string;
     /**
      * Дата начала
+     * @maxLength 255
      */
     startDate?: string;
     /**
      * Дата завершения
+     * @maxLength 255
      */
     endDate?: string;
     /**
@@ -59,6 +66,7 @@ export interface SbrfTask {
     taskType?: ClassifierRef<TaskType>
     /**
      * Привязка ко времени
+     * @maxLength 255
      */
     timeRef?: Config.TimeRef
     /**
@@ -75,22 +83,27 @@ export interface SbrfTask {
     employees: SbrfTaskEmployee[];
     /**
      * Дата создания
+     * @maxLength 255
      */
     createdOn?: string;
     /**
      * Плановая дата начала
+     * @maxLength 255
      */
     plannedStart?: string;
     /**
      * Плановая дата завершения
+     * @maxLength 255
      */
     plannedEnd?: string;
     /**
      * Фактическая дата начала
+     * @maxLength 255
      */
     factStart?: string;
     /**
      * Фактическая дата завершения
+     * @maxLength 255
      */
     factEnd?: string;
     /**
@@ -103,10 +116,12 @@ export interface SbrfTask {
     corporates: SbrfTaskCorporate[];
     /**
      * Место встречи
+     * @maxLength 255
      */
     meetingLocation: string;
     /**
      * Комментарий к результату
+     * @maxLength 255
      */
     decision: string;
     /**
@@ -115,6 +130,7 @@ export interface SbrfTask {
     actionResult?: Classifier
     /**
      * Кампания
+     * @maxLength 255
      */
     campaignName: string;
     /**
@@ -127,6 +143,7 @@ export interface SbrfTask {
     persons: SbrfTaskPerson[];
     /**
      * Добавить в Outlook
+     * @maxLength 255
      */
     sendToOutlook: string;
     /**
@@ -139,6 +156,7 @@ export interface SbrfTask {
     channel?: Classifier
     /**
      * Источник создания задачи
+     * @maxLength 255
      */
     source: string;
     /**
@@ -147,18 +165,22 @@ export interface SbrfTask {
     notifyBySms: boolean;
     /**
      * Номер для уведомлений по SMS
+     * @maxLength 255
      */
     smsPhoneNumber: string;
     /**
      * ID Звонка
+     * @maxLength 255
      */
     callId: string;
     /**
      * Номер телефона вызова
+     * @maxLength 255
      */
     callPhoneNumber: string;
     /**
      * № обращения в CRM
+     * @maxLength 255
      */
     clientRequestNumber: string;
     /**
@@ -171,6 +193,7 @@ export interface SbrfTask {
     split?: Classifier
     /**
      * Подсплит
+     * @maxLength 255
      */
     mainSplit: string;
     /**
@@ -179,6 +202,7 @@ export interface SbrfTask {
     initiatorFlg: boolean;
     /**
      * Уникальный идентификатор операции создания
+     * @maxLength 255
      */
     operUID: string;
     /**
@@ -195,26 +219,32 @@ export interface SbrfTask {
     requiresApproval: boolean;
     /**
      * Идентификатор ГСЗ (Для задач на включение в ГСЗ)
+     * @maxLength 255
      */
     gszId: string;
     /**
      * Срок исполнения
+     * @maxLength 255
      */
     dueDate: string;
     /**
      * Идентификатор карточки обращения
+     * @maxLength 255
      */
     referenceCrmId: string;
     /**
      * Идентификатор карточки взаимодействия
+     * @maxLength 255
      */
     interactionCrmId: string;
     /**
      * Новая плановая дата начала
+     * @maxLength 255
      */
     newPlannedStart: string;
     /**
      * Новая плановая дата окончания
+     * @maxLength 255
      */
     newPlannedEnd: string;
     /**
@@ -223,10 +253,12 @@ export interface SbrfTask {
     estimated?: Estimated;
     /**
      * Признак наличия дочерней записи
+     * @maxLength 255
      */
     childActivityFlag: string;
     /**
      * Id родительской записи (Идентификатор торговой точки)
+     * @maxLength 255
      */
     pointId: string;
     /**
@@ -244,34 +276,42 @@ export interface SbrfTask {
     };
     /**
      * Id адреса
+     * @maxLength 255
      */
     addressId: string;
     /**
      * Несовпадение GPS
+     * @maxLength 255
      */
     gps: string;
     /**
      * Несвоевременный приход флаг
+     * @maxLength 255
      */
     inTimeFlag: string;
     /**
      * Id договора
+     * @maxLength 255
      */
     agreementId: string;
     /**
      * ФИО оператора внешнего КЦ
+     * @maxLength 255
      */
     createdByCcFullName: string;
     /**
      * Идентификатор внешнего КЦ
+     * @maxLength 255
      */
     createdByCcId: string;
     /**
      * Код участника кампании
+     * @maxLength 255
      */
     ukCode: string;
     /**
      * Признак автоматически созданной активности
+     * @maxLength 255
      */
     autoactivityFlag: boolean;
     /**
@@ -280,10 +320,12 @@ export interface SbrfTask {
     opportunities: SbrfTaskDeal[];
     /**
      * Признак наличия дочерней записи
+     * @maxLength 255
      */
     childVisitFlag: string;
     /**
      * Периодичность
+     * @maxLength 255
      */
     period: string;
     /**
@@ -296,10 +338,12 @@ export interface SbrfTask {
     employeeFact?: number;
     /**
      * Телефон клиента, связанный с активностью/Телефон контактного лица
+     * @maxLength 255
      */
     phoneNumber: string;
     /**
      * Тип телефона
+     * @maxLength 255
      */
     phoneType: string;
     /**
@@ -308,6 +352,7 @@ export interface SbrfTask {
     listType?: ListType
     /**
      * Количество Персональных предложений по клиенту
+     * @maxLength 255
      */
     countPP: string;
 

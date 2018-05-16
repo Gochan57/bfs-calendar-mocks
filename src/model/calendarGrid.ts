@@ -88,10 +88,22 @@ export const enum CalendarGridWholeDayType {
     Type2 = 2,
     Type3 = 3,
 }
-
+// { Enabled: 1, Editable: 2, Disabled: 0 }
+//{ InsideCelendar: 2, OutsideCelendar: 1, Disabled: 0 }
 export const enum DragAndDropAvailabilityType {
     Disabled = 0,
+    Enabled = 2,  // InsideCelendar: 2
+    Editable = 1, // OutsideCelendar: 1
+}
+
+export const enum DragAndDropEventEditType {
+    Disabled = 0,
     Enabled = 1,
+}
+
+export const enum DragAndDropMode {
+    DragAndDrop,
+    Edit,
 }
 
 export const enum DropAreaType {
@@ -99,6 +111,14 @@ export const enum DropAreaType {
     WholeDayAreaType = 2, // в области на весь день
 }
 
+// { OutOfZone: 3, Grid: 1, WholeDay: 2 }
+// { OutOfZone: 3, Grid: 1, WholeDay: 2 }
+export const enum DragAndDropWrapperDropType {
+    Grid = 1,
+    WholeDay = 2,
+    OutOfZone = 3,
+    TaskList = 4
+}
 // частичный тип, может содержать любое количество свойств <T>
 //export type Partial<T> = { [P in keyof T]?: T[P] }
 

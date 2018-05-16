@@ -1,15 +1,26 @@
-// @ChangeLog
-// Добавлен CheckboxGroup в type Filter
-// Добавил Pladges в SbrfTask
-export interface Pledge {
-    objType?: string,
-    name?: string,
-    count?: number,
-}
-export interface Pledges
-{
-    totalCount?: number,
-    objects?: Pledge[],
+// ChangeLog
+//  Filter вынесен в отдельный тип
+//  Pledges вынесен в отдельный интерфейс
+
+export type Filter = (Checkbox | CheckboxGroup | DateInput | RadioGroup | Select | Switch | TabSelector)
+
+export interface Pledges {
+    /**
+     * Наименование (передается значение C_NAME справочника 'Виды залога') различающихся видов залога объектов залога, входящих в задачу через запятую
+     */
+    pledgerType?: string;
+    /**
+     * Количество объектов залога, входящих в задачу, через запятую
+     */
+    count?: string;
+    /**
+     * Общее количество объектов залога
+     */
+    totalCount?: number;
+    /**
+     * Список объектов залога
+     */
+    objects?: SbrfTaskPledgeObject[];
 }
 
 /**
@@ -17,8 +28,11 @@ export interface Pledges
  * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
  * and run json-schema-to-typescript to regenerate this file.
  */
-export type Filter = (Checkbox | CheckboxGroup | DateInput | RadioGroup | Select | Switch | TabSelector)
-export interface RoleGroupConfiguration {
+
+/**
+ * Схема ответа получения конфигурации
+ */
+export interface InteractionTaskConfigDetailsRs {
     /**
      * Список ролей, для которых применима данная конфигурация
      */
@@ -77,7 +91,7 @@ export interface RoleGroupConfiguration {
         forEmployeesSubordinates?: string;
     };
     /**
-     * Настройка для отображения кнопки 'Добавить задачу'
+     * Настройка для отображения кнопки 'Добавить задачу'@types
      */
     canCreateTask?: boolean;
     /**
@@ -89,14 +103,21 @@ export interface RoleGroupConfiguration {
      */
     noSeparateTaskService?: boolean;
     /**
-     * Признаки обогащения задач данными о клиенте и сотрудниках
+     * Признак сокрытия иконок
      */
-    enrichTaskListVsEmployee?: boolean;
-    enrichTaskListVsClientInfo?: boolean;
-    enrichTaskListVsPoints?: boolean;
-    enrichTaskDetailsVsEmployees?: boolean;
-    enrichTaskDetailsVsClientInfo?: boolean;
-    enrichTaskDetailsVsPoints?: boolean;
+    hideIconsTaskList?: boolean;
+    /**
+     * Признак скрытия даты непросроченной задачи в списке
+     */
+    hideDateTaskList?: boolean;
+    /**
+     * Признак скрытия даты просроченной задачи в списке
+     */
+    hideOverdueDateTaskList?: boolean;
+    /**
+     * Признак открытия только одной группы задач в списке
+     */
+    singleGroupOpened?: boolean;
     /**
      * Тип задачи для зависимого справочника Результат
      */
@@ -113,14 +134,14 @@ export interface RoleGroupConfiguration {
      * Стратегия выбора отображаемой даты в списке задач
      */
     showDateStrategy?:
-        'PLANNED_START'
-            | 'PLANNED_END'
-            | 'FACT_START'
-            | 'FACT_END'
-            | 'CREATED_ON'
-            | 'DUE_DATE'
-            | 'ACTIVE_START_DATE'
-            | 'ACTIVE_END_DATE';
+        | 'PLANNED_START'
+        | 'PLANNED_END'
+        | 'FACT_START'
+        | 'FACT_END'
+        | 'CREATED_ON'
+        | 'DUE_DATE'
+        | 'ACTIVE_START_DATE'
+        | 'ACTIVE_END_DATE';
     /**
      * Перечень параметров фильтрации
      */
@@ -139,6 +160,14 @@ export interface RoleGroupConfiguration {
      * SbrfTaskListFilter, при инициализации заполняется значениями по умолчанию из FilterParam
      */
     defaultFilter?: {
+        /**
+         * Логин сотрудника
+         */
+        login?: string;
+        /**
+         * RowId позиции пользователя с признаком 'Личный'
+         */
+        personId?: string;
         /**
          * Id лида
          */
@@ -188,21 +217,45 @@ export interface RoleGroupConfiguration {
          */
         dateCreateTo?: string;
         /**
-         * Плановая дата начала
+         * Плановая дата начала, от
          */
         datePlanFrom?: string;
         /**
-         * Плановая дата завершения
+         * Плановая дата начала, до
          */
         datePlanTo?: string;
         /**
-         * Фактическая дата начала
+         * Плановая дата завершения, от
+         */
+        datePlanEndFrom?: string;
+        /**
+         * Плановая дата завершения, до
+         */
+        datePlanEndTo?: string;
+        /**
+         * Фактическая дата начала, от
+         */
+        dateFactStartFrom?: string;
+        /**
+         * Фактическая дата начала, до
+         */
+        dateFactStartTo?: string;
+        /**
+         * Фактическая дата завершения, от
          */
         dateFactFrom?: string;
         /**
-         * Фактическая дата завершения
+         * Фактическая дата завершения, до
          */
         dateFactTo?: string;
+        /**
+         * Дата контрольного срока, от
+         */
+        dateDeadlineFrom?: string;
+        /**
+         * Дата контрольного срока, до
+         */
+        dateDeadlineTo?: string;
         /**
          * Текущая дата
          */
@@ -252,6 +305,34 @@ export interface RoleGroupConfiguration {
          */
         documentSerNum?: string;
         /**
+         * Тип документа
+         */
+        documentType?: string;
+        /**
+         * Серия документа
+         */
+        documentSeries?: string;
+        /**
+         * Номер документа
+         */
+        documentNumber?: string;
+        /**
+         * Наименование организации
+         */
+        orgName?: string;
+        /**
+         * ИНН
+         */
+        inn?: string;
+        /**
+         * КПП
+         */
+        kpp?: string;
+        /**
+         * ОГРН
+         */
+        ogrn?: string;
+        /**
          * Номер ВСП
          */
         divisionNum?: string;
@@ -279,6 +360,18 @@ export interface RoleGroupConfiguration {
          * Только свои задачи
          */
         onlyUserTasks?: boolean;
+        /**
+         * Привязка ко времени
+         */
+        timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
+        /**
+         * Заявка к задаче
+         */
+        request?: string;
+        /**
+         * Продуктовое предложение
+         */
+        product?: string;
     };
     /**
      * Данные для маппинга значений из справочника(статус, приоритет, тип)
@@ -295,14 +388,14 @@ export interface RoleGroupConfiguration {
          */
         taskStatuses?: {
             [k: string]:
-                'PLANNED'
-                    | 'PROGRESS'
-                    | 'APPROVAL'
-                    | 'DECLINED'
-                    | 'CLARIFY'
-                    | 'DONE'
-                    | 'ARCHIEVE'
-                    | 'DEF_TASK_STATUS';
+                | 'PLANNED'
+                | 'PROGRESS'
+                | 'APPROVAL'
+                | 'DECLINED'
+                | 'CLARIFY'
+                | 'DONE'
+                | 'ARCHIEVE'
+                | 'DEF_TASK_STATUS';
         };
         /**
          * Значения для маппинга приоритета задачи
@@ -316,10 +409,6 @@ export interface RoleGroupConfiguration {
      */
     listType?: ('ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK')[];
     /**
-     * Признак необходимости группировки задач по дате
-     */
-    isNeedToGroupTaskList?: boolean;
-    /**
      * Имя класса для кастомной сортировки
      */
     customValidation?: string;
@@ -331,9 +420,19 @@ export interface RoleGroupConfiguration {
      * Имя класса для кастомной обработки ассептора
      */
     customAcceptorHandler?: string;
+    /**
+     * Признаки группировки задач в списке
+     */
+    groupTaskList?: {
+        [k: string]: boolean;
+    };
+    /**
+     * Конкретный тип задачи в ППРБ
+     */
+    pprbTaskType?: string;
 }
 export interface Checkbox {
-    '@type'?: 'Checkbox';
+    '@types': 'Checkbox';
     /**
      * Порядок следования параметра
      */
@@ -382,7 +481,7 @@ export interface FilterParamCondition {
     value?: string;
 }
 export interface DateInput {
-    '@type'?: 'DateInput';
+    '@types': 'DateInput';
     /**
      * Порядок следования параметра
      */
@@ -425,11 +524,17 @@ export interface DateInput {
     deltaParamName?: string;
 }
 export interface OptionItem {
+    /**
+     * Значение для сохранения на BH
+     */
     value?: string;
+    /**
+     * Значение для отображения на PL
+     */
     text?: string;
 }
 export interface RadioGroup {
-    '@type'?: 'RadioGroup';
+    '@types': 'RadioGroup';
     /**
      * Порядок следования параметра
      */
@@ -474,7 +579,13 @@ export interface RadioGroup {
      * Дополнительное значение фильтра
      */
     additionalItem?: {
+        /**
+         * Значение для сохранения на BH
+         */
         value?: string;
+        /**
+         * Значение для отображения на PL
+         */
         text?: string;
     };
     /**
@@ -483,7 +594,7 @@ export interface RadioGroup {
     classifierName?: string;
 }
 export interface Select {
-    '@type'?: 'Select';
+    '@types': 'Select';
     /**
      * Порядок следования параметра
      */
@@ -528,7 +639,13 @@ export interface Select {
      * Дополнительное значение фильтра
      */
     additionalItem?: {
+        /**
+         * Значение для сохранения на BH
+         */
         value?: string;
+        /**
+         * Значение для отображения на PL
+         */
         text?: string;
     };
     /**
@@ -538,10 +655,10 @@ export interface Select {
     /**
      * Тип селекта
      */
-        type?: 'DASHED' | 'DEFAULT' | 'INVERT';
+    type?: 'DASHED' | 'DEFAULT' | 'INVERT';
 }
 export interface Switch {
-    '@type'?: 'Switch';
+    '@types': 'Switch';
     /**
      * Порядок следования параметра
      */
@@ -580,7 +697,7 @@ export interface Switch {
     resettable: boolean;
 }
 export interface TabSelector {
-    '@type'?: 'TabSelector';
+    '@types': 'TabSelector';
     /**
      * Порядок следования параметра
      */
@@ -625,7 +742,13 @@ export interface TabSelector {
      * Дополнительное значение фильтра
      */
     additionalItem?: {
+        /**
+         * Значение для сохранения на BH
+         */
         value?: string;
+        /**
+         * Значение для отображения на PL
+         */
         text?: string;
     };
     /**
@@ -675,6 +798,10 @@ export interface CardConfiguration {
      */
     rows?: Blocks[];
     /**
+     * Доступные действия из этой карточки
+     */
+    operations?: Operation[];
+    /**
      * Перечень отображаемых блоков в заголовке
      */
     header?: {
@@ -691,6 +818,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -698,11 +829,28 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
-         * Приоритет
+         * Информация о табе
          */
-        priority?: {
+        tab?: {
             /**
              * Заглавие
              */
@@ -712,26 +860,9 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
-             * Режим работы блока
+             * Размер блока
              */
-            mode?: 'CREATE' | 'READ' | 'UPDATE';
-            /**
-             * Параметры в СУП
-             */
-            params?: BlockParameter[];
-        };
-        /**
-         * Адрес
-         */
-        address?: {
-            /**
-             * Заглавие
-             */
-            caption?: string;
-            /**
-             * Порядок следования в карточке (от меньшего к большему)
-             */
-            order?: number;
+            size?: number;
             /**
              * Режим работы блока
              */
@@ -740,27 +871,27 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
-        };
-        /**
-         * Заголовок
-         */
-        header?: {
             /**
-             * Заглавие
+             * Bunlde
              */
-            caption?: string;
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
             /**
-             * Порядок следования в карточке (от меньшего к большему)
+             * Признак отображения блока в Календаре
              */
-            order?: number;
+            showInCalendar?: boolean;
             /**
-             * Режим работы блока
+             * Id таба
              */
-            mode?: 'CREATE' | 'READ' | 'UPDATE';
-            /**
-             * Параметры в СУП
-             */
-            params?: BlockParameter[];
+            value?: string;
         };
         /**
          * Клиенты ФЛ
@@ -775,6 +906,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -782,6 +917,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -800,6 +952,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -807,6 +963,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Представители по задаче
@@ -821,6 +994,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -828,6 +1005,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Комментарии
@@ -842,6 +1036,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -849,6 +1047,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -867,6 +1082,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -874,6 +1093,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Фактические даты
@@ -888,6 +1124,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -895,6 +1135,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Дата создания
@@ -909,6 +1166,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -916,6 +1177,107 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Дата дедлайна
+         */
+        deadLineDate?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Длительность
+         */
+        duration?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * ID задачи
@@ -930,6 +1292,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -937,6 +1303,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Потенциальные продажи
@@ -951,6 +1334,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -958,6 +1345,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -976,6 +1380,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -983,6 +1391,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -1001,6 +1426,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1008,6 +1437,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Описание задачи
@@ -1022,6 +1468,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1029,6 +1479,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Комментарий к результату
@@ -1043,6 +1510,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1050,6 +1521,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Результат
@@ -1064,6 +1552,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1071,6 +1563,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Статус
@@ -1085,6 +1594,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1093,6 +1606,23 @@ export interface CardConfiguration {
              */
             params?: BlockParameter[];
             /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+            /**
              * Список классификаторов для передачи на PL
              */
             items?: Classifier[];
@@ -1100,7 +1630,7 @@ export interface CardConfiguration {
         /**
          * Тип задачи
          */
-            type?: {
+        type?: {
             /**
              * Заглавие
              */
@@ -1110,6 +1640,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1117,6 +1651,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Список классификаторов для передачи на PL
              */
@@ -1135,6 +1686,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1142,6 +1697,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -1160,6 +1732,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1167,6 +1743,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Команда сотрудников
@@ -1181,6 +1774,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1188,6 +1785,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -1206,6 +1820,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1213,6 +1831,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Тематика обращения
@@ -1227,6 +1862,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1234,6 +1873,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Сделки
@@ -1248,6 +1904,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1255,6 +1915,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * История по задаче
@@ -1269,6 +1946,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1276,6 +1957,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
             /**
              * Многократность
              */
@@ -1294,6 +1992,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1301,6 +2003,23 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
         /**
          * Телефон клиента
@@ -1315,6 +2034,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1322,6 +2045,407 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Адрес
+         */
+        address?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Юридический адрес
+         */
+        corporateAddress?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Объекты залога
+         */
+        pledge?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Кастомный блок
+         */
+        custom?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Приоритет
+         */
+        priority?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Дата заявления
+         */
+        applicationDate?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Тип заявления
+         */
+        applicationType?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Номер страхового договора
+         */
+        contractNumber?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Привлеченный сотрудник
+         */
+        recruit?: {
+            /**
+             * Заглавие
+             */
+            caption?: string;
+            /**
+             * Порядок следования в карточке (от меньшего к большему)
+             */
+            order?: number;
+            /**
+             * Размер блока
+             */
+            size?: number;
+            /**
+             * Режим работы блока
+             */
+            mode?: 'CREATE' | 'READ' | 'UPDATE';
+            /**
+             * Параметры в СУП
+             */
+            params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
+        };
+        /**
+         * Разделитель
+         */
+        underline?: {
+            type?: 'NONE' | 'HIDDEN' | 'BOLD';
         };
         /**
          * Комплаенс: отправка уведомлений
@@ -1336,6 +2460,10 @@ export interface CardConfiguration {
              */
             order?: number;
             /**
+             * Размер блока
+             */
+            size?: number;
+            /**
              * Режим работы блока
              */
             mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1343,11 +2471,545 @@ export interface CardConfiguration {
              * Параметры в СУП
              */
             params?: BlockParameter[];
+            /**
+             * Bunlde
+             */
+            bundle?: {
+                /**
+                 * Название бандла
+                 */
+                name?: string;
+                /**
+                 * Тип бандла
+                 */
+                type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+            };
+            /**
+             * Признак отображения блока в Календаре
+             */
+            showInCalendar?: boolean;
         };
+    };
+    /**
+     * Изменяемая часть задачи
+     */
+    diff?: {
+        /**
+         * Идентификатор
+         */
+        id?: string;
+        /**
+         * Идентификатор родительской задачи
+         */
+        parentTaskId?: string;
+        /**
+         * Заголовок
+         */
+        title?: string;
+        /**
+         * Подзаголовок
+         */
+        subtitle?: string;
+        /**
+         * Описание
+         */
+        description?: string;
+        /**
+         * Дата начала
+         */
+        startDate?: string;
+        /**
+         * Дата завершения
+         */
+        endDate?: string;
+        /**
+         * Статус
+         */
+        status?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+            ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
+        };
+        /**
+         * Тип задачи
+         */
+        taskType?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+            ref?: 'MEETING' | 'CALL' | 'OTHER';
+        };
+        /**
+         * Привязка ко времени
+         */
+        timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
+        /**
+         * Приоритет
+         */
+        priority?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+            ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
+        };
+        /**
+         * Подзадачи
+         */
+        subtasks?: SbrfTask[];
+        /**
+         * Связанные сотрудники
+         */
+        employees?: SbrfTaskEmployee[];
+        /**
+         * Дата создания
+         */
+        createdOn?: string;
+        /**
+         * Плановая дата начала
+         */
+        plannedStart?: string;
+        /**
+         * Плановая дата завершения
+         */
+        plannedEnd?: string;
+        /**
+         * Фактическая дата начала
+         */
+        factStart?: string;
+        /**
+         * Фактическая дата завершения
+         */
+        factEnd?: string;
+        /**
+         * Потенциальные продажи
+         */
+        leads?: SbrfTaskLead[];
+        /**
+         * Клиенты ЮЛ
+         */
+        corporates?: SbrfTaskCorporate[];
+        /**
+         * Место встречи
+         */
+        meetingLocation?: string;
+        /**
+         * Комментарий к результату
+         */
+        decision?: string;
+        /**
+         * Результат
+         */
+        actionResult?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * Кампания
+         */
+        campaignName?: string;
+        /**
+         * Продуктовые предложения
+         */
+        products?: SbrfTaskProduct[];
+        /**
+         * Клиенты ФЛ
+         */
+        persons?: SbrfTaskPerson[];
+        /**
+         * Добавить в Outlook
+         */
+        sendToOutlook?: string;
+        /**
+         * Идентификатор версии записи (изменяемой, т.е. исходной)
+         */
+        modId?: number;
+        /**
+         * Канал привлечения
+         */
+        channel?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * Источник создания задачи
+         */
+        source?: string;
+        /**
+         * Уведомления по SMS -Y, -N
+         */
+        notifyBySms?: boolean;
+        /**
+         * Номер для уведомлений по SMS
+         */
+        smsPhoneNumber?: string;
+        /**
+         * ID Звонка
+         */
+        callId?: string;
+        /**
+         * Номер телефона вызова
+         */
+        callPhoneNumber?: string;
+        /**
+         * № обращения в CRM
+         */
+        clientRequestNumber?: string;
+        /**
+         * Область задачи
+         */
+        area?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * Тематика обращения
+         */
+        split?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * Подсплит
+         */
+        mainSplit?: string;
+        /**
+         * Признак совпадения инициатора и текущего главного исполнителя
+         */
+        initiatorFlg?: boolean;
+        /**
+         * Уникальный идентификатор операции создания
+         */
+        operUID?: string;
+        /**
+         * Комментарии
+         */
+        comments?: SbrfTaskComment[];
+        /**
+         * История изменений
+         */
+        history?: SbrfTaskHistory[];
+        /**
+         * Требует утверждения
+         */
+        requiresApproval?: boolean;
+        /**
+         * Идентификатор ГСЗ (Для задач на включение в ГСЗ)
+         */
+        gszId?: string;
+        /**
+         * Срок исполнения
+         */
+        dueDate?: string;
+        /**
+         * Идентификатор карточки обращения
+         */
+        referenceCrmId?: string;
+        /**
+         * Идентификатор карточки взаимодействия
+         */
+        interactionCrmId?: string;
+        /**
+         * Новая плановая дата начала
+         */
+        newPlannedStart?: string;
+        /**
+         * Новая плановая дата окончания
+         */
+        newPlannedEnd?: string;
+        /**
+         * Оцениваемый
+         */
+        estimated?: {
+            /**
+             * Логин пользователя
+             */
+            login?: string;
+            /**
+             * Фамилия сотрудника
+             */
+            lastName?: string;
+            /**
+             * Отчество сотрудника
+             */
+            middleName?: string;
+            /**
+             * Имя сотрудника
+             */
+            firstName?: string;
+            /**
+             * ID
+             */
+            id?: string;
+            /**
+             * Эл. почта
+             */
+            email?: string;
+            /**
+             * Должность
+             */
+            jobTitle?: string;
+            /**
+             * Наименование позиции/функциональное подчинение
+             */
+            positionName?: string;
+            /**
+             * Рабочий телефон
+             */
+            workPhone?: string;
+            /**
+             * Мобильный телефон
+             */
+            mobilePhone?: string;
+            /**
+             * Внешний логин пользователя
+             */
+            extLogin?: string;
+            /**
+             * ФИО Сотрудника
+             */
+            name?: string;
+            /**
+             * Признак основного исполнителя
+             */
+            primary?: boolean;
+            /**
+             * Признак блокировки
+             */
+            blocked?: boolean;
+            /**
+             * Роль
+             */
+            role?: {
+                /**
+                 * Код
+                 */
+                code?: string;
+                /**
+                 * Значение
+                 */
+                value?: string;
+            };
+            /**
+             * Тип сотрудника
+             */
+            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+            /**
+             * Сегмент профиля сотрудника
+             */
+            businessSegment?: {
+                /**
+                 * Код
+                 */
+                code?: string;
+                /**
+                 * Значение
+                 */
+                value?: string;
+            };
+            /**
+             * 11-значный полный код ВСП(ТБ+ОСБ+ВСП) подразделения сотрудника, к которому привязана основная позиция пользователя
+             */
+            divisionCode?: string;
+            /**
+             * Функциональное подразделение
+             */
+            funcDivisionName?: string;
+            /**
+             * Номер окна МО, который провел идентификацию
+             */
+            window?: string;
+            tn?: string;
+        };
+        /**
+         * Признак наличия дочерней записи
+         */
+        childActivityFlag?: string;
+        /**
+         * Id родительской записи (Идентификатор торговой точки)
+         */
+        pointId?: string;
+        /**
+         * Заметка
+         */
+        note?: {
+            /**
+             * Комментарий
+             */
+            text?: string;
+            /**
+             * Id родительской записи организации/МОКК/МП
+             */
+            objectId?: string;
+        };
+        /**
+         * Id адреса
+         */
+        addressId?: string;
+        /**
+         * Несовпадение GPS
+         */
+        gps?: string;
+        /**
+         * Несвоевременный приход флаг
+         */
+        inTimeFlag?: string;
+        /**
+         * Id договора
+         */
+        agreementId?: string;
+        /**
+         * ФИО оператора внешнего КЦ
+         */
+        createdByCcFullName?: string;
+        /**
+         * Идентификатор внешнего КЦ
+         */
+        createdByCcId?: string;
+        /**
+         * Код участника кампании
+         */
+        ukCode?: string;
+        /**
+         * Признак автоматически созданной активности
+         */
+        autoactivityFlag?: boolean;
+        /**
+         * Сделки
+         */
+        opportunities?: SbrfTaskDeal[];
+        /**
+         * Признак наличия дочерней записи
+         */
+        childVisitFlag?: string;
+        /**
+         * Периодичность
+         */
+        period?: string;
+        /**
+         * Планируемое количество сотрудников
+         */
+        employeePlan?: number;
+        /**
+         * Фактическое количество сотрудников
+         */
+        employeeFact?: number;
+        /**
+         * Телефон клиента, связанный с активностью/Телефон контактного лица
+         */
+        phoneNumber?: string;
+        /**
+         * Тип телефона
+         */
+        phoneType?: string;
+        /**
+         * Тип листа в сервисах CRM
+         */
+        listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
+        /**
+         * Количество Персональных предложений по клиенту
+         */
+        countPP?: string;
+        /**
+         * Дедлайн
+         */
+        deadLine?: string;
+        /**
+         * Полное описание задачи
+         */
+        fullDescription?: string;
+        /**
+         * Причина смены статуса
+         */
+        commentStatus?: string;
+        /**
+         * Заявки к задаче
+         */
+        requests?: SbrfTaskRequest[];
+        /**
+         * Залоги к задаче
+         */
+        pledges?: Pledges;
+        /**
+         * Дополнительные параметры задачи
+         */
+        params?: SbrfTaskParams[];
+        /**
+         * Связанные задачи
+         */
+        relatedTasks?: SbrfTask[];
+        /**
+         * Тип связи - справочник RoleType
+         */
+        relationType?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * ID связи
+         */
+        relateId?: string;
+        /**
+         * ID задачи в смежной АС
+         */
+        extTaskId?: string;
+        /**
+         * ID смежной АС
+         */
+        extTaskSystemId?: string;
+        /**
+         * Признак обновления задачи целиком: 1 - полное обновление задачи, 0 - частичное обновление задачи (будут изменены только те атрибуты, которые переданы на вход)
+         */
+        updateAllTask?: number;
     };
 }
 export interface Role {
-    '@type'?: 'ROLE';
+    '@types': 'ROLE';
     /**
      * Операнд условия отображения
      */
@@ -1358,7 +3020,7 @@ export interface Role {
     value?: string;
 }
 export interface TaskStatusCondition {
-    '@type'?: 'TASK_STATUS';
+    '@types': 'TASK_STATUS';
     /**
      * Операнд условия отображения
      */
@@ -1369,7 +3031,7 @@ export interface TaskStatusCondition {
     value?: string;
 }
 export interface TaskTypeCondition {
-    '@type'?: 'TASK_TYPE';
+    '@types': 'TASK_TYPE';
     /**
      * Операнд условия отображения
      */
@@ -1380,7 +3042,7 @@ export interface TaskTypeCondition {
     value?: string;
 }
 export interface And {
-    '@type'?: 'AND';
+    '@types': 'AND';
     /**
      * Операнд условия отображения
      */
@@ -1391,7 +3053,7 @@ export interface And {
     value?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
 }
 export interface Or {
-    '@type'?: 'OR';
+    '@types': 'OR';
     /**
      * Операнд условия отображения
      */
@@ -1402,27 +3064,6 @@ export interface Or {
     value?: (Role | TaskStatusCondition | TaskTypeCondition | And | Or)[];
 }
 export interface Blocks {
-    /* Кнопка из блока операций
-     *
-     */
-    operationHiddenTrue?: {
-        /**
-         * Заглавие
-         */
-        caption?: string;
-        /**
-         * Порядок следования в карточке (от меньшего к большему)
-         */
-        order?: number;
-        /**
-         * Режим работы блока
-         */
-        mode?: 'CREATE' | 'READ' | 'UPDATE';
-        /**
-         * Параметры в СУП
-         */
-        params?: BlockParameter[];
-    }
     /**
      * Заголовок
      */
@@ -1436,6 +3077,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1443,11 +3088,28 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
-     * Приоритет
+     * Информация о табе
      */
-    priority?: {
+    tab?: {
         /**
          * Заглавие
          */
@@ -1457,26 +3119,9 @@ export interface Blocks {
          */
         order?: number;
         /**
-         * Режим работы блока
+         * Размер блока
          */
-        mode?: 'CREATE' | 'READ' | 'UPDATE';
-        /**
-         * Параметры в СУП
-         */
-        params?: BlockParameter[];
-    };
-    /**
-     * Адрес
-     */
-    address?: {
-        /**
-         * Заглавие
-         */
-        caption?: string;
-        /**
-         * Порядок следования в карточке (от меньшего к большему)
-         */
-        order?: number;
+        size?: number;
         /**
          * Режим работы блока
          */
@@ -1485,27 +3130,27 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
-    };
-    /**
-     * Заголовок
-     */
-    header?: {
         /**
-         * Заглавие
+         * Bunlde
          */
-        caption?: string;
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
         /**
-         * Порядок следования в карточке (от меньшего к большему)
+         * Признак отображения блока в Календаре
          */
-        order?: number;
+        showInCalendar?: boolean;
         /**
-         * Режим работы блока
+         * Id таба
          */
-        mode?: 'CREATE' | 'READ' | 'UPDATE';
-        /**
-         * Параметры в СУП
-         */
-        params?: BlockParameter[];
+        value?: string;
     };
     /**
      * Клиенты ФЛ
@@ -1520,6 +3165,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1527,6 +3176,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1545,6 +3211,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1552,6 +3222,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Представители по задаче
@@ -1566,6 +3253,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1573,6 +3264,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Комментарии
@@ -1587,6 +3295,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1594,6 +3306,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1612,23 +3341,9 @@ export interface Blocks {
          */
         order?: number;
         /**
-         * Режим работы блока
+         * Размер блока
          */
-        mode?: 'CREATE' | 'READ' | 'UPDATE';
-        /**
-         * Параметры в СУП
-         */
-        params?: BlockParameter[];
-    };
-    planDatesDuration?: {
-        /**
-         * Заглавие
-         */
-        caption?: string;
-        /**
-         * Порядок следования в карточке (от меньшего к большему)
-         */
-        order?: number;
+        size?: number;
         /**
          * Режим работы блока
          */
@@ -1637,6 +3352,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Фактические даты
@@ -1651,6 +3383,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1658,6 +3394,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Дата создания
@@ -1672,6 +3425,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1679,6 +3436,107 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Дата дедлайна
+     */
+    deadLineDate?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Длительность
+     */
+    duration?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * ID задачи
@@ -1693,6 +3551,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1700,6 +3562,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Потенциальные продажи
@@ -1714,6 +3593,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1721,6 +3604,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1739,6 +3639,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1746,6 +3650,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1764,6 +3685,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1771,6 +3696,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Описание задачи
@@ -1785,6 +3727,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1792,6 +3738,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Комментарий к результату
@@ -1806,6 +3769,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1813,6 +3780,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Результат
@@ -1827,6 +3811,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1834,6 +3822,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Статус
@@ -1848,6 +3853,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1856,6 +3865,23 @@ export interface Blocks {
          */
         params?: BlockParameter[];
         /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+        /**
          * Список классификаторов для передачи на PL
          */
         items?: Classifier[];
@@ -1863,7 +3889,7 @@ export interface Blocks {
     /**
      * Тип задачи
      */
-        type?: {
+    type?: {
         /**
          * Заглавие
          */
@@ -1873,6 +3899,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1880,6 +3910,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Список классификаторов для передачи на PL
          */
@@ -1898,6 +3945,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1905,6 +3956,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1923,6 +3991,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1930,6 +4002,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Команда сотрудников
@@ -1944,6 +4033,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1951,6 +4044,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -1969,6 +4079,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1976,6 +4090,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Тематика обращения
@@ -1990,6 +4121,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -1997,6 +4132,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Сделки
@@ -2011,6 +4163,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -2018,6 +4174,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * История по задаче
@@ -2032,6 +4205,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -2039,6 +4216,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
         /**
          * Многократность
          */
@@ -2057,6 +4251,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -2064,6 +4262,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
     /**
      * Телефон клиента
@@ -2078,6 +4293,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -2085,6 +4304,407 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Адрес
+     */
+    address?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Юридический адрес
+     */
+    corporateAddress?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Объекты залога
+     */
+    pledge?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Кастомный блок
+     */
+    custom?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Приоритет
+     */
+    priority?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Дата заявления
+     */
+    applicationDate?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Тип заявления
+     */
+    applicationType?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Номер страхового договора
+     */
+    contractNumber?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Привлеченный сотрудник
+     */
+    recruit?: {
+        /**
+         * Заглавие
+         */
+        caption?: string;
+        /**
+         * Порядок следования в карточке (от меньшего к большему)
+         */
+        order?: number;
+        /**
+         * Размер блока
+         */
+        size?: number;
+        /**
+         * Режим работы блока
+         */
+        mode?: 'CREATE' | 'READ' | 'UPDATE';
+        /**
+         * Параметры в СУП
+         */
+        params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
+    };
+    /**
+     * Разделитель
+     */
+    underline?: {
+        type?: 'NONE' | 'HIDDEN' | 'BOLD';
     };
     /**
      * Комплаенс: отправка уведомлений
@@ -2099,6 +4719,10 @@ export interface Blocks {
          */
         order?: number;
         /**
+         * Размер блока
+         */
+        size?: number;
+        /**
          * Режим работы блока
          */
         mode?: 'CREATE' | 'READ' | 'UPDATE';
@@ -2106,6 +4730,23 @@ export interface Blocks {
          * Параметры в СУП
          */
         params?: BlockParameter[];
+        /**
+         * Bunlde
+         */
+        bundle?: {
+            /**
+             * Название бандла
+             */
+            name?: string;
+            /**
+             * Тип бандла
+             */
+            type?: 'INTERNAL' | 'EXTERNAL' | 'CUSTOM';
+        };
+        /**
+         * Признак отображения блока в Календаре
+         */
+        showInCalendar?: boolean;
     };
 }
 export interface BlockParameter {
@@ -2499,7 +5140,7 @@ export interface Operation {
             /**
              * Тип сотрудника
              */
-                type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
             /**
              * Сегмент профиля сотрудника
              */
@@ -2525,6 +5166,7 @@ export interface Operation {
              * Номер окна МО, который провел идентификацию
              */
             window?: string;
+            tn?: string;
         };
         /**
          * Признак наличия дочерней записи
@@ -2615,11 +5257,89 @@ export interface Operation {
          * Количество Персональных предложений по клиенту
          */
         countPP?: string;
+        /**
+         * Дедлайн
+         */
+        deadLine?: string;
+        /**
+         * Полное описание задачи
+         */
+        fullDescription?: string;
+        /**
+         * Причина смены статуса
+         */
+        commentStatus?: string;
+        /**
+         * Заявки к задаче
+         */
+        requests?: SbrfTaskRequest[];
+        /**
+         * Залоги к задаче
+         */
+        pledges?: {
+            /**
+             * Наименование (передается значение C_NAME справочника 'Виды залога') различающихся видов залога объектов залога, входящих в задачу через запятую
+             */
+            pledgerType?: string;
+            /**
+             * Количество объектов залога, входящих в задачу, через запятую
+             */
+            count?: string;
+            /**
+             * Общее количество объектов залога
+             */
+            totalCount?: number;
+            /**
+             * Список объектов залога
+             */
+            objects?: SbrfTaskPledgeObject[];
+        };
+        /**
+         * Дополнительные параметры задачи
+         */
+        params?: SbrfTaskParams[];
+        /**
+         * Связанные задачи
+         */
+        relatedTasks?: SbrfTask[];
+        /**
+         * Тип связи - справочник RoleType
+         */
+        relationType?: {
+            /**
+             * Код
+             */
+            code?: string;
+            /**
+             * Значение
+             */
+            value?: string;
+        };
+        /**
+         * ID связи
+         */
+        relateId?: string;
+        /**
+         * ID задачи в смежной АС
+         */
+        extTaskId?: string;
+        /**
+         * ID смежной АС
+         */
+        extTaskSystemId?: string;
+        /**
+         * Признак обновления задачи целиком: 1 - полное обновление задачи, 0 - частичное обновление задачи (будут изменены только те атрибуты, которые переданы на вход)
+         */
+        updateAllTask?: number;
     };
     /**
      * Не показывать операцию в выпадающем списке на PL.
      */
     hidden?: boolean;
+    /**
+     * Основная операция на карточке
+     */
+    main?: boolean;
 }
 export interface SbrfTask {
     /**
@@ -2960,7 +5680,7 @@ export interface SbrfTask {
         /**
          * Тип сотрудника
          */
-            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -2986,6 +5706,7 @@ export interface SbrfTask {
          * Номер окна МО, который провел идентификацию
          */
         window?: string;
+        tn?: string;
     };
     /**
      * Признак наличия дочерней записи
@@ -3077,9 +5798,79 @@ export interface SbrfTask {
      */
     countPP?: string;
     /**
-     * Объекты залога
+     * Дедлайн
      */
-    pledges?: Pledges;
+    deadLine?: string;
+    /**
+     * Полное описание задачи
+     */
+    fullDescription?: string;
+    /**
+     * Причина смены статуса
+     */
+    commentStatus?: string;
+    /**
+     * Заявки к задаче
+     */
+    requests?: SbrfTaskRequest[];
+    /**
+     * Залоги к задаче
+     */
+    pledges?: {
+        /**
+         * Наименование (передается значение C_NAME справочника 'Виды залога') различающихся видов залога объектов залога, входящих в задачу через запятую
+         */
+        pledgerType?: string;
+        /**
+         * Количество объектов залога, входящих в задачу, через запятую
+         */
+        count?: string;
+        /**
+         * Общее количество объектов залога
+         */
+        totalCount?: number;
+        /**
+         * Список объектов залога
+         */
+        objects?: SbrfTaskPledgeObject[];
+    };
+    /**
+     * Дополнительные параметры задачи
+     */
+    params?: SbrfTaskParams[];
+    /**
+     * Связанные задачи
+     */
+    relatedTasks?: SbrfTask[];
+    /**
+     * Тип связи - справочник RoleType
+     */
+    relationType?: {
+        /**
+         * Код
+         */
+        code?: string;
+        /**
+         * Значение
+         */
+        value?: string;
+    };
+    /**
+     * ID связи
+     */
+    relateId?: string;
+    /**
+     * ID задачи в смежной АС
+     */
+    extTaskId?: string;
+    /**
+     * ID смежной АС
+     */
+    extTaskSystemId?: string;
+    /**
+     * Признак обновления задачи целиком: 1 - полное обновление задачи, 0 - частичное обновление задачи (будут изменены только те атрибуты, которые переданы на вход)
+     */
+    updateAllTask?: number;
 }
 export interface SbrfTaskEmployee {
     /**
@@ -3154,7 +5945,7 @@ export interface SbrfTaskEmployee {
     /**
      * Тип сотрудника
      */
-        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+    type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
     /**
      * Сегмент профиля сотрудника
      */
@@ -3180,6 +5971,7 @@ export interface SbrfTaskEmployee {
      * Номер окна МО, который провел идентификацию
      */
     window?: string;
+    tn?: string;
 }
 export interface SbrfTaskLead {
     /**
@@ -3220,6 +6012,10 @@ export interface SbrfTaskProduct {
      * Код волны (соответствующий каналу, в который передается предложение), к которому относится данный УК (для ListOfNbo)
      */
     waveId?: string;
+    /**
+     * Идентификатор продукта в МС
+     */
+    id?: string;
 }
 export interface SbrfTaskCorporate {
     /**
@@ -3366,6 +6162,10 @@ export interface SbrfTaskCorporate {
      * Список договоров организации
      */
     agreements?: SbrfTaskAgreement[];
+    /**
+     * EPKId организации
+     */
+    epkId?: string;
     zpflag?: boolean;
     akkflag?: boolean;
     mokkflag?: boolean;
@@ -3437,7 +6237,7 @@ export interface SbrfTaskPerson {
     /**
      * Список номеров телефона клиента
      */
-    phones?: Phone[];
+    phones?: SbrfTaskPhone[];
     /**
      * Идентификатор клиента
      */
@@ -3497,8 +6297,35 @@ export interface SbrfTaskPerson {
         value?: string;
     };
 }
-export interface Phone {
-    contactId?: string;
+export interface SbrfTaskPhone {
+    /**
+     * Id записи телефона
+     */
+    phoneId?: string;
+    /**
+     * Признак действующего
+     */
+    activeFlg?: boolean;
+    /**
+     * Признак основного
+     */
+    primaryFlg?: boolean;
+    /**
+     * Тип телефона
+     */
+    phoneType?: string;
+    /**
+     * Номер телефона
+     */
+    phoneNumber?: string;
+    /**
+     * Комментарий
+     */
+    comment?: string;
+    /**
+     * Идентификатор версии записи (изменяемой, т.е. исходной)
+     */
+    modId?: number;
 }
 export interface SbrfTaskCorporateAddress {
     /**
@@ -3517,6 +6344,50 @@ export interface SbrfTaskCorporateAddress {
      * Признак основного адреса
      */
     primaryFlg?: boolean;
+    /**
+     * Страна
+     */
+    country?: string;
+    /**
+     * Регион
+     */
+    region?: string;
+    /**
+     * Район/Округ
+     */
+    disctrict?: string;
+    /**
+     * Тип района
+     */
+    disctrictType?: string;
+    /**
+     * Город
+     */
+    city?: string;
+    /**
+     * Город
+     */
+    cityType?: string;
+    /**
+     * Населенный пункт
+     */
+    locality?: string;
+    /**
+     * Тип населенного пункта
+     */
+    localityType?: string;
+    /**
+     * Улица
+     */
+    street?: string;
+    /**
+     * Населенный пункт
+     */
+    streetType?: string;
+    /**
+     * Дом/владение
+     */
+    house?: string;
 }
 export interface SbrfTaskAgreement {
     /**
@@ -3593,6 +6464,50 @@ export interface SbrfTaskPoint {
          * Признак основного адреса
          */
         primaryFlg?: boolean;
+        /**
+         * Страна
+         */
+        country?: string;
+        /**
+         * Регион
+         */
+        region?: string;
+        /**
+         * Район/Округ
+         */
+        disctrict?: string;
+        /**
+         * Тип района
+         */
+        disctrictType?: string;
+        /**
+         * Город
+         */
+        city?: string;
+        /**
+         * Город
+         */
+        cityType?: string;
+        /**
+         * Населенный пункт
+         */
+        locality?: string;
+        /**
+         * Тип населенного пункта
+         */
+        localityType?: string;
+        /**
+         * Улица
+         */
+        street?: string;
+        /**
+         * Населенный пункт
+         */
+        streetType?: string;
+        /**
+         * Дом/владение
+         */
+        house?: string;
     };
     /**
      * Строка адреса
@@ -3696,7 +6611,7 @@ export interface SbrfTaskComment {
         /**
          * Тип сотрудника
          */
-            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -3722,11 +6637,16 @@ export interface SbrfTaskComment {
          * Номер окна МО, который провел идентификацию
          */
         window?: string;
+        tn?: string;
     };
     /**
      * Идентификатор версии записи (изменяемой, т.е. исходной)
      */
     modId?: number;
+    /**
+     * Идентификатор родительского комментария
+     */
+    parentCommentId?: string;
 }
 export interface SbrfTaskHistory {
     /**
@@ -3805,7 +6725,7 @@ export interface SbrfTaskHistory {
         /**
          * Тип сотрудника
          */
-            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
+        type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
         /**
          * Сегмент профиля сотрудника
          */
@@ -3831,6 +6751,7 @@ export interface SbrfTaskHistory {
          * Номер окна МО, который провел идентификацию
          */
         window?: string;
+        tn?: string;
     };
     /**
      * Номер телефона на который был переведен звонок
@@ -3887,627 +6808,91 @@ export interface SbrfTaskDeal {
      */
     managerIds?: string[];
 }
-
-/**
- * This file was automatically generated by json-schema-to-typescript.
- * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
- * and run json-schema-to-typescript to regenerate this file.
- */
-
-/**
- * Общая схема запроса и ответа для create task
- */
-export interface SbrfTaskJson {
+export interface SbrfTaskRequest {
     /**
-     * Идентификатор
+     * Идентификатор запроса
      */
     id?: string;
-    /**
-     * Идентификатор родительской задачи
-     */
-    parentTaskId?: string;
-    /**
-     * Заголовок
-     */
-    title?: string;
-    /**
-     * Подзаголовок
-     */
-    subtitle?: string;
-    /**
-     * Описание
-     */
-    description?: string;
-    /**
-     * Дата начала
-     */
-    startDate?: string;
-    /**
-     * Дата завершения
-     */
-    endDate?: string;
-    /**
-     * Статус
-     */
-    status?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-        ref?: 'PLANNED' | 'PROGRESS' | 'APPROVAL' | 'DECLINED' | 'CLARIFY' | 'DONE' | 'ARCHIEVE' | 'DEF_TASK_STATUS';
-    };
-    /**
-     * Тип задачи
-     */
-    taskType?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-        ref?: 'MEETING' | 'CALL' | 'OTHER';
-    };
-    /**
-     * Привязка ко времени
-     */
-    timeRef?: 'UNBOUND' | 'DATE' | 'DATETIME' | 'DEADLINE' | 'DAY';
-    /**
-     * Приоритет
-     */
-    priority?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-        ref?: 'HIGH' | 'MEDIUM' | 'LOW' | 'DEF_TASK_PRIORITY';
-    };
-    /**
-     * Подзадачи
-     */
-    subtasks?: SbrfTask[];
-    /**
-     * Связанные сотрудники
-     */
-    employees?: SbrfTaskEmployee[];
-    /**
-     * Дата создания
-     */
-    createdOn?: string;
-    /**
-     * Плановая дата начала
-     */
-    plannedStart?: string;
-    /**
-     * Плановая дата завершения
-     */
-    plannedEnd?: string;
-    /**
-     * Фактическая дата начала
-     */
-    factStart?: string;
-    /**
-     * Фактическая дата завершения
-     */
-    factEnd?: string;
-    /**
-     * Потенциальные продажи
-     */
-    leads?: SbrfTaskLead[];
-    /**
-     * Клиенты ЮЛ
-     */
-    corporates?: SbrfTaskCorporate[];
-    /**
-     * Место встречи
-     */
-    meetingLocation?: string;
-    /**
-     * Комментарий к результату
-     */
-    decision?: string;
-    /**
-     * Результат
-     */
-    actionResult?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-    };
-    /**
-     * Кампания
-     */
-    campaignName?: string;
-    /**
-     * Продуктовые предложения
-     */
-    products?: SbrfTaskProduct[];
-    /**
-     * Клиенты ФЛ
-     */
-    persons?: SbrfTaskPerson[];
-    /**
-     * Добавить в Outlook
-     */
-    sendToOutlook?: string;
-    /**
-     * Идентификатор версии записи (изменяемой, т.е. исходной)
-     */
-    modId?: number;
-    /**
-     * Канал привлечения
-     */
-    channel?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-    };
-    /**
-     * Источник создания задачи
-     */
-    source?: string;
-    /**
-     * Уведомления по SMS -Y, -N
-     */
-    notifyBySms?: boolean;
-    /**
-     * Номер для уведомлений по SMS
-     */
-    smsPhoneNumber?: string;
-    /**
-     * ID Звонка
-     */
-    callId?: string;
-    /**
-     * Номер телефона вызова
-     */
-    callPhoneNumber?: string;
-    /**
-     * № обращения в CRM
-     */
-    clientRequestNumber?: string;
-    /**
-     * Область задачи
-     */
-    area?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-    };
-    /**
-     * Тематика обращения
-     */
-    split?: {
-        /**
-         * Код
-         */
-        code?: string;
-        /**
-         * Значение
-         */
-        value?: string;
-    };
-    /**
-     * Подсплит
-     */
-    mainSplit?: string;
-    /**
-     * Признак совпадения инициатора и текущего главного исполнителя
-     */
-    initiatorFlg?: boolean;
-    /**
-     * Уникальный идентификатор операции создания
-     */
-    operUID?: string;
-    /**
-     * Комментарии
-     */
-    comments?: SbrfTaskComment[];
-    /**
-     * История изменений
-     */
-    history?: SbrfTaskHistory[];
-    /**
-     * Требует утверждения
-     */
-    requiresApproval?: boolean;
-    /**
-     * Идентификатор ГСЗ (Для задач на включение в ГСЗ)
-     */
-    gszId?: string;
-    /**
-     * Срок исполнения
-     */
-    dueDate?: string;
-    /**
-     * Идентификатор карточки обращения
-     */
-    referenceCrmId?: string;
-    /**
-     * Идентификатор карточки взаимодействия
-     */
-    interactionCrmId?: string;
-    /**
-     * Новая плановая дата начала
-     */
-    newPlannedStart?: string;
-    /**
-     * Новая плановая дата окончания
-     */
-    newPlannedEnd?: string;
-    /**
-     * Оцениваемый
-     */
-    estimated?: {
-        /**
-         * Логин пользователя
-         */
-        login?: string;
-        /**
-         * Фамилия сотрудника
-         */
-        lastName?: string;
-        /**
-         * Отчество сотрудника
-         */
-        middleName?: string;
-        /**
-         * Имя сотрудника
-         */
-        firstName?: string;
-        /**
-         * ID
-         */
-        id?: string;
-        /**
-         * Эл. почта
-         */
-        email?: string;
-        /**
-         * Должность
-         */
-        jobTitle?: string;
-        /**
-         * Наименование позиции/функциональное подчинение
-         */
-        positionName?: string;
-        /**
-         * Рабочий телефон
-         */
-        workPhone?: string;
-        /**
-         * Мобильный телефон
-         */
-        mobilePhone?: string;
-        /**
-         * Внешний логин пользователя
-         */
-        extLogin?: string;
-        /**
-         * ФИО Сотрудника
-         */
-        name?: string;
-        /**
-         * Признак основного исполнителя
-         */
-        primary?: boolean;
-        /**
-         * Признак блокировки
-         */
-        blocked?: boolean;
-        /**
-         * Роль
-         */
-        role?: {
-            /**
-             * Код
-             */
-            code?: string;
-            /**
-             * Значение
-             */
-            value?: string;
-        };
-        /**
-         * Тип сотрудника
-         */
-            type?: 'INITIATOR' | 'PERFORMER' | 'MANAGER' | 'VKO' | 'COMMENTAUTHOR' | 'CORPORATETEAMMEMBER' | 'BANKEMPLOYEE';
-        /**
-         * Сегмент профиля сотрудника
-         */
-        businessSegment?: {
-            /**
-             * Код
-             */
-            code?: string;
-            /**
-             * Значение
-             */
-            value?: string;
-        };
-        /**
-         * 11-значный полный код ВСП(ТБ+ОСБ+ВСП) подразделения сотрудника, к которому привязана основная позиция пользователя
-         */
-        divisionCode?: string;
-        /**
-         * Функциональное подразделение
-         */
-        funcDivisionName?: string;
-        /**
-         * Номер окна МО, который провел идентификацию
-         */
-        window?: string;
-    };
-    /**
-     * Признак наличия дочерней записи
-     */
-    childActivityFlag?: string;
-    /**
-     * Id родительской записи (Идентификатор торговой точки)
-     */
-    pointId?: string;
-    /**
-     * Заметка
-     */
-    note?: {
-        /**
-         * Комментарий
-         */
-        text?: string;
-        /**
-         * Id родительской записи организации/МОКК/МП
-         */
-        objectId?: string;
-    };
-    /**
-     * Id адреса
-     */
-    addressId?: string;
-    /**
-     * Несовпадение GPS
-     */
-    gps?: string;
-    /**
-     * Несвоевременный приход флаг
-     */
-    inTimeFlag?: string;
-    /**
-     * Id договора
-     */
-    agreementId?: string;
-    /**
-     * ФИО оператора внешнего КЦ
-     */
-    createdByCcFullName?: string;
-    /**
-     * Идентификатор внешнего КЦ
-     */
-    createdByCcId?: string;
-    /**
-     * Код участника кампании
-     */
-    ukCode?: string;
-    /**
-     * Признак автоматически созданной активности
-     */
-    autoactivityFlag?: boolean;
-    /**
-     * Сделки
-     */
-    opportunities?: SbrfTaskDeal[];
-    /**
-     * Признак наличия дочерней записи
-     */
-    childVisitFlag?: string;
-    /**
-     * Периодичность
-     */
-    period?: string;
-    /**
-     * Планируемое количество сотрудников
-     */
-    employeePlan?: number;
-    /**
-     * Фактическое количество сотрудников
-     */
-    employeeFact?: number;
-    /**
-     * Телефон клиента, связанный с активностью/Телефон контактного лица
-     */
-    phoneNumber?: string;
-    /**
-     * Тип телефона
-     */
-    phoneType?: string;
-    /**
-     * Тип листа в сервисах CRM
-     */
-    listType?: 'ACTIONINFO' | 'VISIT' | 'ACTIVITY' | 'TASK' | 'REQUEST' | 'TASKPIP' | 'NBOTASK';
-    /**
-     * Количество Персональных предложений по клиенту
-     */
-    countPP?: string;
 }
-
-/**
- * This file was automatically generated by json-schema-to-typescript.
- * DO NOT MODIFY IT BY HAND. Instead, modify the source JSONSchema file,
- * and run json-schema-to-typescript to regenerate this file.
- */
-
-/**
- * Общая схема запроса для получения tasks
- */
-export interface SbrfTaskFilter {
+export interface SbrfTaskPledgeObject {
     /**
-     * Id лида
+     * Вид объекта залога
      */
-    leadId?: string;
+    objType?: string;
     /**
-     * Id клиента
+     * Наименование объекта залога
      */
-    accountId?: string;
+    name?: string;
     /**
-     * Id контакта
+     * Количество объектов залога
      */
-    contactCrmId?: string;
+    count?: number;
+}
+export interface SbrfTaskParams {
     /**
-     * Статус
+     * Вид задачи
      */
-    status?: string;
+    taskKind?: string;
     /**
-     * Тип задачи
+     * Плановые трудозатраты
      */
-        type?: string;
+    planLaborCosts?: string;
     /**
-     * Приоритет
+     * Фактические трудозатраты
      */
-    priority?: string;
+    actualLaborCosts?: string;
     /**
-     * Список типов задач
+     * Причина выставления задачи
      */
-    taskTypes?: string[];
+    taskReason?: string;
     /**
-     * Тематика обращения
+     * Категория задачи
      */
-    split?: string;
+    taskCategory?: string;
     /**
-     * Подсплит
+     * Способ отображения задачи в интерфейсе
      */
-    mainSplit?: string;
+    displayTaskView?: string;
     /**
-     * Исполнитель
+     * Фамилия заявителя
      */
-    performer?: string;
+    applicantLastName?: string;
     /**
-     * Дата и время создания, от
+     * Имя заявителя
      */
-    dateCreateFrom?: string;
+    applicantFirstName?: string;
     /**
-     * Дата и время создания, до
+     * Отчество заявителя
      */
-    dateCreateTo?: string;
+    applicantMiddleName?: string;
     /**
-     * Плановая дата начала
+     * Направление бизнеса (возможные варианты 'НПФ', 'Страхование')
      */
-    datePlanFrom?: string;
+    businessArea?: string;
     /**
-     * Плановая дата завершения
+     * Название папки в ECM
      */
-    datePlanTo?: string;
+    folderNameEcm?: string;
     /**
-     * Фактическая дата начала
+     * Статус дефекта
      */
-    dateFactFrom?: string;
+    defectStatus?: string;
     /**
-     * Фактическая дата завершения
+     * Дата заявления на постпродажное обслуживание страхового продукта
      */
-    dateFactTo?: string;
+    insuranceAfterSaleApplicationDate?: string;
     /**
-     * Текущая дата
+     * Тип заявления на постпродажное обслуживание страхового продукта
      */
-    currentDate?: string;
+    insuranceAfterSaleApplicationType?: string;
     /**
-     * Дата рождения
+     * Серия и номер договора страхования
      */
-    birthDate?: string;
-    /**
-     * overdue/open
-     */
-    state?: string;
-    /**
-     * Задачи текущего дня
-     */
-    current?: boolean;
-    /**
-     * Запланированные задачи
-     */
-    planned?: boolean;
-    /**
-     * Просроченные задачи
-     */
-    expired?: boolean;
-    /**
-     * Уникальный идентификатор клиента в МДМ
-     */
-    stubId?: string;
-    /**
-     * Уникальный идентификатор клиента в ЕПК
-     */
-    epkId?: string;
-    /**
-     * Фамилия клиента
-     */
-    lastName?: string;
-    /**
-     * Имя клиента
-     */
-    firstName?: string;
-    /**
-     * Отчество клиента
-     */
-    middleName?: string;
-    /**
-     * Серия + номер документа
-     */
-    documentSerNum?: string;
-    /**
-     * Номер ВСП
-     */
-    divisionNum?: string;
-    /**
-     * Показать все задачи подразделения
-     */
-    divisionTasks?: boolean;
-    /**
-     * Признак последней страницы
-     */
-    lastPage?: boolean;
-    /**
-     * Номер страницы
-     */
-    pageNum?: number;
-    /**
-     * Размер страницы
-     */
-    pageSize?: number;
-    /**
-     * Срочные задачи
-     */
-    important?: boolean;
-    /**
-     * Только свои задачи
-     */
-    onlyUserTasks?: boolean;
+    insuranceContractNumber?: string;
 }
 
 export interface CheckboxGroup {
-    '@type'?: 'CheckboxGroup';
+    '@types'?: 'CheckboxGroup';
     /**
      * Порядок следования параметра
      */

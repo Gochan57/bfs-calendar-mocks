@@ -16,15 +16,6 @@ export interface Config extends CalendarConfig {
      */
     noSeparateTaskService: boolean;
     /**
-     * Признаки обогащения задач данными о клиенте и сотрудниках
-     */
-    enrichTaskListVsEmployee: boolean;
-    enrichTaskListVsClientInfo: boolean;
-    enrichTaskListVsPoints: boolean;
-    enrichTaskDetailsVsEmployees: boolean;
-    enrichTaskDetailsVsClientInfo: boolean;
-    enrichTaskDetailsVsPoints: boolean;
-    /**
      * Тип задачи для зависимого справочника Результат
      */
     actionTypeParentValueId?: string;
@@ -45,10 +36,6 @@ export interface Config extends CalendarConfig {
      */
     filter: Filter[];
     defaultFilter: SbrfTaskFilter
-    /**
-     * Признак необходимости группировки задач по дате
-     */
-    isNeedToGroupTaskList: boolean;
 }
 
 export type CardConditionOperand = 'EQUALS' | 'NOT_EQUALS';

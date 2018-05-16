@@ -586,7 +586,7 @@ export function generateTaskList(filter: Model.SbrfTaskFilter): SbrfModel.SbrfTa
     return res
 }
 
-export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfiguration {
+export function generateGeomonitoringPlannerConfig(): SbrfModel.InteractionTaskConfigDetailsRs {
     return {
         'roles': [
             'GUIDE'
@@ -600,17 +600,11 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
         },
         'canCreateTask': false, // для геомониторига не возм созд задачу  // true,
         'noSeparateTaskService': true, // признак отсутствия отдельного сервиса для получения детальной информации по задаче
-        'enrichTaskListVsEmployee': false,
-        'enrichTaskListVsClientInfo': false,
-        'enrichTaskListVsPoints': false,
-        'enrichTaskDetailsVsEmployees': false,
-        'enrichTaskDetailsVsClientInfo': false,
-        'enrichTaskDetailsVsPoints': false,
         'titleFillStrategy': 'CLIENT',
         'showDateStrategy': 'DUE_DATE', //'PLANNED_START',
         'filter': [
             {
-                '@type': 'CheckboxGroup',
+                '@types': 'CheckboxGroup',
                 'order': 0,
                 'required': true,
                 'name': 'type',
@@ -636,7 +630,7 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
                 'type': 'DEFAULT'
             },
             {
-                '@type': 'DateInput',
+                '@types': 'DateInput',
                 'order': 1,
                 'required': true,
                 'name': 'datePlanTo',
@@ -646,7 +640,7 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
                 'resettable': true
             },
             {
-                '@type': 'Switch',
+                '@types': 'Switch',
                 'order': 2,
                 'required': false,
                 'name': 'priority',
@@ -668,16 +662,16 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
                 'headerHidden': null,
                 'conditions': [
                     {
-                        '@type': 'AND',
+                        '@types': 'AND',
                         'when': null,
                         'value': [
                             {
-                                '@type': 'ROLE',
+                                '@types': 'ROLE',
                                 'when': 'EQUALS',
                                 'value': 'GUIDE'
                             },
                             {
-                                '@type': 'TASK_TYPE',
+                                '@types': 'TASK_TYPE',
                                 'when': 'NOT_EQUALS',
                                 'value': '1-CALL'
                             }
@@ -714,10 +708,6 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
                         'planDates': {
                             'order': 10,
                             'caption': 'Дата начала'
-                        },
-                        'planDatesDuration': {
-                            'order': 10,
-                            'caption': 'Длительность'
                         }
                     },
                     {
@@ -868,7 +858,7 @@ export function generateGeomonitoringPlannerConfig(): SbrfModel.RoleGroupConfigu
     }
 }
 
-export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
+export function generateRKMPlannerConfig(): SbrfModel.InteractionTaskConfigDetailsRs {
     return {
         'roles': [
             'GUIDE'
@@ -882,17 +872,11 @@ export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
         },
         'canCreateTask': true, // для геомониторига не возм созд задачу  // true,
         'noSeparateTaskService': true, // признак отсутствия отдельного сервиса для получения детальной информации по задаче
-        'enrichTaskListVsEmployee': false,
-        'enrichTaskListVsClientInfo': false,
-        'enrichTaskListVsPoints': false,
-        'enrichTaskDetailsVsEmployees': false,
-        'enrichTaskDetailsVsClientInfo': false,
-        'enrichTaskDetailsVsPoints': false,
         'titleFillStrategy': 'CLIENT',
         'showDateStrategy': 'DUE_DATE', //'PLANNED_START',
         'filter': [
             {
-                '@type': 'CheckboxGroup',
+                '@types': 'CheckboxGroup',
                 'order': 0,
                 'required': true,
                 'name': 'type',
@@ -918,7 +902,7 @@ export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
                 'type': 'DEFAULT'
             },
             {
-                '@type': 'DateInput',
+                '@types': 'DateInput',
                 'order': 1,
                 'required': true,
                 'name': 'datePlanTo',
@@ -928,7 +912,7 @@ export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
                 'resettable': true
             },
             {
-                '@type': 'Switch',
+                '@types': 'Switch',
                 'order': 2,
                 'required': false,
                 'name': 'priority',
@@ -950,16 +934,16 @@ export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
                 'headerHidden': null,
                 'conditions': [
                     {
-                        '@type': 'AND',
+                        '@types': 'AND',
                         'when': null,
                         'value': [
                             {
-                                '@type': 'ROLE',
+                                '@types': 'ROLE',
                                 'when': 'EQUALS',
                                 'value': 'GUIDE'
                             },
                             {
-                                '@type': 'TASK_TYPE',
+                                '@types': 'TASK_TYPE',
                                 'when': 'NOT_EQUALS',
                                 'value': '1-CALL'
                             }
@@ -996,10 +980,6 @@ export function generateRKMPlannerConfig(): SbrfModel.RoleGroupConfiguration {
                         'planDates': {
                             'order': 10,
                             'caption': 'Дата начала'
-                        },
-                        'planDatesDuration': {
-                            'order': 10,
-                            'caption': 'Длительность'
                         }
                     },
                     {
@@ -1873,7 +1853,7 @@ export function generateCalendarConfig(): Model.CalendarConfig {
     return config
 }
 
-export function generatePlannerConfig(): SbrfModel.RoleGroupConfiguration {
+export function generatePlannerConfig(): SbrfModel.InteractionTaskConfigDetailsRs {
     let config = generateRKMPlannerConfig()
     if (role === 'EFS_MRM_MONITORING_GEOPLEDGE_USER') {
         config = generateGeomonitoringPlannerConfig()
